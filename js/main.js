@@ -1,6 +1,6 @@
 /* ============================================
    LEAP Business Solutions – Main JS
-   FAQ · Scroll Animations · Form · Checklist
+   FAQ · Scroll Animations · Form
    ============================================ */
 
 /* ── FAQ accordion ── */
@@ -102,45 +102,6 @@ function initContactForm() {
   });
 }
 
-/* ── Checklist download (generates text file, no server needed) ── */
-function generateChecklist() {
-  const items = [
-    'Provident Fund (PF) – Monthly ECR filing & payment by 15th',
-    'Employee State Insurance (ESIC) – Monthly contribution & return',
-    'Professional Tax (PT) – Monthly deduction & quarterly/annual return',
-    'Labour Welfare Fund (LWF) – Half-yearly/annual contribution',
-    'Payment of Bonus Act – Annual bonus payment (8.33% – 20%)',
-    'Payment of Gratuity Act – Gratuity fund & actuarial valuation',
-    'Maternity Benefit Act – Policy, benefits & record maintenance',
-    'POSH Act – ICC formation, annual report & training',
-    'Employment Exchange Act – Quarterly return filing',
-    'Contract Labour (R&A) Act – License & return filing',
-    'Shops & Establishment Act – Annual renewal of registration',
-    'Minimum Wages Act – Revision compliance & wage register',
-    'Payment of Wages Act – Wage slip & deduction register',
-    'Equal Remuneration Act – Register of workers',
-    'Factory Act – Annual return & license renewal (if applicable)',
-  ];
-
-  let content  = 'LEAP BUSINESS SOLUTIONS\n';
-      content += 'Labour Law Compliance Checklist – India\n';
-      content += 'www.leapbusiness.in  |  support@leapbusiness.in  |  +91 79772 13501\n';
-      content += '='.repeat(62) + '\n\n';
-  items.forEach((item, i) => { content += `[ ] ${i + 1}. ${item}\n\n`; });
-  content += '\n' + '='.repeat(62) + '\n';
-  content += 'For a FREE Compliance Audit within 1 hour – just call us!\n';
-  content += 'Mumbai, Maharashtra  |  Pan-India Services\n';
-
-  const blob = new Blob([content], { type: 'text/plain' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = 'LEAP-Compliance-Checklist.txt';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('📥 Checklist downloaded!');
-}
-
 /* ── Toast notification ── */
 function showToast(msg) {
   let toast = document.querySelector('.toast');
@@ -160,9 +121,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initCounters();
   initContactForm();
-
-  /* Checklist buttons (may appear on multiple pages) */
-  document.querySelectorAll('#downloadChecklist, #downloadChecklist2').forEach(btn => {
-    btn.addEventListener('click', generateChecklist);
-  });
 });
