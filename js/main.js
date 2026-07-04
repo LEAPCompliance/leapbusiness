@@ -70,10 +70,34 @@ function initCounters() {
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    showToast('✅ Thank you! We\'ll call you within 1 hour.');
-    form.reset();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        showToast('✅ Thank you! We\'ll call you within 1 hour.');
+        form.reset();
+      } else {
+        showToast('⚠️ Something went wrong. Please call us directly at +91 79772 13501.');
+      }
+    } catch (err) {
+      showToast('⚠️ Something went wrong. Please call us directly at +91 79772 13501.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+    }
   });
 }
 
