@@ -81,7 +81,10 @@ function calcEsicSplit() {
 
 /* ---------- 4. Professional Tax (Maharashtra) ---------- */
 function maharashtraPT(gross, female, month) {
-  if (female && gross < 15000) return 0;
+  if (female) {
+    if (gross <= 25000) return 0;
+    return month === 'feb' ? 300 : 200;
+  }
   if (gross <= 7500) return 0;
   if (gross <= 10000) return 175;
   return month === 'feb' ? 300 : 200;
@@ -95,7 +98,7 @@ function calcPT() {
 
   document.getElementById('pt-result').innerHTML = `
     <div class="calc-row"><span>Monthly Professional Tax (Maharashtra)</span><strong>${fmtINR(pt)}</strong></div>
-    <p style="font-size:13px;color:var(--text-secondary);margin-top:10px">Maharashtra slabs: ₹0–7,500 = Nil (female employees below ₹15,000 = Nil), ₹7,501–10,000 = ₹175/month, above ₹10,000 = ₹200/month (₹300 in February). For other states, see our full <a href="knowledge.html">Knowledge Hub PT reference tool</a>.</p>
+    <p style="font-size:13px;color:var(--text-secondary);margin-top:10px">Maharashtra slabs: Male — ₹0–7,500 Nil, ₹7,501–10,000 ₹175/month, above ₹10,000 ₹200/month (₹300 in February). Female — up to ₹25,000 Nil, above ₹25,000 ₹200/month (₹300 in February). For other states, see our full <a href="knowledge.html">Knowledge Hub PT reference tool</a>.</p>
   `;
 }
 

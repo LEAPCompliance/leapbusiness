@@ -27,13 +27,32 @@ function renderNavbar(activePage) {
             </div>
           </li>
           <li class="nav-dropdown">
-            <a href="blog.html" ${activePage==='blog'||activePage==='registrations'||activePage==='faq'||activePage==='labourcodes'?'class="active"':''}>Resources</a>
-            <div class="dropdown-menu">
-              <a href="blog.html">Blog &amp; Articles</a>
-              <a href="registrations.html">Registrations</a>
-              <a href="knowledge.html">Knowledge Hub</a>
-              <a href="faq.html">FAQs</a>
-              <a href="labour-codes.html">Labour Codes 2026</a>
+            <a href="blog.html" ${activePage==='blog'||activePage==='registrations'||activePage==='faq'||activePage==='labourcodes'||activePage==='resources'?'class="active"':''}>Resources</a>
+            <div class="dropdown-menu dropdown-mega">
+              <div>
+                <div class="dropdown-heading">Reference Hubs</div>
+                <a href="coming-soon.html?item=Downloads">Downloads</a>
+                <a href="coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
+                <a href="registrations.html">Registrations</a>
+                <a href="knowledge.html">Knowledge Hub</a>
+                <a href="knowledge.html#lwf">Labour Welfare Fund</a>
+                <a href="knowledge.html#pt">Professional Tax</a>
+                <a href="coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
+                <a href="coming-soon.html?item=Minimum Wages">Minimum Wages</a>
+                <a href="coming-soon.html?item=Holidays">Holidays</a>
+              </div>
+              <div>
+                <div class="dropdown-heading">Compliance</div>
+                <a href="labour-codes.html">Labour Codes 2026</a>
+                <a href="coming-soon.html?item=Compliance Calendar">Compliance Calendar</a>
+                <a href="coming-soon.html?item=Guidance">Guidance</a>
+              </div>
+              <div>
+                <div class="dropdown-heading">Editorial</div>
+                <a href="blog.html">Articles</a>
+                <a href="faq.html">FAQs</a>
+                <a href="coming-soon.html?item=Govt. FAQs">Govt. FAQs</a>
+              </div>
             </div>
           </li>
           <li class="nav-dropdown">

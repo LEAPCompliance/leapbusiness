@@ -220,6 +220,11 @@ ul { list-style: none; }
 .dropdown-menu.dropdown-wide { min-width: 260px; }
 .dropdown-heading { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: var(--text-secondary); padding: 10px 14px 4px; text-transform: uppercase; }
 .dropdown-divider { height: 1px; background: var(--border); margin: 6px 4px; }
+.dropdown-menu.dropdown-mega { min-width: 620px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 18px; padding: 16px; }
+.dropdown-mega .dropdown-heading { padding: 4px 10px 6px; }
+.dropdown-mega a { padding: 8px 10px; font-size: 13.5px; }
+@media (max-width: 1200px) { .dropdown-menu.dropdown-mega { min-width: 480px; } }
+
 
 /* Hamburger */
 .hamburger {
