@@ -672,6 +672,32 @@ footer { background: var(--primary); color: rgba(255,255,255,0.68); padding: 64p
   .footer-bottom { flex-direction: column; text-align: center; }
 }
 
+/* ── RESPONSIVE GRID UTILITIES (mobile audit) ── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; }
+.grid-featured { display: grid; grid-template-columns: 1.5fr 1fr; }
+.grid-sidebar-240 { display: grid; grid-template-columns: 240px 1fr; }
+
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-featured { grid-template-columns: 1fr; }
+  .grid-sidebar-240 { grid-template-columns: 1fr; }
+  .faq-sidebar { position: static !important; }
+}
+@media (max-width: 768px) {
+  .grid-4 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  html { font-size: 15px; }
+  .section-pad { padding-top: 48px; padding-bottom: 48px; }
+  .section-pad-sm { padding-top: 32px; padding-bottom: 32px; }
+}
+
+
 /* ── STOCK IMAGES ── */
 .img-cover {
   width: 100%;
