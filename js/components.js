@@ -99,7 +99,7 @@ function renderFooter() {
           <a href="index.html">
             <img src="assets/logo.png" alt="LEAP Business Solutions" class="footer-logo-img" />
           </a>
-          <p>Your trusted partner for comprehensive Labour Law Compliance across India. Based in Mumbai, serving businesses pan-India since 2021.</p>
+          <p>Your trusted partner for comprehensive Labour Law Compliance across India. Based in Mumbai, serving businesses pan-India since 2022.</p>
           <div class="footer-social">
             <a class="social-btn" href="https://www.linkedin.com/company/leapbusiness" target="_blank" rel="noopener" title="LinkedIn">in</a>
             <a class="social-btn" href="https://twitter.com/leapbusiness" target="_blank" rel="noopener" title="X / Twitter">𝕏</a>
@@ -147,7 +147,7 @@ function renderFooter() {
     <div style="border-top:1px solid rgba(255,255,255,0.09)">
       <div class="container">
         <div class="footer-bottom">
-          <span>© 2025 LEAP Business Solutions. All rights reserved. | Mumbai, India</span>
+          <span>© ${new Date().getFullYear()} LEAP Business Solutions. All rights reserved. | Mumbai, India</span>
           <div class="footer-bottom-links">
             <a href="https://www.leapbusiness.in/privacy-policy.html">Privacy Policy</a>
             <a href="https://www.leapbusiness.in/terms-of-service.html">Terms of Service</a>

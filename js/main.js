@@ -56,7 +56,8 @@ function initCounters() {
     entries.forEach(e => {
       if (e.isIntersecting) {
         document.querySelectorAll('.stat-num').forEach(el => {
-          animateCounter(el, parseInt(el.dataset.val), el.dataset.suffix || '');
+          const val = parseInt(el.dataset.val);
+          if (!isNaN(val)) animateCounter(el, val, el.dataset.suffix || '');
         });
         statsObserver.disconnect();
       }
