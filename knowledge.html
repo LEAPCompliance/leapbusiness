@@ -5,59 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Knowledge Hub | LEAP Business Solutions</title>
 <meta name="description" content="Free compliance reference tools and resources — PT slabs, LWF rates, PF limits and more. Built by LEAP Business Solutions, Mumbai.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://www.leapbusiness.in/knowledge.html" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="css/style.css?v=2" />
 <style>
 :root {
-  --navy: #0b1f3a;
-  --navy-mid: #152d50;
-  --navy-light: #1e3d6b;
-  --gold: #d4a237;
-  --gold-light: #f0c050;
-  --gold-pale: #fdf3db;
+  --navy: #1A4F78;
+  --navy-mid: #184E77;
+  --navy-light: #3299C2;
+  --gold: #3299C2;
+  --gold-light: #5FB8DE;
+  --gold-pale: rgba(50, 153, 194, 0.08);
   --white: #ffffff;
-  --off-white: #f8f7f4;
-  --text-dark: #1a2840;
-  --text-mid: #4a5568;
-  --text-light: #718096;
-  --border: #e2e0da;
-  --radius: 10px;
+  --off-white: #F5F7F9;
+  --text-dark: #333333;
+  --text-mid: #666666;
+  --text-light: #999999;
+  --border: #D9D9D9;
+  --radius: 8px;
   --radius-lg: 16px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text-dark);background:var(--off-white)}
+body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--off-white)}
 
-/* ── NAV ── */
-nav{background:var(--navy);padding:0 2rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
-.nav-inner{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;height:64px}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nav-logo-mark{width:36px;height:36px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;color:var(--navy);font-weight:700;letter-spacing:-0.5px}
-.nav-brand{display:flex;flex-direction:column;line-height:1.1}
-.nav-brand-name{font-size:14px;font-weight:700;color:var(--white);letter-spacing:0.01em}
-.nav-brand-tag{font-size:10px;color:var(--gold-light);font-weight:500;letter-spacing:0.06em;text-transform:uppercase}
-.nav-links{display:flex;gap:0;align-items:center}
-.nav-links a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:13.5px;font-weight:500;padding:0 14px;height:64px;display:flex;align-items:center;border-bottom:3px solid transparent;transition:all 0.2s}
-.nav-links a:hover{color:var(--white);border-bottom-color:rgba(212,162,55,0.5)}
-.nav-links a.active{color:var(--gold-light);border-bottom-color:var(--gold)}
-.nav-cta{background:var(--gold);color:var(--navy);font-size:13px;font-weight:700;padding:8px 18px;border-radius:6px;text-decoration:none;margin-left:14px;transition:background 0.2s;white-space:nowrap}
-.nav-cta:hover{background:var(--gold-light)}
 
 /* ── HERO ── */
-.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,var(--navy-light) 100%);padding:52px 2rem 44px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(212,162,55,0.08) 0%,transparent 65%);pointer-events:none}
-.hero-inner{max-width:720px;margin:auto;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(212,162,55,0.15);border:1px solid rgba(212,162,55,0.3);border-radius:20px;padding:5px 14px;font-size:11.5px;font-weight:600;color:var(--gold-light);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:18px}
-.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(28px,5vw,42px);color:var(--white);font-weight:400;line-height:1.2;margin-bottom:14px}
-.hero h1 span{color:var(--gold)}
-.hero p{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:520px;margin:0 auto 0}
+.kb-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,var(--navy-light) 100%);padding:52px 2rem 44px;text-align:center;position:relative;overflow:hidden}
+.kb-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(50,153,194,0.08) 0%,transparent 65%);pointer-events:none}
+.kb-hero-inner{max-width:720px;margin:auto;position:relative;z-index:1}
+.kb-hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(50,153,194,0.15);border:1px solid rgba(50,153,194,0.3);border-radius:20px;padding:5px 14px;font-size:11.5px;font-weight:600;color:var(--gold-light);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:18px}
+.kb-hero h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);color:var(--white);font-weight:400;line-height:1.2;margin-bottom:14px}
+.kb-hero h1 span{color:var(--gold)}
+.kb-hero p{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:520px;margin:0 auto 0}
 
 /* ── TOOL TABS ── */
-.tabs-section{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:64px;z-index:90}
+.tabs-section{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:72px;z-index:90}
 .tabs-inner{max-width:1100px;margin:auto;padding:0 2rem;display:flex;gap:0;overflow-x:auto}
 .tab-btn{padding:14px 18px;font-size:13.5px;font-weight:600;color:var(--text-mid);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all 0.2s;display:flex;align-items:center;gap:6px}
 .tab-btn:hover{color:var(--text-dark)}
 .tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
-.tab-btn .tab-badge{font-size:10px;background:var(--gold-pale);color:var(--gold);font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid rgba(212,162,55,0.3)}
+.tab-btn .tab-badge{font-size:10px;background:var(--gold-pale);color:var(--gold);font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid rgba(50,153,194,0.3)}
 
 /* ── MAIN LAYOUT ── */
 .page{max-width:1100px;margin:0 auto;padding:28px 2rem 60px}
@@ -71,22 +58,22 @@ nav{background:var(--navy);padding:0 2rem;position:sticky;top:0;z-index:100;box-
 .tool-desc{font-size:13px;color:var(--text-mid);line-height:1.5;max-width:500px}
 .tool-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .chip{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
-.chip-navy{background:rgba(11,31,58,0.08);color:var(--navy)}
-.chip-gold{background:var(--gold-pale);color:#8a6a0a}
+.chip-navy{background:rgba(26,79,120,0.08);color:var(--navy)}
+.chip-gold{background:var(--gold-pale);color:#0d4a63}
 .chip-green{background:#ecfdf5;color:#065f46}
 
 /* ── PT TOOL INTERIOR ── */
 .pt-wrap{padding:20px 24px}
 .search-filter-row{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
-.pt-search{flex:1;min-width:160px;height:36px;padding:0 12px;font-size:13.5px;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid var(--border);border-radius:6px;color:var(--text-dark);background:var(--white);outline:none;transition:border 0.2s}
+.pt-search{flex:1;min-width:160px;height:36px;padding:0 12px;font-size:13.5px;font-family:'Inter',sans-serif;border:1px solid var(--border);border-radius:6px;color:var(--text-dark);background:var(--white);outline:none;transition:border 0.2s}
 .pt-search:focus{border-color:var(--navy)}
 .filter-pills{display:flex;gap:6px;flex-wrap:wrap}
-.fpill{font-size:12px;padding:5px 13px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text-mid);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;transition:all 0.15s}
+.fpill{font-size:12px;padding:5px 13px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text-mid);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:all 0.15s}
 .fpill:hover{border-color:var(--navy);color:var(--navy)}
 .fpill.on{background:var(--navy);border-color:var(--navy);color:var(--white)}
 
 .state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:6px;margin-bottom:20px}
-.state-btn{padding:8px 10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--text-dark);cursor:pointer;text-align:left;transition:all 0.15s;font-weight:500}
+.state-btn{padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif;border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--text-dark);cursor:pointer;text-align:left;transition:all 0.15s;font-weight:500}
 .state-btn:hover{border-color:var(--navy-light);background:#f5f8ff}
 .state-btn.active{background:var(--navy);border-color:var(--navy);color:var(--white)}
 .state-btn.na{opacity:0.45;font-style:italic;font-weight:400}
@@ -98,7 +85,7 @@ nav{background:var(--navy);padding:0 2rem;position:sticky;top:0;z-index:100;box-
 .dp-badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .badge-applicable{background:#ecfdf5;color:#065f46;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:20px}
 .badge-na{background:#fef2f2;color:#991b1b;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:20px}
-.badge-mode{background:rgba(11,31,58,0.07);color:var(--navy);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.badge-mode{background:rgba(26,79,120,0.07);color:var(--navy);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
 
 .meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:18px}
 .meta-tile{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:11px 14px}
@@ -106,7 +93,7 @@ nav{background:var(--navy);padding:0 2rem;position:sticky;top:0;z-index:100;box-
 .meta-val{font-size:13px;font-weight:600;color:var(--text-dark);line-height:1.4}
 
 .slab-section-title{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);font-weight:700;margin-bottom:8px}
-.slab-note{font-size:12px;color:var(--text-mid);font-style:italic;margin-bottom:10px;background:var(--gold-pale);border:1px solid rgba(212,162,55,0.25);border-radius:6px;padding:7px 12px}
+.slab-note{font-size:12px;color:var(--text-mid);font-style:italic;margin-bottom:10px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.25);border-radius:6px;padding:7px 12px}
 
 .slab-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--white);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
 .slab-table th{background:var(--navy);color:rgba(255,255,255,0.85);padding:9px 12px;text-align:left;font-size:11.5px;font-weight:600;letter-spacing:0.03em}
@@ -127,15 +114,9 @@ nav{background:var(--navy);padding:0 2rem;position:sticky;top:0;z-index:100;box-
 .section-divider span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);white-space:nowrap}
 .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* footer */
-footer{background:var(--navy);color:rgba(255,255,255,0.6);text-align:center;padding:24px;font-size:12.5px}
-footer a{color:var(--gold-light);text-decoration:none}
-footer strong{color:rgba(255,255,255,0.9)}
-
 /* mobile */
 @media(max-width:600px){
-  .nav-links{display:none}
-  .hero h1{font-size:26px}
+  .kb-hero h1{font-size:26px}
   .pt-wrap{padding:14px}
   .dp-header{flex-direction:column}
 }
@@ -143,33 +124,12 @@ footer strong{color:rgba(255,255,255,0.9)}
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="https://www.leapbusiness.in/" class="nav-logo">
-      <div class="nav-logo-mark">L</div>
-      <div class="nav-brand">
-        <span class="nav-brand-name">LEAP Business Solutions</span>
-        <span class="nav-brand-tag">With Great Success</span>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="https://www.leapbusiness.in/">Home</a>
-      <a href="https://www.leapbusiness.in/services.html">Services</a>
-      <a href="https://www.leapbusiness.in/payroll-compliance.html">Payroll</a>
-      <a href="https://www.leapbusiness.in/knowledge.html" class="active">Knowledge Hub</a>
-      <a href="https://www.leapbusiness.in/tools.html">Tools</a>
-      <a href="https://www.leapbusiness.in/labour-codes.html">Labour Codes 2026</a>
-      <a href="https://www.leapbusiness.in/faq.html">FAQ</a>
-      <a href="https://www.leapbusiness.in/contact.html">Contact</a>
-    </div>
-  </div>
-</nav>
+<div id="navbar-placeholder"></div>
 
 <!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-badge">📚 Free Compliance Resources</div>
+<div class="kb-hero">
+  <div class="kb-hero-inner">
+    <div class="kb-hero-badge">📚 Free Compliance Resources</div>
     <h1>Knowledge <span>Hub</span></h1>
     <p>Quick-reference tools, slab tables, and compliance guides — built by our experts for HR &amp; Finance teams across India. Free, always up to date.</p>
   </div>
@@ -226,7 +186,7 @@ footer strong{color:rgba(255,255,255,0.9)}
     <div class="section-divider"><span>More tools coming soon</span></div>
 
     <div class="coming-grid">
-      <div class="coming-card" style="border-color:#d4a237;opacity:1;background:var(--gold-pale)">
+      <div class="coming-card" style="border-color:#3299C2;opacity:1;background:var(--gold-pale)">
         <div class="coming-icon">🤝</div>
         <div class="coming-title">LWF State-wise Rates</div>
         <div class="coming-desc">Contribution amounts, periodicity and due dates for all LWF-applicable states.</div>
@@ -314,16 +274,13 @@ footer strong{color:rgba(255,255,255,0.9)}
 
 </div><!-- /page -->
 
-<!-- FOOTER -->
-<footer>
-  <strong>LEAP Business Solutions</strong> &nbsp;|&nbsp; Labour Law &amp; Payroll Compliance &nbsp;|&nbsp; Mumbai, India<br>
-  <span style="margin-top:4px;display:block">📞 <a href="tel:+917977213501">+91 79772 13501</a> &nbsp;|&nbsp; 
-  <a href="mailto:shrilesh.batwal@leapbusiness.in">shrilesh.batwal@leapbusiness.in</a> &nbsp;|&nbsp; 
-  <a href="https://www.leapbusiness.in/">leapbusiness.in</a></span>
-  <span style="margin-top:6px;display:block;font-size:11px">All slab data is for reference only. Verify with the respective State Government portal before filing.</span>
-</footer>
+<div id="footer-placeholder"></div>
+<div id="whatsapp-placeholder"></div>
 
+<script src="js/components.js?v=2"></script>
+<script src="js/main.js?v=2"></script>
 <script>
+renderNavbar('resources');renderFooter();renderWhatsApp();
 const PT_DATA = {"Kerala": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Not Applicable", "ec": "Not Applicable", "empPeriodicity": "Half-Yearly", "empMode": "Branch wise", "empDue": "31st Aug & Last day of Feb", "returnDue": "—", "employerAmt": "₹1,250/- per branch", "employerDue": "30th Sep & 31st Mar", "slabNote": "Half-yearly income based slabs", "slabs": [["1", "Up to ₹11,999", "Nil"], ["2", "₹12,000 – ₹17,999", "₹120"], ["3", "₹18,000 – ₹29,999", "₹180"], ["4", "₹30,000 – ₹44,999", "₹300"], ["5", "₹45,000 – ₹59,999", "₹450"], ["6", "₹60,000 – ₹74,999", "₹600"], ["7", "₹75,000 – ₹99,999", "₹750"], ["8", "₹1,00,000 – ₹1,24,999", "₹1,000"], ["9", "Above ₹1,25,000", "₹1,250"]], "slabCols": ["S.No", "Half-Yearly Income", "PT (₹)"]}, "Andhra Pradesh": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Applicable (Location wise)", "ec": "Applicable (Location wise)", "empPeriodicity": "Monthly", "empMode": "Location wise", "empDue": "10th of every month", "returnDue": "Monthly – 10th", "employerAmt": "₹2,500/- per branch", "employerDue": "30th June", "slabNote": "Monthly income slabs", "slabs": [["1", "Up to ₹15,000", "Nil"], ["2", "₹15,001 – ₹20,000", "₹150"], ["3", "Above ₹20,000", "₹200"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Karnataka": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Applicable (Centrally – Bangalore)", "ec": "Applicable (Centrally – Bangalore)", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "20th of every month", "returnDue": "Monthly – 20th | Annually – 30th April", "employerAmt": "₹2,500/- per branch", "employerDue": "30th April", "slabNote": "Monthly income slabs; February differs for salary ₹25,000 & above", "slabs": [["1", "Up to ₹24,999", "Nil"], ["2", "₹25,000 & above (except Feb)", "₹200"], ["3", "₹25,000 & above — February", "₹300"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Telangana": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Applicable (Location wise)", "ec": "Applicable (Location wise)", "empPeriodicity": "Monthly", "empMode": "Location wise", "empDue": "10th of every month", "returnDue": "Monthly – 10th", "employerAmt": "₹2,500/- per location + ₹2,500/- per director", "employerDue": "30th June", "slabNote": "Monthly income slabs", "slabs": [["1", "Up to ₹15,000", "Nil"], ["2", "₹15,001 – ₹20,000", "₹150"], ["3", "Above ₹20,000", "₹200"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Maharashtra": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Applicable (Circle wise)", "ec": "Applicable (Circle wise)", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "Last day of every month | Annually – 31st Mar", "returnDue": "Last day of every month | Annually – 31st Mar", "employerAmt": "₹2,500/- centrally for all branches", "employerDue": "31st March", "slabNote": "Revised: female exemption threshold is now ₹25,000/month (previously ₹15,000)", "slabs": [["1", "Male: ₹0 – ₹7,500", "Nil"], ["2", "Male: ₹7,501 – ₹10,000", "₹175"], ["3", "Male: Above ₹10,000 (except Feb)", "₹200"], ["4", "Male: Above ₹10,000 — February", "₹300"], ["5", "Female: Up to ₹25,000", "Nil"], ["6", "Female: Above ₹25,000 (except Feb)", "₹200"], ["7", "Female: Above ₹25,000 — February", "₹300"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Gujarat": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Applicable (Location wise)", "ec": "Applicable (Branch wise)", "empPeriodicity": "Monthly", "empMode": "Location wise", "empDue": "15th of every month", "returnDue": "Monthly – 15th", "employerAmt": "Corporation: ₹2,000 | Municipality: ₹1,000 | Panchayat: ₹500 (per branch)", "employerDue": "30th Sep", "slabNote": "Monthly income slabs (revised 2022 basis, still current)", "slabs": [["1", "Up to ₹12,000", "Nil"], ["2", "Above ₹12,000", "₹200"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Madhya Pradesh": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Applicable (Centrally)", "ec": "Applicable (Location wise)", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "10th of every month", "returnDue": "15th of each quarter (Apr, Jul, Oct, Jan)", "employerAmt": "≤10 emp: ₹1,000/branch | >10 emp: ₹2,500/branch", "employerDue": "30th Sep", "slabNote": "Annual income slabs", "slabs": [["1", "Up to ₹2,25,000", "Nil"], ["2", "₹2,25,001 – ₹3,00,000", "₹1,500/yr"], ["3", "₹3,00,001 – ₹4,00,000", "₹2,000/yr"], ["4", "Above ₹4,00,000", "₹2,500/yr"]], "slabCols": ["S.No", "Annual Income", "PT"]}, "Assam": {"applicable": true, "remittance": "Online", "returnMode": "Manual", "rc": "Applicable (Centrally)", "ec": "Applicable (Centrally)", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "Last day of every month", "returnDue": "Monthly", "employerAmt": "₹2,500/- centrally for all branches", "employerDue": "30th Sep", "slabNote": "Monthly income slabs", "slabs": [["1", "Up to ₹15,000", "Nil"], ["2", "₹15,001 – ₹25,000", "₹180"], ["3", "Above ₹25,000", "₹208"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Odisha": {"applicable": false, "note": "Professional Tax was repealed in Odisha effective 1 April 2026, under the Odisha State Tax on Professions, Trades, Callings and Employment (Repeal) Ordinance, 2026 (notified 21 April 2026). Note: this repeal is specific to PT — Labour Welfare Fund continues to apply in Odisha separately."}, "West Bengal": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Applicable (Centrally)", "ec": "Applicable (Location wise)", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "21st of every month", "returnDue": "30th April", "employerAmt": "₹2,500/- per branch", "employerDue": "31st July", "slabNote": "Monthly income slabs", "slabs": [["1", "Up to ₹10,000", "Nil"], ["2", "₹10,001 – ₹15,000", "₹110"], ["3", "₹15,001 – ₹25,000", "₹130"], ["4", "₹25,001 – ₹40,000", "₹150"], ["5", "Above ₹40,000", "₹200"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Tripura": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Not Applicable", "ec": "Not Applicable", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "Last day of every month", "returnDue": "Monthly", "employerAmt": "₹2,500/- per branch", "employerDue": "30th Sep", "slabNote": "Monthly income slabs", "slabs": [["1", "Up to ₹7,500", "Nil"], ["2", "₹7,501 – ₹15,000", "₹150"], ["3", "Above ₹15,000", "₹208"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Nagaland": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Not Applicable", "ec": "Not Applicable", "empPeriodicity": "Annually", "empMode": "Centrally", "empDue": "30th April", "returnDue": "—", "employerAmt": "₹2,500/- per branch", "employerDue": "30th Sep", "slabNote": "Monthly income slabs", "slabs": [["1", "Less than ₹4,000", "Nil"], ["2", "₹4,001 – ₹5,000", "₹35"], ["3", "₹5,001 – ₹7,000", "₹75"], ["4", "₹7,001 – ₹9,000", "₹110"], ["5", "₹9,001 – ₹12,000", "₹180"], ["6", "₹12,001 & above", "₹208"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Meghalaya": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Not Applicable", "ec": "Not Applicable", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "Last day of every month", "returnDue": "—", "employerAmt": "₹2,500/- per branch", "employerDue": "30th April", "slabNote": "Annual income slabs, effective FY 2026–27", "slabs": [["1", "Below ₹50,000", "Nil"], ["2", "₹50,001 – ₹75,000", "₹200/yr"], ["3", "₹75,001 – ₹1,00,000", "₹300/yr"], ["4", "₹1,00,001 – ₹1,50,000", "₹450/yr"], ["5", "₹1,50,001 – ₹2,00,000", "₹600/yr"], ["6", "₹2,00,001 – ₹2,50,000", "₹1,000/yr"], ["7", "₹2,50,001 – ₹3,00,000", "₹1,250/yr"], ["8", "₹3,00,001 – ₹3,50,000", "₹1,500/yr"], ["9", "₹3,50,001 – ₹4,00,000", "₹1,800/yr"], ["10", "₹4,00,001 – ₹4,50,000", "₹2,100/yr"], ["11", "₹4,50,001 – ₹5,00,000", "₹2,400/yr"], ["12", "Above ₹5,00,000", "₹2,500/yr"]], "slabCols": ["S.No", "Annual Income", "PT"]}, "Mizoram": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Not Applicable", "ec": "Not Applicable", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "Last day of every month", "returnDue": "—", "employerAmt": "₹2,500/- per branch", "employerDue": "30th Sep", "slabNote": "Monthly income slabs", "slabs": [["1", "Up to ₹5,000", "Nil"], ["2", "₹5,001 – ₹8,000", "₹75"], ["3", "₹8,001 – ₹10,000", "₹120"], ["4", "₹10,001 – ₹12,000", "₹150"], ["5", "₹12,001 – ₹15,000", "₹180"], ["6", "Above ₹15,000", "₹208"]], "slabCols": ["S.No", "Monthly Income", "PT"]}, "Sikkim": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Not Applicable", "ec": "Not Applicable", "empPeriodicity": "Quarterly", "empMode": "Centrally", "empDue": "Last day of each quarter (Apr, Jul, Oct, Jan)", "returnDue": "—", "employerAmt": "₹2,500/- per branch", "employerDue": "30th Sep", "slabNote": "Monthly income slabs (revised — previous figures were outdated)", "slabs": [["1", "Up to ₹20,000", "Nil"], ["2", "₹20,001 – ₹30,000", "₹125"], ["3", "₹30,001 – ₹40,000", "₹150"], ["4", "Above ₹40,000", "₹200"]], "slabCols": ["S.No", "Monthly Income", "PT (₹)"]}, "Manipur": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Not Applicable", "ec": "Not Applicable", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "Last day of every month", "returnDue": "—", "employerAmt": "₹2,500/- per branch", "employerDue": "30th Sep", "slabNote": "Annual income slabs", "slabs": [["1", "Less than ₹50,000", "Nil"], ["2", "₹50,001 – ₹75,000", "₹1,200/yr"], ["3", "₹75,001 – ₹1,00,000", "₹2,000/yr"], ["4", "₹1,00,001 – ₹1,25,000", "₹2,400/yr"], ["5", "Above ₹1,25,000", "₹2,500/yr"]], "slabCols": ["S.No", "Annual Income", "PT"]}, "Jharkhand": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Applicable (Centrally)", "ec": "Applicable (Centrally)", "empPeriodicity": "Quarterly", "empMode": "Centrally", "empDue": "15th of each quarter (Apr, Jul, Oct, Jan)", "returnDue": "15th of each quarter", "employerAmt": "≤5 emp: ₹500/yr | ≤10 emp: ₹1,000/yr | ≤20 emp: ₹2,000/yr | >20 emp: ₹2,500/yr", "employerDue": "30th April", "slabNote": "Annual gross income slabs; paid quarterly", "slabs": [["1", "Up to ₹3,00,000", "Nil"], ["2", "₹3,00,001 – ₹5,00,000", "₹1,200/yr (₹300/qtr)"], ["3", "₹5,00,001 – ₹8,00,000", "₹1,800/yr (₹450/qtr)"], ["4", "₹8,00,001 – ₹10,00,000", "₹2,100/yr (₹525/qtr)"], ["5", "Above ₹10,00,000", "₹2,500/yr (₹625/qtr)"]], "slabCols": ["S.No", "Annual Income", "PT"]}, "Tamil Nadu": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "RC number issued – Location wise", "ec": "Not Applicable", "empPeriodicity": "Half-Yearly", "empMode": "Location wise", "empDue": "30th Sep & 31st Mar", "returnDue": "—", "employerAmt": "Location wise — slab differs per location (Chennai rates shown)", "employerDue": "30th Sep & 31st Mar", "slabNote": "Half-yearly income slabs (Chennai Corporation)", "slabs": [["1", "Up to ₹21,000", "Nil"], ["2", "₹21,001 – ₹30,000", "₹180"], ["3", "₹30,001 – ₹45,000", "₹425"], ["4", "₹45,001 – ₹60,000", "₹930"], ["5", "₹60,001 – ₹75,000", "₹1,025"], ["6", "Above ₹75,000", "₹1,250"]], "slabCols": ["S.No", "Half-Yearly Income", "PT (₹)"]}, "Puducherry": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Not Applicable", "ec": "Not Applicable", "empPeriodicity": "Half-Yearly", "empMode": "Location wise", "empDue": "15th Jan & 15th July", "returnDue": "—", "employerAmt": "₹1,250/- per branch", "employerDue": "15th Jan & 15th July", "slabNote": "Half-yearly income slabs", "slabs": [["1", "Below ₹99,999", "Nil"], ["2", "₹1,00,000 – ₹2,00,000", "₹250"], ["3", "₹2,00,001 – ₹3,00,000", "₹500"], ["4", "₹3,00,001 – ₹4,00,000", "₹750"], ["5", "₹4,00,001 – ₹5,00,000", "₹1,000"], ["6", "₹5,00,001 & above", "₹1,250"]], "slabCols": ["S.No", "Half-Yearly Income", "PT (₹)"]}, "Bihar": {"applicable": true, "remittance": "Manual", "returnMode": "Manual", "rc": "Applicable (Centrally)", "ec": "Applicable (Centrally)", "empPeriodicity": "Annually", "empMode": "Centrally", "empDue": "30th Nov", "returnDue": "30th Nov", "employerAmt": "₹2,500/- centrally for all branches", "employerDue": "30th Nov", "slabNote": "Annual income slabs", "slabs": [["1", "Up to ₹3,00,000", "Nil"], ["2", "₹3,00,001 – ₹5,00,000", "₹1,000/yr"], ["3", "₹5,00,001 – ₹10,00,000", "₹2,000/yr"], ["4", "Above ₹10,00,000", "₹2,500/yr"]], "slabCols": ["S.No", "Annual Income", "PT"]}, "Punjab": {"applicable": true, "remittance": "Online", "returnMode": "Online", "rc": "Applicable (Centrally)", "ec": "Applicable (Centrally)", "empPeriodicity": "Monthly", "empMode": "Centrally", "empDue": "Last day of every month", "returnDue": "30th April", "employerAmt": "₹200/- per month × number of employees", "employerDue": "30th April", "slabNote": "Annual income slabs; shown for both income-tax regimes", "slabs": [["1", "Old Regime: Up to ₹2,50,000/yr", "Nil"], ["2", "Old Regime: Above ₹2,50,000/yr", "₹200/month"], ["3", "New Regime: Up to ₹3,00,000/yr", "Nil"], ["4", "New Regime: Above ₹3,00,000/yr", "₹200/month"]], "slabCols": ["S.No", "Annual Income / Regime", "PT"]}, "Delhi": {"applicable": false}, "Haryana": {"applicable": false}, "Uttar Pradesh": {"applicable": false}, "Chandigarh": {"applicable": false}, "Rajasthan": {"applicable": false}, "Uttarakhand": {"applicable": false}, "Arunachal Pradesh": {"applicable": false}};
 
 let activeFilter='all', activeState=null;
@@ -371,7 +328,7 @@ function renderDetail(name) {
           <span class="badge-na">PT Not Applicable</span>
         </div>
         <p style="font-size:14px;color:var(--text-mid);line-height:1.6">Professional Tax is <strong>not levied</strong> in ${name}. No PT registration, deduction, remittance, or return obligations apply to establishments in this state.</p>
-        ${s.note ? `<div style="margin-top:12px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(212,162,55,0.3);border-radius:8px;font-size:12.5px;color:#6b4f0a">📌 ${s.note}</div>` : ''}
+        ${s.note ? `<div style="margin-top:12px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">📌 ${s.note}</div>` : ''}
         <div style="margin-top:14px;padding:12px 14px;background:var(--off-white);border-radius:8px;border:1px solid var(--border);font-size:12.5px;color:var(--text-mid)">
           💡 <strong>LEAP Tip:</strong> Even though PT is not applicable here, ensure your PF, ESIC, LWF and Shops & Establishment compliances are in order. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:600">Contact us</a> for a free audit.
         </div>
@@ -429,7 +386,7 @@ function renderDetail(name) {
         </table>
       </div>
 
-      <div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(212,162,55,0.3);border-radius:8px;font-size:12.5px;color:#6b4f0a">
+      <div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">
         💼 <strong>Need help with PT compliance in ${name}?</strong> LEAP manages end-to-end PT — from enrollment certificates to monthly deductions and returns. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Get in touch →</a>
       </div>
     </div>`;
@@ -483,7 +440,7 @@ function lwfSelectState(name){
     return;
   }
   const rows=s.contributions.map(c=>`<tr><td>${c.period}</td><td style="font-weight:600;color:#065f46">${c.empContrib}</td><td style="font-weight:600;color:var(--navy)">${c.emplrContrib}</td><td style="font-weight:700;color:var(--navy)">${c.total}</td><td>${c.deductionDate}</td><td style="font-weight:600">${c.submissionDate}</td></tr>`).join('');
-  panel.innerHTML=`<div class="detail-panel"><div class="dp-header"><div class="dp-title">${name}</div><div class="dp-badges"><span class="badge-applicable">✓ LWF Applicable</span><span class="badge-mode">${s.periodicity}</span></div></div><div class="meta-grid" style="margin-bottom:18px"><div class="meta-tile" style="grid-column:1/-1"><div class="meta-lbl">Who is covered / exclusions</div><div class="meta-val" style="font-weight:400;font-size:13px;line-height:1.5">${s.exclusions}</div></div></div><div class="slab-section-title">Contribution Rates &amp; Due Dates</div>${s.notes?`<div class="slab-note">📌 ${s.notes}</div>`:''}<div style="overflow-x:auto"><table class="slab-table"><thead><tr><th>Period</th><th>Employee (₹)</th><th>Employer (₹)</th><th>Total (₹)</th><th>Deduction Date</th><th>Submission Deadline</th></tr></thead><tbody>${rows}</tbody></table></div><div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(212,162,55,0.3);border-radius:8px;font-size:12.5px;color:#6b4f0a">🤝 <strong>Need help with LWF compliance in ${name}?</strong> LEAP manages LWF deductions, registers, and filings across all applicable states. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Get in touch →</a></div></div>`;
+  panel.innerHTML=`<div class="detail-panel"><div class="dp-header"><div class="dp-title">${name}</div><div class="dp-badges"><span class="badge-applicable">✓ LWF Applicable</span><span class="badge-mode">${s.periodicity}</span></div></div><div class="meta-grid" style="margin-bottom:18px"><div class="meta-tile" style="grid-column:1/-1"><div class="meta-lbl">Who is covered / exclusions</div><div class="meta-val" style="font-weight:400;font-size:13px;line-height:1.5">${s.exclusions}</div></div></div><div class="slab-section-title">Contribution Rates &amp; Due Dates</div>${s.notes?`<div class="slab-note">📌 ${s.notes}</div>`:''}<div style="overflow-x:auto"><table class="slab-table"><thead><tr><th>Period</th><th>Employee (₹)</th><th>Employer (₹)</th><th>Total (₹)</th><th>Deduction Date</th><th>Submission Deadline</th></tr></thead><tbody>${rows}</tbody></table></div><div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">🤝 <strong>Need help with LWF compliance in ${name}?</strong> LEAP manages LWF deductions, registers, and filings across all applicable states. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Get in touch →</a></div></div>`;
   document.getElementById('lwfDetailPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
