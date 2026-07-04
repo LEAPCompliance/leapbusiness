@@ -17,9 +17,11 @@
     .story-year { position:absolute; left:0; top:0; width:56px; height:56px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-weight:700; font-size:13px; text-align:center; line-height:1.15; z-index:1; box-shadow:0 4px 14px rgba(26,79,120,0.28); }
     .story-title { font-family:'Playfair Display',serif; font-size:19px; color:var(--primary); margin-bottom:8px; }
     .story-desc { font-size:15px; color:var(--text-secondary); line-height:1.75; }
-    .story-quote { max-width:760px; margin:48px auto 0; background:var(--secondary-faint); border-left:3px solid var(--secondary); border-radius:var(--radius); padding:32px 36px; }
-    .story-quote p { font-family:'Playfair Display',serif; font-style:italic; font-size:18px; color:var(--primary); line-height:1.7; margin:0; }
-    .story-quote span { display:block; margin-top:16px; font-family:'Inter',sans-serif; font-style:normal; font-size:14px; font-weight:600; color:var(--text-secondary); }
+    .story-quote { max-width:820px; margin:48px auto 0; background:var(--secondary-faint); border-left:3px solid var(--secondary); border-radius:var(--radius); padding:32px 36px; display:flex; gap:28px; align-items:flex-start; }
+    .story-quote-photo { width:104px; height:104px; border-radius:50%; object-fit:cover; flex-shrink:0; border:3px solid var(--white); box-shadow:var(--shadow); }
+    .story-quote-body p { font-family:'Playfair Display',serif; font-style:italic; font-size:18px; color:var(--primary); line-height:1.7; margin:0; }
+    .story-quote-body span { display:block; margin-top:16px; font-family:'Inter',sans-serif; font-style:normal; font-size:14px; font-weight:600; color:var(--text-secondary); }
+    @media (max-width:640px) { .story-quote { flex-direction:column; align-items:center; text-align:center; } }
     @media (max-width:640px) { .story-item { padding-left:64px; } .story-year { width:48px; height:48px; font-size:11px; } .story-timeline::before { left:23px; } }
   </style>
 </head>
@@ -76,8 +78,11 @@
     </div>
 
     <div class="story-quote fade-up delay-2">
-      <p>"Across every one of those jobs, the compliance person carried the real weight, tracking hundreds of filings, clearing audit points under pressure, chasing claims for people who had waited months, while the client only ever saw a clean report and a monthly invoice. What the client never saw was the person on the other side of that desk, stretched too thin, and never in a position to say so out loud. Commitments slipped sometimes, not for lack of effort, but because the system behind the scenes was overburdened, and no one could ever explain that to the client. That gap, between what a client is told and what is actually happening behind the scenes, is exactly what LEAP was built to close. No hidden overload, no silent slippage, just direct, honest execution."</p>
-      <span>— Shrilesh Batwal, Co-Founder, LEAP Business Solutions</span>
+      <img src="assets/team/shrilesh-batwal.jpg" alt="Shrilesh Batwal, Co-Founder, LEAP Business Solutions" class="story-quote-photo" loading="lazy" />
+      <div class="story-quote-body">
+        <p>"Across every one of those jobs, the compliance person carried the real weight, tracking hundreds of filings, clearing audit points under pressure, chasing claims for people who had waited months, while the client only ever saw a clean report and a monthly invoice. What the client never saw was the person on the other side of that desk, stretched too thin, and never in a position to say so out loud. Commitments slipped sometimes, not for lack of effort, but because the system behind the scenes was overburdened, and no one could ever explain that to the client. That gap, between what a client is told and what is actually happening behind the scenes, is exactly what LEAP was built to close. No hidden overload, no silent slippage, just direct, honest execution."</p>
+        <span>— Shrilesh Batwal, Co-Founder, LEAP Business Solutions</span>
+      </div>
     </div>
   </div>
 </section>
