@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Payroll & Compliance Calculators | PF, ESIC, PT, Gratuity | LEAP</title>
+  <meta name="description" content="Free instant calculators for CTC to take-home, EPF split, ESIC split, Professional Tax, Gratuity, Statutory Bonus, Maternity Benefit and Code on Wages allowance compliance. By LEAP Business Solutions, Mumbai." />
+  <link rel="canonical" href="https://www.leapbusiness.in/tools.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .calc-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; }
+    .calc-result { background: var(--background-light); border-radius: var(--radius); padding: 20px; }
+    .calc-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border); }
+    .calc-row:last-child { border-bottom: none; }
+    .calc-total { font-size: 16px; color: var(--primary); font-weight: 700; border-top: 2px solid var(--secondary); margin-top: 6px; padding-top: 12px; }
+    .calc-inline { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .jump-pill { display: inline-block; padding: 7px 16px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; color: var(--primary); text-decoration: none; margin: 4px 6px 4px 0; background: var(--white); }
+    .jump-pill:hover { background: var(--secondary); color: var(--white); border-color: var(--secondary); }
+    .heatmap-bar { width: 100%; height: 14px; background: var(--border); border-radius: 7px; overflow: hidden; margin: 10px 0; }
+    .heatmap-fill { height: 100%; transition: width 0.3s ease; }
+    @media (max-width: 900px) { .calc-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Tools</span></div>
+      <h1 class="page-hero-title">Payroll &amp; Compliance Calculators</h1>
+      <p class="page-hero-desc">Free, instant tools to estimate PF, ESIC, PT, Gratuity, Bonus, Maternity Benefit, and Code on Wages allowance compliance.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<section style="background:var(--secondary-faint);border-bottom:1px solid var(--border);padding:16px 0">
+  <div class="container" style="font-size:14px;color:var(--text-secondary);text-align:center">
+    ⚠️ These calculators give indicative estimates for general awareness, based on standard statutory rates as of July 2026. They are not a substitute for professional advice — <a href="contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> for figures specific to your business.
+  </div>
+</section>
+
+<!-- Quick jump -->
+<section class="section-pad-sm" style="border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div style="margin-bottom:14px"><strong style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px">PAYROLL CALCULATORS</strong><br>
+      <a href="#ctc-takehome" class="jump-pill">CTC ↔ Take-Home</a><a href="#epf-split" class="jump-pill">EPF Split</a><a href="#esic-split" class="jump-pill">ESIC Split</a><a href="#pt" class="jump-pill">Professional Tax</a>
+    </div>
+    <div style="margin-bottom:14px"><strong style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px">STATUTORY PAYOUTS</strong><br>
+      <a href="#gratuity" class="jump-pill">Gratuity</a><a href="#bonus" class="jump-pill">Statutory Bonus</a><a href="#maternity" class="jump-pill">Maternity Benefit</a>
+    </div>
+    <div><strong style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px">RECKONERS</strong><br>
+      <a href="#allowance-heatmap" class="jump-pill">Allowance Heatmap</a>
+    </div>
+  </div>
+</section>
+
+<!-- 1. CTC <-> Take-Home -->
+<section id="ctc-takehome" class="section-pad">
+  <div class="container">
+    <div class="tag">Payroll Calculator</div>
+    <h2 class="section-title">CTC ↔ Take-Home</h2>
+    <p class="section-sub" style="margin-bottom:28px">Estimate net take-home pay and employer cost from gross monthly salary.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="form-group"><label>Gross Monthly Salary (₹)</label><input type="number" id="th-gross" value="40000" oninput="calcTakeHome()" /></div>
+        <div class="form-group"><label>Basic + DA (% of gross)</label><input type="number" id="th-basicpct" value="50" oninput="calcTakeHome()" /></div>
+        <div class="form-group"><label>Month</label><select id="th-month" onchange="calcTakeHome()"><option value="other">Any month except February</option><option value="feb">February</option></select></div>
+        <div class="calc-inline"><input type="checkbox" id="th-female" onchange="calcTakeHome()" style="width:16px;height:16px" /><label for="th-female" style="margin:0;font-size:13px;color:var(--text-secondary)">Female employee (Maharashtra PT exemption below ₹15,000)</label></div>
+      </div>
+      <div class="calc-result" id="th-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. EPF Split -->
+<section id="epf-split" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tag">Payroll Calculator</div>
+    <h2 class="section-title">EPF Split</h2>
+    <p class="section-sub" style="margin-bottom:28px">Break down Provident Fund into Employee, EPF, EPS (Pension) and EDLI shares.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="form-group"><label>Basic + DA, Monthly (₹)</label><input type="number" id="epf-basic" value="20000" oninput="calcEpfSplit()" /></div>
+      </div>
+      <div class="calc-result" id="epf-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ESIC Split -->
+<section id="esic-split" class="section-pad">
+  <div class="container">
+    <div class="tag">Payroll Calculator</div>
+    <h2 class="section-title">ESIC Split</h2>
+    <p class="section-sub" style="margin-bottom:28px">Check ESIC eligibility and split employee/employer contributions.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="form-group"><label>Gross Monthly Wage (₹)</label><input type="number" id="esic-gross" value="18000" oninput="calcEsicSplit()" /></div>
+        <div class="calc-inline"><input type="checkbox" id="esic-pwd" onchange="calcEsicSplit()" style="width:16px;height:16px" /><label for="esic-pwd" style="margin:0;font-size:13px;color:var(--text-secondary)">Person with disability (₹25,000 threshold)</label></div>
+      </div>
+      <div class="calc-result" id="esic-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Professional Tax -->
+<section id="pt" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tag">Payroll Calculator</div>
+    <h2 class="section-title">Professional Tax (Maharashtra)</h2>
+    <p class="section-sub" style="margin-bottom:28px">Estimate monthly Professional Tax for Maharashtra-based employees.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="form-group"><label>Gross Monthly Salary (₹)</label><input type="number" id="pt-gross" value="15000" oninput="calcPT()" /></div>
+        <div class="form-group"><label>Month</label><select id="pt-month" onchange="calcPT()"><option value="other">Any month except February</option><option value="feb">February</option></select></div>
+        <div class="calc-inline"><input type="checkbox" id="pt-female" onchange="calcPT()" style="width:16px;height:16px" /><label for="pt-female" style="margin:0;font-size:13px;color:var(--text-secondary)">Female employee</label></div>
+      </div>
+      <div class="calc-result" id="pt-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Gratuity -->
+<section id="gratuity" class="section-pad">
+  <div class="container">
+    <div class="tag">Statutory Payout</div>
+    <h2 class="section-title">Gratuity Calculator</h2>
+    <p class="section-sub" style="margin-bottom:28px">Estimate gratuity payable under the Payment of Gratuity Act, 1972.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="form-group"><label>Last Drawn Basic + DA, Monthly (₹)</label><input type="number" id="grat-basic" value="25000" oninput="calcGratuity()" /></div>
+        <div class="form-group"><label>Years of Continuous Service</label><input type="number" id="grat-years" value="7" oninput="calcGratuity()" /></div>
+      </div>
+      <div class="calc-result" id="grat-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Statutory Bonus -->
+<section id="bonus" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tag">Statutory Payout</div>
+    <h2 class="section-title">Statutory Bonus Calculator</h2>
+    <p class="section-sub" style="margin-bottom:28px">Estimate annual bonus payable under the Payment of Bonus Act, 1965.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="form-group"><label>Basic + DA, Monthly (₹)</label><input type="number" id="bonus-basic" value="9000" oninput="calcBonus()" /></div>
+        <div class="form-group"><label>Gross Monthly Wage (₹, for eligibility check)</label><input type="number" id="bonus-gross" value="18000" oninput="calcBonus()" /></div>
+        <div class="form-group"><label>Bonus % (<span id="bonus-pct-label">8.33%</span>)</label><input type="range" id="bonus-pct" min="8.33" max="20" step="0.01" value="8.33" oninput="calcBonus()" style="width:100%" /></div>
+      </div>
+      <div class="calc-result" id="bonus-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Maternity Benefit -->
+<section id="maternity" class="section-pad">
+  <div class="container">
+    <div class="tag">Statutory Payout</div>
+    <h2 class="section-title">Maternity Benefit Calculator</h2>
+    <p class="section-sub" style="margin-bottom:28px">Estimate paid maternity leave benefit under the Maternity Benefit (Amendment) Act, 2017.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="form-group"><label>Average Monthly Gross Salary (₹)</label><input type="number" id="mat-salary" value="30000" oninput="calcMaternity()" /></div>
+        <div class="form-group"><label>Child Number</label><select id="mat-children" onchange="calcMaternity()"><option value="1or2">1st or 2nd child (26 weeks)</option><option value="3plus">3rd child onward (12 weeks)</option></select></div>
+      </div>
+      <div class="calc-result" id="mat-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Allowance Heatmap -->
+<section id="allowance-heatmap" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tag">Reckoner</div>
+    <h2 class="section-title">Allowance Heatmap — Code on Wages 50% Rule</h2>
+    <p class="section-sub" style="margin-bottom:28px">Check whether your salary structure meets the new statutory wage floor: Basic + DA must be at least 50% of total remuneration, or the excess allowance gets added back to "wages" for PF, gratuity and bonus calculations.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="form-group"><label>Basic, Monthly (₹)</label><input type="number" id="hm-basic" value="20000" oninput="calcHeatmap()" /></div>
+        <div class="form-group"><label>DA, Monthly (₹)</label><input type="number" id="hm-da" value="0" oninput="calcHeatmap()" /></div>
+        <div class="form-group"><label>HRA, Monthly (₹)</label><input type="number" id="hm-hra" value="10000" oninput="calcHeatmap()" /></div>
+        <div class="form-group"><label>Conveyance Allowance, Monthly (₹)</label><input type="number" id="hm-conv" value="5000" oninput="calcHeatmap()" /></div>
+        <div class="form-group"><label>Other/Special Allowances, Monthly (₹)</label><input type="number" id="hm-other" value="15000" oninput="calcHeatmap()" /></div>
+      </div>
+      <div class="calc-result" id="hm-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-pad audit-cta">
+  <div class="container">
+    <div class="audit-inner">
+      <div class="fade-up">
+        <div class="tag">Need Exact Figures?</div>
+        <h2 class="audit-title">These are estimates. Let's get it exactly right for your business.</h2>
+        <p class="audit-desc">Book a free 1-hour compliance audit and we'll walk through your actual payroll structure, Labour Code readiness, and statutory obligations.</p>
+      </div>
+      <div class="audit-box fade-up delay-2">
+        <div class="audit-free-tag">✦ 100% Free ✦</div>
+        <div class="audit-time">Book a Call</div>
+        <div class="audit-sub">Our expert will call you within the hour</div>
+        <a href="tel:+917977213501" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px">📞 +91 79772 13501</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<div id="whatsapp-placeholder"></div>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script src="js/tools.js"></script>
+<script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
+</body>
+</html>

@@ -15,9 +15,8 @@ function renderNavbar(activePage) {
 
         <ul class="nav-links">
           <li><a href="index.html"            ${activePage==='home'    ?'class="active"':''}>Home</a></li>
-          <li><a href="about.html"            ${activePage==='about'   ?'class="active"':''}>About Us</a></li>
           <li class="nav-dropdown">
-            <a href="services.html"           ${activePage==='services'?'class="active"':''}>Services</a>
+            <a href="services.html"           ${activePage==='services'?'class="active"':''}>Our Services</a>
             <div class="dropdown-menu">
               <a href="payroll-compliance.html">Payroll Compliance</a>
               <a href="services.html#pf">PF – Provident Fund</a>
@@ -27,14 +26,42 @@ function renderNavbar(activePage) {
               <a href="services.html#audit">Labour Law Audit</a>
             </div>
           </li>
-          <li><a href="registrations.html" ${activePage==='registrations'?'class="active"':''}>Registrations</a></li>
-          <li><a href="blog.html"             ${activePage==='blog'    ?'class="active"':''}>Resources</a></li>
-          <li><a href="faq.html"              ${activePage==='faq'     ?'class="active"':''}>FAQs</a></li>
-          <li><a href="contact.html"          ${activePage==='contact' ?'class="active"':''}>Contact</a></li>
-          <li><a href="knowledge.html" ${activePage==='Knowledge'?'class="active"':''}>Knowledge</a></li>
+          <li class="nav-dropdown">
+            <a href="blog.html" ${activePage==='blog'||activePage==='registrations'||activePage==='faq'||activePage==='labourcodes'?'class="active"':''}>Resources</a>
+            <div class="dropdown-menu">
+              <a href="blog.html">Blog &amp; Articles</a>
+              <a href="registrations.html">Registrations</a>
+              <a href="knowledge.html">Knowledge Hub</a>
+              <a href="faq.html">FAQs</a>
+              <a href="labour-codes.html">Labour Codes 2026</a>
+            </div>
+          </li>
+          <li class="nav-dropdown">
+            <a href="tools.html" ${activePage==='tools'?'class="active"':''}>Tools</a>
+            <div class="dropdown-menu dropdown-wide">
+              <div class="dropdown-heading">Payroll Calculators</div>
+              <a href="tools.html#ctc-takehome">CTC ↔ Take-Home</a>
+              <a href="tools.html#epf-split">EPF Split</a>
+              <a href="tools.html#esic-split">ESIC Split</a>
+              <a href="tools.html#pt">Professional Tax</a>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-heading">Statutory Payouts</div>
+              <a href="tools.html#gratuity">Gratuity</a>
+              <a href="tools.html#bonus">Statutory Bonus</a>
+              <a href="tools.html#maternity">Maternity Benefit</a>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-heading">Reckoners</div>
+              <a href="tools.html#allowance-heatmap">Allowance Heatmap</a>
+            </div>
+          </li>
+          <li class="nav-dropdown">
+            <a href="about.html" ${activePage==='about'||activePage==='contact'?'class="active"':''}>About Us</a>
+            <div class="dropdown-menu">
+              <a href="about.html">About Us</a>
+              <a href="contact.html">Contact</a>
+            </div>
+          </li>
         </ul>
-
-        <a href="tel:+917977213501" class="btn btn-primary nav-cta">📞 Free Audit Call</a>
 
         <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
           <span></span><span></span><span></span>
@@ -45,14 +72,16 @@ function renderNavbar(activePage) {
 
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <a href="index.html">Home</a>
-      <a href="about.html">About Us</a>
-      <a href="services.html">Services</a>
-      <a href="registrations.html">Registrations</a>
+      <a href="services.html">Our Services</a>
       <a href="payroll-compliance.html">Payroll Compliance</a>
       <a href="blog.html">Resources / Blog</a>
+      <a href="registrations.html">Registrations</a>
+      <a href="knowledge.html">Knowledge Hub</a>
       <a href="faq.html">FAQs</a>
+      <a href="labour-codes.html">Labour Codes 2026</a>
+      <a href="tools.html">Tools &amp; Calculators</a>
+      <a href="about.html">About Us</a>
       <a href="contact.html">Contact</a>
-      <a href="knowledge.html">Knowledge</a>
       <a href="tel:+917977213501" class="mobile-cta-link">📞 +91 79772 13501 – Free Audit</a>
     </div>
   </nav>`;
@@ -125,6 +154,8 @@ function renderFooter() {
           <a href="blog.html">Resources &amp; Blog</a>
           <a href="faq.html">FAQs</a>
           <a href="contact.html">Contact Us</a>
+          <a href="tools.html">Tools &amp; Calculators</a>
+          <a href="labour-codes.html">Labour Codes 2026</a>
         </div>
 
         <div class="footer-col">
