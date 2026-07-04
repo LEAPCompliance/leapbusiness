@@ -327,6 +327,11 @@ ul { list-style: none; }
 .offer-item { padding-left: 18px; border-left: 3px solid var(--secondary); }
 .offer-item p { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--text-secondary); line-height: 1.5; margin: 0; }
 
+/* ── CLIENT LOGOS ── */
+.client-logo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.client-logo-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; height: 90px; display: flex; align-items: center; justify-content: center; }
+.client-logo-card img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
 /* Hero card */
 .hero-card-wrap { position: relative; }
 .hero-card {
@@ -635,6 +640,7 @@ footer { background: var(--primary); color: rgba(255,255,255,0.68); padding: 64p
   .services-grid { grid-template-columns: repeat(2, 1fr); }
   .why-grid { grid-template-columns: 1fr; }
   .offer-grid { grid-template-columns: repeat(3, 1fr); }
+  .client-logo-grid { grid-template-columns: repeat(3, 1fr); }
   .checklist-inner { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
@@ -648,6 +654,7 @@ footer { background: var(--primary); color: rgba(255,255,255,0.68); padding: 64p
   .services-grid { grid-template-columns: 1fr; }
   .why-list { grid-template-columns: 1fr; }
   .offer-grid { grid-template-columns: 1fr 1fr; }
+  .client-logo-grid { grid-template-columns: 1fr 1fr; }
   .blog-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
