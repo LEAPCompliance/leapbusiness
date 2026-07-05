@@ -1,6 +1,6 @@
 /* ============================================
    LEAP Business Solutions – Main JS
-   FAQ · Scroll Animations · Form · Newsletter
+   FAQ · Scroll Animations · Form · Newsletter · Nav Dropdowns
    ============================================ */
 
 /* ── FAQ accordion ── */
@@ -102,6 +102,22 @@ function initContactForm() {
   });
 }
 
+/* ── Nav dropdown hover-intent (grace period so the menu doesn't
+   snap shut the instant the cursor's path grazes outside the box) ── */
+function initNavDropdowns() {
+  const dropdowns = document.querySelectorAll('.nav-dropdown');
+  dropdowns.forEach(dd => {
+    let closeTimer = null;
+    dd.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimer);
+      dd.classList.add('open');
+    });
+    dd.addEventListener('mouseleave', () => {
+      closeTimer = setTimeout(() => dd.classList.remove('open'), 350);
+    });
+  });
+}
+
 /* ── Newsletter form (footer) ── */
 function initNewsletterForm() {
   const form = document.getElementById('newsletterForm');
@@ -157,4 +173,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initContactForm();
   initNewsletterForm();
+  initNavDropdowns();
 });
