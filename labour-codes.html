@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://www.leapbusiness.in/labour-codes.html" />
   <link rel="icon" href="assets/favicon.png?v=2" type="image/png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="stylesheet" href="css/style.css?v=5" />
+  <link rel="stylesheet" href="css/style.css?v=6" />
   <style>
     .lc-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px; height: 100%; }
     .lc-timeline { border-left: 3px solid var(--secondary); padding-left: 24px; margin-left: 8px; }
@@ -16,6 +16,14 @@
     .lc-timeline-item::before { content: ''; position: absolute; left: -30px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--secondary); }
     .lc-date { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 4px; }
     .updated-badge { display: inline-block; background: var(--secondary-light); color: var(--primary); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-bottom: 16px; }
+    .lc-point-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; height: 100%; }
+    .lc-point-card .service-name { font-size: 15px; margin-bottom: 8px; }
+    .lc-point-card .service-desc { font-size: 14px; margin-bottom: 0; }
+    .lc-num-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 22px; }
+    .lc-num-item:last-child { margin-bottom: 0; }
+    .lc-num-badge { width: 34px; height: 34px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+    .lc-num-text { font-size: 15px; color: var(--text-secondary); line-height: 1.7; padding-top: 4px; }
+    .lc-jump-nav { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -111,16 +119,99 @@
   </div>
 </section>
 
-<!-- Key changes -->
-<section class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div class="container">
+<!-- Key changes intro + jump nav -->
+<section class="section-pad-sm" style="background:var(--secondary-faint);border-top:1px solid var(--border)">
+  <div class="container text-center">
     <div class="tag">Key Changes</div>
-    <h2 class="section-title" style="margin-bottom:36px">What Employers Need to Know</h2>
-    <div class="grid-2" style="gap:24px">
-      <div class="lc-card"><div class="service-name">New "Wages" Definition &amp; the 50% Rule</div><p class="service-desc">Basic pay + DA must now equal at least 50% of total remuneration. If allowances push this below 50%, the excess is added back to "wages" for PF, gratuity and bonus calculation, raising employer statutory cost on allowance-heavy structures.</p></div>
-      <div class="lc-card"><div class="service-name">Gratuity for Fixed-Term Employees</div><p class="service-desc">Fixed-term employees become eligible for gratuity on a pro-rata basis without needing to complete 5 years of continuous service, unlike the earlier regime.</p></div>
-      <div class="lc-card"><div class="service-name">Social Security for Gig &amp; Platform Workers</div><p class="service-desc">Gig workers, platform workers, and unorganised sector workers get a formal social security framework for the first time under the Code on Social Security.</p></div>
-      <div class="lc-card"><div class="service-name">Simplified Registration &amp; Returns</div><p class="service-desc">Single registration and licensing regime and simplified return filing are intended to replace multiple overlapping registrations under the old acts.</p></div>
+    <h2 class="section-title" style="margin-bottom:24px">What Employers Need to Know, By Topic</h2>
+    <div class="lc-jump-nav">
+      <a href="#definitions" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Definitions</a>
+      <a href="#registration-licensing" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Registration &amp; Licensing</a>
+      <a href="#wages-welfare-benefits" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Wages, Welfare &amp; Benefits</a>
+      <a href="#employer-obligations" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Employer Obligations</a>
+    </div>
+  </div>
+</section>
+
+<!-- Definitions -->
+<section class="section-pad" id="definitions">
+  <div class="container">
+    <div class="tag">Definitions</div>
+    <h2 class="section-title" style="margin-bottom:8px">Definitions: What's Changed</h2>
+    <p class="section-sub" style="margin-bottom:32px">The Codes redefine several foundational terms — and those new definitions decide who counts as a worker, what counts as wages, and which rules apply where.</p>
+    <div class="grid-2" style="gap:20px">
+      <div class="lc-point-card fade-up delay-1"><div class="service-name">Worker</div><p class="service-desc">Excludes supervisors drawing ₹18,000/month or more (earlier the cut-off was just ₹3,000/month) — a big jump that pulls many mid-level supervisory staff out of "worker" protections.</p></div>
+      <div class="lc-point-card fade-up delay-2"><div class="service-name">Inter-State Migrant Worker</div><p class="service-desc">Now includes resident migrants working in the state as well as migrants brought in by a contractor, where wages are below ₹18,000/month.</p></div>
+      <div class="lc-point-card fade-up delay-3"><div class="service-name">Contract Worker</div><p class="service-desc">Now includes inter-state migrant workers and "out workers" — those who work outside the establishment's premises.</p></div>
+      <div class="lc-point-card fade-up delay-4"><div class="service-name">Establishment</div><p class="service-desc">A place of business, trade, or manufacture employing 10 or more workers.</p></div>
+      <div class="lc-point-card fade-up delay-5"><div class="service-name">Wages</div><p class="service-desc">Basic pay + DA + Retention Allowance. Excludes Bonus, HRA, other allowances, PF/Pension, overtime, and Gratuity. If these exclusions exceed 50% of total remuneration, the excess is added back to "wages" for benefits computation.</p></div>
+      <div class="lc-point-card fade-up delay-6"><div class="service-name">Appropriate Government</div><p class="service-desc">For contractors working in centrally-governed establishments, compliance now falls under the Central Labour Rules.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Registration & Licensing -->
+<section class="section-pad" id="registration-licensing" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tag">Registration &amp; Licensing</div>
+    <h2 class="section-title" style="margin-bottom:8px">Registration &amp; Licensing: What's New</h2>
+    <p class="section-sub" style="margin-bottom:32px">Registrations and contractor licences are being consolidated under the OSH Code — fewer overlapping registrations, but new deadlines to track.</p>
+    <div class="lc-card" style="max-width:820px;margin:0 auto">
+      <div class="lc-num-item">
+        <div class="lc-num-badge">1</div>
+        <div class="lc-num-text">Existing registrations under the Factories, BOCW, CLRA, ISMW, Mines, and Plantations Acts remain valid under the OSH Code, subject to intimation to the registration officer within the specified time. This also applies to EPF and ESIC registrations.</div>
+      </div>
+      <div class="lc-num-item">
+        <div class="lc-num-badge">2</div>
+        <div class="lc-num-text">Registration under OSH must be obtained within 60 days of applicability. A single registration now covers all establishment details, contractors, contract workers, inter-state migrant workers, and construction work.</div>
+      </div>
+      <div class="lc-num-item">
+        <div class="lc-num-badge">3</div>
+        <div class="lc-num-text">Closure of an establishment must be intimated within 30 days, along with a declaration certifying payment of all dues to workers. Surrender of any registration under the OSH Code must be accompanied by a similar declaration from the employer.</div>
+      </div>
+      <div class="lc-num-item">
+        <div class="lc-num-badge">4</div>
+        <div class="lc-num-text">Contract licences are now required only for contractors employing 50 or more workers.</div>
+      </div>
+      <div class="lc-num-item">
+        <div class="lc-num-badge">5</div>
+        <div class="lc-num-text">A contractor may obtain a single licence covering all its establishments in a state (and in some cases, nationally), with provisions to add new establishments to the licence based on fresh work orders.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wages, Welfare & Benefits -->
+<section class="section-pad" id="wages-welfare-benefits">
+  <div class="container">
+    <div class="tag">Wages, Welfare &amp; Benefits</div>
+    <h2 class="section-title" style="margin-bottom:8px">Wages, Welfare &amp; Benefits: What Changes for You</h2>
+    <p class="section-sub" style="margin-bottom:32px">Work hours, leave, gratuity, and compensation rules have all shifted — most of them in the employee's favour, which means higher benefit costs for employers.</p>
+    <div class="grid-2" style="gap:20px">
+      <div class="lc-point-card fade-up delay-1"><div class="service-name">Work Hours &amp; Overtime</div><p class="service-desc">8 hours a day, 6 days a week. Overtime is payable at twice the regular wage rate (as newly defined). Working on the weekly rest day is now also compensated at double rate.</p></div>
+      <div class="lc-point-card fade-up delay-2"><div class="service-name">Leave Entitlement</div><p class="service-desc">1 day of leave for every 20 days worked. Minimum 180 days worked in a year required (down from 240). Layoff, maternity, and annual leave count towards eligibility, though not towards entitlement itself. Holidays falling within a leave period don't count as leave.</p></div>
+      <div class="lc-point-card fade-up delay-3"><div class="service-name">Leave Carryover &amp; Encashment</div><p class="service-desc">Maximum carryforward is 30 days; the excess can be encashed at year-end. Leave applied for but not granted can be encashed without limit. All leave entitlement is payable on discharge, dismissal, or superannuation, even if eligibility criteria aren't otherwise met.</p></div>
+      <div class="lc-point-card fade-up delay-4"><div class="service-name">New Wage Definition Impact</div><p class="service-desc">PF, ESI, Bonus, Maternity Benefit, and Gratuity are all now calculated on the new definition of wages — expect higher benefit costs across the board.</p></div>
+      <div class="lc-point-card fade-up delay-5"><div class="service-name">Gratuity</div><p class="service-desc">Fixed-term employees are now eligible for gratuity on a pro-rata basis after a minimum of 1 year's work. Payable within 30 days of the employee's application. Gratuity insurance is now mandatory.</p></div>
+      <div class="lc-point-card fade-up delay-6"><div class="service-name">Death / Disability Compensation</div><p class="service-desc">Calculated as 50% of wages multiplied by the relevant age factor. The earlier minimum compensation clauses of ₹1.2 lakh / ₹1.4 lakh under the Employee Compensation Act have been deleted.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Employer Obligations -->
+<section class="section-pad" id="employer-obligations" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tag">Employer Obligations</div>
+    <h2 class="section-title" style="margin-bottom:8px">Your Obligations as Employer</h2>
+    <p class="section-sub" style="margin-bottom:32px">These are the operational obligations that fall directly on employers under the new Codes — the ones LEAP helps you stay on top of every month.</p>
+    <div class="grid-2" style="gap:20px">
+      <div class="lc-point-card fade-up delay-1"><div class="service-name">Payment of Wages</div><p class="service-desc">Wages must be paid within 7 days of the end of the pay period, for all establishments.</p></div>
+      <div class="lc-point-card fade-up delay-2"><div class="service-name">Limit on Deductions</div><p class="service-desc">Deductions from monthly salary cannot exceed 50% of wages, as newly defined.</p></div>
+      <div class="lc-point-card fade-up delay-3"><div class="service-name">Contract Labour Wages</div><p class="service-desc">The principal employer is directly accountable for the wages and benefits of all contract labour, and can deduct unpaid wages or contributions from contractor invoices.</p></div>
+      <div class="lc-point-card fade-up delay-4"><div class="service-name">Appointment &amp; Discharge</div><p class="service-desc">A letter of appointment must be issued within 3 months of the Code becoming applicable. An experience certificate must be given to discharged employees within the stipulated days.</p></div>
+      <div class="lc-point-card fade-up delay-5"><div class="service-name">Safety Officers</div><p class="service-desc">Mandatory for factories employing 500 or more workers, hazardous industries with 250 or more workers, construction work with 250 or more workers, and mines employing 100 or more workers.</p></div>
+      <div class="lc-point-card fade-up delay-6"><div class="service-name">Full &amp; Final Settlement</div><p class="service-desc">Must be completed within 2 days of relieving. Wages or benefits may not be reduced for any reason.</p></div>
+      <div class="lc-point-card fade-up delay-1"><div class="service-name">Annual Health Checkups</div><p class="service-desc">Must be provided free of cost to all employees, including contract employees.</p></div>
     </div>
   </div>
 </section>
