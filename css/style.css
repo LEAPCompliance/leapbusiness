@@ -699,6 +699,23 @@ footer { background: var(--primary); color: rgba(255,255,255,0.68); padding: 64p
   .section-pad-sm { padding-top: 32px; padding-bottom: 32px; }
 }
 
+/* ── IMPACT STAT BOXES ── */
+.stat-box {
+  background: var(--secondary-light);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: left;
+}
+.stat-box-icon { font-size: 30px; margin-bottom: 18px; line-height: 1; }
+.stat-box-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.stat-box-label { font-size: 15px; color: var(--text-secondary); margin-top: 6px; line-height: 1.4; }
+
+
 
 /* ── STOCK IMAGES ── */
 .img-cover {
