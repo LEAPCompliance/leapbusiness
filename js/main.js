@@ -1,6 +1,6 @@
 /* ============================================
    LEAP Business Solutions – Main JS
-   FAQ · Scroll Animations · Form
+   FAQ · Scroll Animations · Form · Newsletter
    ============================================ */
 
 /* ── FAQ accordion ── */
@@ -102,6 +102,41 @@ function initContactForm() {
   });
 }
 
+/* ── Newsletter form (footer) ── */
+function initNewsletterForm() {
+  const form = document.getElementById('newsletterForm');
+  if (!form) return;
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Subscribing...';
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        showToast('✅ Subscribed! You\'ll get compliance updates by email.');
+        form.reset();
+      } else {
+        showToast('⚠️ Something went wrong. Please email support@leapbusiness.in.');
+      }
+    } catch (err) {
+      showToast('⚠️ Something went wrong. Please email support@leapbusiness.in.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  });
+}
+
 /* ── Toast notification ── */
 function showToast(msg) {
   let toast = document.querySelector('.toast');
@@ -121,4 +156,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initCounters();
   initContactForm();
+  initNewsletterForm();
 });

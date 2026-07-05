@@ -187,8 +187,14 @@ function renderFooter() {
           </p>
           <div class="footer-newsletter" style="margin-top:20px">
             <h5>Compliance Updates</h5>
-            <input type="email" placeholder="Your email address" />
-            <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px">Subscribe</button>
+            <form id="newsletterForm">
+              <input type="hidden" name="access_key" value="53f8e9d0-2770-4150-b0d3-4f6f0d347a3d" />
+              <input type="hidden" name="subject" value="New Newsletter Signup - LEAP Website" />
+              <input type="hidden" name="from_name" value="LEAP Website Newsletter" />
+              <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
+              <input type="email" name="email" placeholder="Your email address" required />
+              <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px">Subscribe</button>
+            </form>
           </div>
         </div>
 
