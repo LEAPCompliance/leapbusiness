@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://www.leapbusiness.in/services.html" />
   <link rel="icon" href="assets/favicon.png?v=2" type="image/png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="stylesheet" href="css/style.css?v=10" />
+  <link rel="stylesheet" href="css/style.css?v=11" />
   <style>
     .service-detail { padding: 80px 0; border-bottom: 1px solid var(--border); }
     .service-detail:nth-child(even) { background: var(--secondary-faint); }
@@ -25,6 +25,14 @@
     .service-img { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); }
     .service-img img { width: 100%; height: 340px; object-fit: cover; display: block; }
     @media(max-width:768px){.service-detail-grid{grid-template-columns:1fr}.service-detail:nth-child(even) .service-detail-grid{direction:ltr}}
+    .svc-quicknav { background: var(--background-light); border-bottom: 1px solid var(--border); padding: 16px 0; position: sticky; top: 72px; z-index: 100; }
+    .svc-quicknav-inner { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .svc-quicknav-inner .btn { padding: 8px 18px; font-size: 13px; white-space: nowrap; }
+    @media(max-width:768px){
+      .svc-quicknav { padding: 12px 0; }
+      .svc-quicknav-inner { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; padding: 0 16px; }
+      .svc-quicknav-inner::-webkit-scrollbar { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -41,17 +49,17 @@
 </section>
 
 <!-- Quick Nav -->
-<div style="background:var(--background-light);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:72px;z-index:100">
+<div class="svc-quicknav">
   <div class="container">
-    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
-      <a href="#advisory" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Labour Law Advisory</a>
-      <a href="registrations.html" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Registrations &amp; Licenses</a>
-      <a href="payroll-compliance.html" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Payroll Compliance</a>
-      <a href="#factory" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Factory Compliance</a>
-      <a href="#posh" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">POSH Act Compliance</a>
-      <a href="#audit" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Employer &amp; Vendor's Audit</a>
-      <a href="#ir" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Industrial Relations</a>
-      <a href="#establishment" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Establishment Compliance</a>
+    <div class="svc-quicknav-inner">
+      <a href="#advisory" class="btn btn-outline-dark">Labour Law Advisory</a>
+      <a href="registrations.html" class="btn btn-outline-dark">Registrations &amp; Licenses</a>
+      <a href="payroll-compliance.html" class="btn btn-outline-dark">Payroll Compliance</a>
+      <a href="#factory" class="btn btn-outline-dark">Factory Compliance</a>
+      <a href="#posh" class="btn btn-outline-dark">POSH Act Compliance</a>
+      <a href="#audit" class="btn btn-outline-dark">Employer &amp; Vendor's Audit</a>
+      <a href="#ir" class="btn btn-outline-dark">Industrial Relations</a>
+      <a href="#establishment" class="btn btn-outline-dark">Establishment Compliance</a>
     </div>
   </div>
 </div>
@@ -312,7 +320,7 @@
 
 <div id="footer-placeholder"></div>
 <div id="whatsapp-placeholder"></div>
-<script src="js/components.js?v=4"></script>
+<script src="js/components.js?v=5"></script>
 <script src="js/main.js?v=5"></script>
 <script>renderNavbar('services');renderFooter();renderWhatsApp();</script>
 </body>

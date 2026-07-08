@@ -93,16 +93,69 @@ function renderNavbar(activePage) {
 
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <a href="index.html">Home</a>
-      <a href="services.html">Our Services</a>
-      <a href="payroll-compliance.html">Payroll Compliance</a>
-      <a href="blog.html">Resources / Blog</a>
-      <a href="registrations.html">Registrations</a>
-      <a href="knowledge.html">Knowledge Hub</a>
-      <a href="faq.html">FAQs</a>
-      <a href="labour-codes.html">Labour Codes 2026</a>
-      <a href="tools.html">Tools &amp; Calculators</a>
-      <a href="about.html">About Us</a>
-      <a href="contact.html">Contact</a>
+
+      <details class="mobile-accordion">
+        <summary>Our Services</summary>
+        <div class="mobile-accordion-body">
+          <a href="services.html#advisory">Labour Law Advisory</a>
+          <a href="registrations.html">Registrations &amp; Licenses</a>
+          <a href="payroll-compliance.html">Payroll Compliance</a>
+          <a href="services.html#factory">Factory Compliance</a>
+          <a href="services.html#posh">POSH Act Compliance</a>
+          <a href="services.html#audit">Employer &amp; Vendor's Compliance Audit</a>
+          <a href="services.html#ir">Industrial Relations</a>
+          <a href="services.html#establishment">Establishment Compliance</a>
+        </div>
+      </details>
+
+      <details class="mobile-accordion">
+        <summary>Resources</summary>
+        <div class="mobile-accordion-body">
+          <div class="mobile-accordion-heading">Reference Hubs</div>
+          <a href="coming-soon.html?item=Downloads">Downloads</a>
+          <a href="coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
+          <a href="registrations.html">Registrations</a>
+          <a href="knowledge.html">Knowledge Hub</a>
+          <a href="knowledge.html#lwf">Labour Welfare Fund</a>
+          <a href="knowledge.html#pt">Professional Tax</a>
+          <a href="coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
+          <a href="coming-soon.html?item=Minimum Wages">Minimum Wages</a>
+          <a href="coming-soon.html?item=Holidays">Holidays</a>
+          <div class="mobile-accordion-heading">Compliance</div>
+          <a href="labour-codes.html">Labour Codes 2026</a>
+          <a href="coming-soon.html?item=Compliance Calendar">Compliance Calendar</a>
+          <a href="coming-soon.html?item=Guidance">Guidance</a>
+          <div class="mobile-accordion-heading">Editorial</div>
+          <a href="blog.html">Articles</a>
+          <a href="faq.html">FAQs</a>
+          <a href="coming-soon.html?item=Govt. FAQs">Govt. FAQs</a>
+        </div>
+      </details>
+
+      <details class="mobile-accordion">
+        <summary>Tools</summary>
+        <div class="mobile-accordion-body">
+          <div class="mobile-accordion-heading">Payroll Calculators</div>
+          <a href="tools.html#ctc-takehome">CTC ↔ Take-Home</a>
+          <a href="tools.html#epf-split">EPF Split</a>
+          <a href="tools.html#esic-split">ESIC Split</a>
+          <a href="tools.html#pt">Professional Tax</a>
+          <div class="mobile-accordion-heading">Statutory Payouts</div>
+          <a href="tools.html#gratuity">Gratuity</a>
+          <a href="tools.html#bonus">Statutory Bonus</a>
+          <a href="tools.html#maternity">Maternity Benefit</a>
+          <div class="mobile-accordion-heading">Reckoners</div>
+          <a href="tools.html#allowance-heatmap">Allowance Heatmap</a>
+        </div>
+      </details>
+
+      <details class="mobile-accordion">
+        <summary>About Us</summary>
+        <div class="mobile-accordion-body">
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </details>
     </div>
   </nav>`;
 
