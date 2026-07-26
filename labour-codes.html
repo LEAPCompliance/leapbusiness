@@ -24,6 +24,16 @@
     .lc-num-badge { width: 34px; height: 34px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 14px; flex-shrink: 0; }
     .lc-num-text { font-size: 15px; color: var(--text-secondary); line-height: 1.7; padding-top: 4px; }
     .lc-jump-nav { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 0; }
+    .lc-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius); border: 1px solid var(--border); }
+    .lc-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; font-family: 'Inter', sans-serif; }
+    .lc-table th { background: var(--primary); color: #fff; font-weight: 600; padding: 12px 16px; text-align: left; white-space: nowrap; }
+    .lc-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+    .lc-table tr:last-child td { border-bottom: none; }
+    .lc-table tr:nth-child(even) td { background: var(--secondary-faint); }
+    .lc-table strong.lc-new { color: var(--primary); font-weight: 700; }
+    .lc-checklist-group { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--secondary); padding: 18px 24px 8px; }
+    .lc-checklist-group:first-child { padding-top: 4px; }
+    .checklist-body .check-item { padding: 10px 24px; margin: 0 -24px; }
   </style>
 </head>
 <body>
@@ -74,6 +84,34 @@
         <div class="service-name">OSH &amp; Working Conditions Code, 2020</div>
         <p class="service-desc">Consolidates the Factories Act, Contract Labour Act, Inter-State Migrant Workmen Act and 10 other acts covering workplace safety, health, and working conditions.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Old vs New Comparison -->
+<section class="section-pad" id="old-vs-new" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tag">At a Glance</div>
+    <h2 class="section-title" style="margin-bottom:8px">Old Labour Laws vs New Labour Codes</h2>
+    <p class="section-sub" style="margin-bottom:32px">The headline numbers that actually move the needle for employers — side by side.</p>
+    <div class="lc-table-wrap">
+      <table class="lc-table">
+        <thead>
+          <tr><th>Dimension</th><th>Old Framework (29 Laws)</th><th>New Framework (4 Codes)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Number of laws</td><td>29 separate statutes</td><td><strong class="lc-new">4 consolidated codes</strong></td></tr>
+          <tr><td>Wage definition</td><td>Different across each law</td><td><strong class="lc-new">Uniform — Basic + DA ≥ 50% of total</strong></td></tr>
+          <tr><td>Gig worker coverage</td><td>Not covered</td><td><strong class="lc-new">Included under Social Security Code</strong></td></tr>
+          <tr><td>Retrenchment permission</td><td>Required for 100+ workers</td><td><strong class="lc-new">Required for 300+ workers</strong></td></tr>
+          <tr><td>FTE gratuity eligibility</td><td>5 years' continuous service</td><td><strong class="lc-new">1 year for fixed-term employees</strong></td></tr>
+          <tr><td>Record keeping</td><td>Physical registers</td><td><strong class="lc-new">Mandatory digital records</strong></td></tr>
+          <tr><td>Inspections</td><td>Routine inspector visits</td><td><strong class="lc-new">Risk-based, algorithm-driven audits</strong></td></tr>
+          <tr><td>Full-and-final settlement</td><td>30–45 days (common practice)</td><td><strong class="lc-new">2 working days (statutory)</strong></td></tr>
+          <tr><td>Factory threshold</td><td>10 (with power) / 20 (without power)</td><td><strong class="lc-new">20 (with power) / 40 (without power)</strong></td></tr>
+          <tr><td>Enforcement model</td><td>Prosecution-first</td><td><strong class="lc-new">Cure period + compounding option</strong></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
@@ -129,6 +167,8 @@
       <a href="#registration-licensing" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Registration &amp; Licensing</a>
       <a href="#wages-welfare-benefits" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Wages, Welfare &amp; Benefits</a>
       <a href="#employer-obligations" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Employer Obligations</a>
+      <a href="#penalty-reference" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Penalty Reference</a>
+      <a href="#compliance-checklist" class="btn btn-outline-dark" style="padding:8px 18px;font-size:13px">Compliance Checklist</a>
     </div>
   </div>
 </section>
@@ -212,6 +252,83 @@
       <div class="lc-point-card fade-up delay-5"><div class="service-name">Safety Officers</div><p class="service-desc">Mandatory for factories employing 500 or more workers, hazardous industries with 250 or more workers, construction work with 250 or more workers, and mines employing 100 or more workers.</p></div>
       <div class="lc-point-card fade-up delay-6"><div class="service-name">Full &amp; Final Settlement</div><p class="service-desc">Must be completed within 2 days of relieving. Wages or benefits may not be reduced for any reason.</p></div>
       <div class="lc-point-card fade-up delay-1"><div class="service-name">Annual Health Checkups</div><p class="service-desc">Must be provided free of cost to all employees, including contract employees.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Compliance & Penalty Reference -->
+<section class="section-pad" id="penalty-reference">
+  <div class="container">
+    <div class="tag">Quick Reference</div>
+    <h2 class="section-title" style="margin-bottom:8px">Compliance Requirements &amp; Penalty Reference</h2>
+    <p class="section-sub" style="margin-bottom:32px">Everything above, condensed into one lookup table — what's required, under which Code, how often, and what non-compliance can cost you. Penalty figures are indicative and subject to the final notified rules; confirm specifics with our team before relying on them.</p>
+    <div class="lc-table-wrap">
+      <table class="lc-table">
+        <thead>
+          <tr><th>Compliance Area</th><th>Key Requirement</th><th>Applicable Code</th><th>Frequency</th><th>Penalty Range</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Salary structure</td><td>Basic + DA ≥ 50% of total remuneration</td><td>Code on Wages</td><td>One-time restructuring + ongoing</td><td>₹50,000 first offence</td></tr>
+          <tr><td>Minimum wages</td><td>Pay at or above floor wage for all categories</td><td>Code on Wages</td><td>Ongoing</td><td>₹50,000 (first), ₹1 lakh (repeat)</td></tr>
+          <tr><td>Overtime payment</td><td>Twice the normal wage rate for all eligible workers</td><td>Code on Wages</td><td>Per occurrence</td><td>₹50,000 (first)</td></tr>
+          <tr><td>Equal remuneration</td><td>No gender-based wage discrimination</td><td>Code on Wages</td><td>Ongoing</td><td>₹50,000–₹1 lakh</td></tr>
+          <tr><td>PF contributions</td><td>12% of wages (as newly defined)</td><td>Social Security Code</td><td>Monthly (15th)</td><td>Up to ₹5 lakh</td></tr>
+          <tr><td>ESI contributions</td><td>Employer 3.25%, employee 0.75% (if wages ≤ ₹21,000/month)</td><td>Social Security Code</td><td>Monthly (15th)</td><td>Up to ₹5 lakh</td></tr>
+          <tr><td>Gratuity provision</td><td>4.81% of wages; eligible after 5 years (1 year for FTE)</td><td>Social Security Code</td><td>Annual provision / on separation</td><td>Up to ₹1 lakh</td></tr>
+          <tr><td>Maternity benefit</td><td>26 weeks paid leave; crèche for 50+ employees</td><td>Social Security Code</td><td>Per occurrence</td><td>Up to ₹1 lakh</td></tr>
+          <tr><td>Gig worker cess</td><td>1–2% of annual turnover (for aggregators)</td><td>Social Security Code</td><td>Annual (rates to be notified)</td><td>To be specified</td></tr>
+          <tr><td>Trade union recognition</td><td>Recognised union for 51%+ membership</td><td>Industrial Relations Code</td><td>On application</td><td>—</td></tr>
+          <tr><td>Standing orders</td><td>Mandatory for 300+ worker establishments</td><td>Industrial Relations Code</td><td>One-time + amendments</td><td>₹1 lakh</td></tr>
+          <tr><td>Retrenchment notice</td><td>90 days + govt. permission for 300+ establishments</td><td>Industrial Relations Code</td><td>Per occurrence</td><td>Up to ₹10 lakh</td></tr>
+          <tr><td>Working hours</td><td>Max 8 hrs/day, 48 hrs/week (with exceptions)</td><td>OSH Code</td><td>Ongoing</td><td>₹2 lakh (first), ₹5 lakh (repeat)</td></tr>
+          <tr><td>Annual health check-up</td><td>Free for workers above prescribed age (45 in draft rules)</td><td>OSH Code</td><td>Annual</td><td>₹2 lakh</td></tr>
+          <tr><td>Digital records</td><td>Electronic registers replace physical registers</td><td>All Codes</td><td>Ongoing</td><td>Varies by Code</td></tr>
+          <tr><td>Shram Suvidha registration</td><td>Single registration + digital compliance portal</td><td>All Codes</td><td>One-time + updates</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Compliance Checklist -->
+<section class="section-pad" id="compliance-checklist" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:32px">
+      <div class="tag">Action Items</div>
+      <h2 class="section-title" style="margin-bottom:8px">Your Quick Compliance Checklist</h2>
+      <p class="section-sub" style="margin:0 auto">A practical punch-list to work through — this is exactly the kind of gap-check we do for you in the free 1-hour audit.</p>
+    </div>
+    <div class="checklist-preview" style="max-width:720px;margin:0 auto">
+      <div class="checklist-header">
+        <h4>Labour Code Compliance Checklist, India 2026</h4>
+        <span class="checklist-badge">16 Items</span>
+      </div>
+      <div class="checklist-body">
+        <div class="lc-checklist-group">Wages &amp; Salary</div>
+        <div class="check-item"><div class="check-box">✓</div> Restructure all salaries so Basic + DA ≥ 50% of total remuneration</div>
+        <div class="check-item"><div class="check-box">✓</div> Pay at or above floor wage for all employee categories</div>
+        <div class="check-item"><div class="check-box">✓</div> Pay overtime at 2× normal wage rate for all eligible workers</div>
+        <div class="check-item"><div class="check-box">✓</div> Complete full-and-final settlement within 2 working days</div>
+
+        <div class="lc-checklist-group">Social Security &amp; Benefits</div>
+        <div class="check-item"><div class="check-box">✓</div> Register on EPFO and ESIC portals; deposit contributions by the 15th monthly</div>
+        <div class="check-item"><div class="check-box">✓</div> Recalculate PF at 12% of wages under the new definition</div>
+        <div class="check-item"><div class="check-box">✓</div> Provision gratuity at 4.81%; FTE staff eligible after 1 year</div>
+        <div class="check-item"><div class="check-box">✓</div> Ensure 26 weeks' maternity leave; crèche facility for 50+ employees</div>
+
+        <div class="lc-checklist-group">Working Conditions</div>
+        <div class="check-item"><div class="check-box">✓</div> Cap daily hours at 8 and weekly at 48 (spread-over max 12 hours)</div>
+        <div class="check-item"><div class="check-box">✓</div> Provide free annual health check-ups for workers above prescribed age</div>
+        <div class="check-item"><div class="check-box">✓</div> Maintain max 30-day leave carry-forward; encash the excess</div>
+
+        <div class="lc-checklist-group">Digital &amp; Registration</div>
+        <div class="check-item"><div class="check-box">✓</div> Register on the Shram Suvidha Portal, obtain your Labour Identification Number</div>
+        <div class="check-item"><div class="check-box">✓</div> Migrate all employment records to electronic format</div>
+        <div class="check-item"><div class="check-box">✓</div> Constitute or renew your POSH Internal Committee (10+ employees)</div>
+      </div>
+      <div class="checklist-footer">
+        <a href="tel:+917977213501" class="btn btn-primary" style="width:100%;justify-content:center">📞 Get Help Closing These Gaps</a>
+      </div>
     </div>
   </div>
 </section>
