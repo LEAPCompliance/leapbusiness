@@ -8,74 +8,156 @@ function fmtINR(n) {
   return '₹' + Math.round(n).toLocaleString('en-IN');
 }
 
-/* ---------- 1. CTC Structure & Take-Home ---------- */
-function calcTakeHome() {
-  const gross = parseFloat(document.getElementById('ctc-gross').value) || 0;
-  const gender = document.getElementById('ctc-gender').value;
-  const female = gender === 'Female';
-  const comm = parseFloat(document.getElementById('ctc-comm').value) || 0;
-  const conv = parseFloat(document.getElementById('ctc-conv').value) || 0;
+/* ---------- 1. CTC <-> Take-Home ---------- */
+let ctcDirection = 'ctc'; // 'ctc' = CTC -> Take-Home, 'th' = Take-Home -> CTC
 
-  // Part A - Earnings
-  const basicDA = gross * 0.5;
-  const hra = basicDA * 0.5;
-  const special = gross - basicDA - hra - comm - conv;
-  const grossTotal = basicDA + hra + comm + conv + special; // = gross
+const CTC_STATES = {
+  MH: { name: 'Maharashtra', pt: maharashtraPTState, lwfEE: 25 / 6, lwfER: 75 / 6, lwfFreq: 'half-yearly (Jun & Dec)', febNote: 'Maharashtra charges ₹300 in February (vs ₹200 other months) to reach the ₹2,500 annual cap.' },
+  KA: { name: 'Karnataka', pt: (g) => (g < 25000 ? 0 : 200), lwfEE: 50 / 12, lwfER: 100 / 12, lwfFreq: 'annual', febNote: 'Karnataka charges ₹300 in February (vs ₹200 other months) to reach the ₹2,500 annual cap.' },
+  GJ: { name: 'Gujarat', pt: (g) => (g <= 12000 ? 0 : 200), lwfEE: 6 / 6, lwfER: 12 / 6, lwfFreq: 'half-yearly (Jun & Dec)', febNote: null },
+  WB: { name: 'West Bengal', pt: ptWestBengal, lwfEE: 3 / 6, lwfER: 30 / 6, lwfFreq: 'half-yearly (Jun & Dec)', febNote: null },
+  TN: { name: 'Tamil Nadu', pt: ptTamilNaduMonthly, lwfEE: 20 / 12, lwfER: 40 / 12, lwfFreq: 'annual', febNote: null, halfYearly: true },
+  TS: { name: 'Telangana', pt: ptTelanganaAP, lwfEE: 2 / 12, lwfER: 5 / 12, lwfFreq: 'annual', febNote: null },
+  AP: { name: 'Andhra Pradesh', pt: ptTelanganaAP, lwfEE: 30 / 12, lwfER: 70 / 12, lwfFreq: 'annual', febNote: null },
+  MP: { name: 'Madhya Pradesh', pt: (g) => (g <= 18750 ? 0 : 208), lwfEE: 10 / 6, lwfER: 20 / 6, lwfFreq: 'half-yearly (Jun & Dec)', febNote: 'Madhya Pradesh charges ₹212 in February (vs ₹208 other months) to reach the ₹2,500 annual cap.' },
+};
 
-  // Part B - Employee Deductions
-  const pfWage = grossTotal - hra; // Basic+DA + all allowances except HRA
+function maharashtraPTState(gross, female) {
+  if (female) return gross <= 25000 ? 0 : 200;
+  if (gross <= 7500) return 0;
+  if (gross <= 10000) return 175;
+  return 200;
+}
+function ptWestBengal(gross) {
+  if (gross <= 10000) return 0;
+  if (gross <= 15000) return 110;
+  if (gross <= 25000) return 130;
+  if (gross <= 40000) return 150;
+  return 200;
+}
+function ptTamilNaduMonthly(gross) {
+  const hy = gross * 6;
+  let half;
+  if (hy <= 21000) half = 0;
+  else if (hy <= 30000) half = 180;
+  else if (hy <= 45000) half = 425;
+  else if (hy <= 60000) half = 930;
+  else if (hy <= 75000) half = 1025;
+  else half = 1250;
+  return half / 6;
+}
+function ptTelanganaAP(gross) {
+  if (gross <= 15000) return 0;
+  if (gross <= 20000) return 150;
+  return 200;
+}
+
+function setCtcDirection(dir) {
+  ctcDirection = dir;
+  document.getElementById('ctc-dir-ctc').classList.toggle('active', dir === 'ctc');
+  document.getElementById('ctc-dir-th').classList.toggle('active', dir === 'th');
+  document.getElementById('ctc-amount-label').textContent = dir === 'ctc' ? 'Monthly CTC (₹)' : 'Monthly Take-Home (₹)';
+  calcTakeHome();
+}
+
+function ctcForward(gross, p) {
+  const basicDA = gross * (p.basicPct / 100);
+  const hra = basicDA * (p.hraPct / 100);
+  const special = gross - basicDA - hra - p.comm - p.conv;
+  const grossTotal = basicDA + hra + p.comm + p.conv + special; // = gross
+
+  const pfWage = grossTotal - hra;
   const pfEmp = pfWage > 15000 ? 1800 : pfWage * 0.12;
   const esicApplicable = basicDA < 21000;
   const esicEmp = esicApplicable ? basicDA * 0.0075 : 0;
-  const pt = maharashtraPT(gross, female, 'other');
-  const mlwfEmp = Math.round((25 / 6) * 100) / 100;
-  const netSalary = grossTotal - pfEmp - esicEmp - pt - mlwfEmp;
+  const st = CTC_STATES[p.state];
+  const pt = st.pt(gross, p.female);
+  const lwfEmp = st.lwfEE;
+  const netSalary = grossTotal - pfEmp - esicEmp - pt - lwfEmp;
 
-  // Part C - Employer Cost
   const pfEmployer = pfWage > 15000 ? 1950 : pfWage * 0.13;
   const esicEmployer = esicApplicable ? basicDA * 0.0325 : 0;
-  const mlwfEmployer = Math.round((75 / 6) * 100) / 100;
+  const lwfEmployer = st.lwfER;
   const bonus = basicDA * 0.0833;
   const gratuity = basicDA * 0.0481;
-  const employerCostTotal = pfEmployer + esicEmployer + mlwfEmployer + bonus + gratuity;
+  const employerCostTotal = pfEmployer + esicEmployer + lwfEmployer + bonus + gratuity;
 
   const ctc = grossTotal + employerCostTotal;
+  return { basicDA, hra, comm: p.comm, conv: p.conv, special, grossTotal, pfEmp, esicApplicable, esicEmp, pt, lwfEmp, netSalary, pfWage, pfEmployer, esicEmployer, lwfEmployer, bonus, gratuity, employerCostTotal, ctc };
+}
+
+function ctcSolveGross(targetVal, getter, p) {
+  let lo = 0, hi = Math.max(targetVal * 3, 200000);
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    const val = getter(ctcForward(mid, p));
+    if (val < targetVal) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+function calcTakeHome() {
+  const amount = parseFloat(document.getElementById('ctc-amount').value) || 0;
+  const stateCode = document.getElementById('ctc-state').value;
+  const gender = document.getElementById('ctc-gender').value;
+  const female = gender === 'Female';
+  const basicPct = parseFloat(document.getElementById('ctc-basicpct').value) || 50;
+  const hraPct = parseFloat(document.getElementById('ctc-hrapct').value) || 0;
+  const comm = parseFloat(document.getElementById('ctc-comm').value) || 0;
+  const conv = parseFloat(document.getElementById('ctc-conv').value) || 0;
+
+  const p = { basicPct, hraPct, comm, conv, state: stateCode, female };
+  const st = CTC_STATES[stateCode];
+
+  let gross;
+  if (ctcDirection === 'ctc') {
+    gross = ctcSolveGross(amount, (r) => r.ctc, p);
+  } else {
+    gross = ctcSolveGross(amount, (r) => r.netSalary, p);
+  }
+  const r = ctcForward(gross, p);
+
+  document.getElementById('ctc-summary').innerHTML = ctcDirection === 'ctc'
+    ? `Monthly CTC of ${fmtINR(amount)} → estimated take-home of <strong>${fmtINR(r.netSalary)}</strong>/month`
+    : `Target take-home of ${fmtINR(amount)} → estimated CTC of <strong>${fmtINR(r.ctc)}</strong>/month`;
 
   document.getElementById('th-result').innerHTML = `
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:4px">Part A — Earnings</div>
-    <div class="calc-row"><span>Basic + DA (50% of gross)</span><strong>${fmtINR(basicDA)}</strong></div>
-    <div class="calc-row"><span>HRA (50% of Basic + DA)</span><strong>${fmtINR(hra)}</strong></div>
-    <div class="calc-row"><span>Communication Allowance</span><strong>${fmtINR(comm)}</strong></div>
-    <div class="calc-row"><span>Conveyance / Fuel Allowance</span><strong>${fmtINR(conv)}</strong></div>
-    <div class="calc-row"><span>Special Allowance (balancing)</span><strong>${fmtINR(special)}</strong></div>
-    <div class="calc-row calc-total"><span>Gross Salary</span><strong>${fmtINR(grossTotal)}</strong></div>
+    <div class="calc-row"><span>Basic + DA (${basicPct}% of gross)</span><strong>${fmtINR(r.basicDA)}</strong></div>
+    <div class="calc-row"><span>HRA (${hraPct}% of Basic + DA)</span><strong>${fmtINR(r.hra)}</strong></div>
+    <div class="calc-row"><span>Communication Allowance</span><strong>${fmtINR(r.comm)}</strong></div>
+    <div class="calc-row"><span>Conveyance / Fuel Allowance</span><strong>${fmtINR(r.conv)}</strong></div>
+    <div class="calc-row"><span>Special Allowance (balancing)</span><strong>${fmtINR(r.special)}</strong></div>
+    <div class="calc-row calc-total"><span>Gross Salary</span><strong>${fmtINR(r.grossTotal)}</strong></div>
 
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin:16px 0 4px">Part B — Employee Deductions</div>
-    <div class="calc-row"><span>PF — Employee (12%${pfWage > 15000 ? ', capped ₹1,800' : ''})</span><strong>- ${fmtINR(pfEmp)}</strong></div>
-    <div class="calc-row"><span>ESIC — Employee ${esicApplicable ? '(0.75%)' : '(n/a, Basic+DA ≥ ₹21,000)'}</span><strong>- ${fmtINR(esicEmp)}</strong></div>
-    <div class="calc-row"><span>Professional Tax (Maharashtra)</span><strong>- ${fmtINR(pt)}</strong></div>
-    <div class="calc-row"><span>MLWF — Employee (monthly provision)</span><strong>- ${fmtINR(mlwfEmp)}</strong></div>
-    <div class="calc-row calc-total"><span>Net Take-Home Salary</span><strong>${fmtINR(netSalary)}</strong></div>
+    <div class="calc-row"><span>PF — Employee (12%${r.pfWage > 15000 ? ', capped ₹1,800' : ''})</span><strong>- ${fmtINR(r.pfEmp)}</strong></div>
+    <div class="calc-row"><span>ESIC — Employee ${r.esicApplicable ? '(0.75%)' : '(n/a, Basic+DA ≥ ₹21,000)'}</span><strong>- ${fmtINR(r.esicEmp)}</strong></div>
+    <div class="calc-row"><span>Professional Tax (${st.name})</span><strong>- ${fmtINR(r.pt)}</strong></div>
+    <div class="calc-row"><span>LWF — Employee (monthly provision)</span><strong>- ${fmtINR(r.lwfEmp)}</strong></div>
+    <div class="calc-row calc-total"><span>Net Take-Home Salary</span><strong>${fmtINR(r.netSalary)}</strong></div>
 
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin:16px 0 4px">Part C — Employer Cost (Over &amp; Above Gross)</div>
-    <div class="calc-row"><span>PF — Employer (13%${pfWage > 15000 ? ', capped ₹1,950' : ''})</span><strong>${fmtINR(pfEmployer)}</strong></div>
-    <div class="calc-row"><span>ESIC — Employer ${esicApplicable ? '(3.25%)' : '(n/a, Basic+DA ≥ ₹21,000)'}</span><strong>${fmtINR(esicEmployer)}</strong></div>
-    <div class="calc-row"><span>MLWF — Employer (monthly provision)</span><strong>${fmtINR(mlwfEmployer)}</strong></div>
-    <div class="calc-row"><span>Statutory Bonus (8.33%)</span><strong>${fmtINR(bonus)}</strong></div>
-    <div class="calc-row"><span>Gratuity provision (4.81%)</span><strong>${fmtINR(gratuity)}</strong></div>
-    <div class="calc-row calc-total"><span>Employer Cost (Part C Total)</span><strong>${fmtINR(employerCostTotal)}</strong></div>
+    <div class="calc-row"><span>PF — Employer (13%${r.pfWage > 15000 ? ', capped ₹1,950' : ''})</span><strong>${fmtINR(r.pfEmployer)}</strong></div>
+    <div class="calc-row"><span>ESIC — Employer ${r.esicApplicable ? '(3.25%)' : '(n/a, Basic+DA ≥ ₹21,000)'}</span><strong>${fmtINR(r.esicEmployer)}</strong></div>
+    <div class="calc-row"><span>LWF — Employer (monthly provision)</span><strong>${fmtINR(r.lwfEmployer)}</strong></div>
+    <div class="calc-row"><span>Statutory Bonus (8.33%)</span><strong>${fmtINR(r.bonus)}</strong></div>
+    <div class="calc-row"><span>Gratuity provision (4.81%)</span><strong>${fmtINR(r.gratuity)}</strong></div>
+    <div class="calc-row calc-total"><span>Employer Cost (Part C Total)</span><strong>${fmtINR(r.employerCostTotal)}</strong></div>
 
-    <div class="calc-row calc-total" style="margin-top:16px;padding-top:16px;border-top:2px solid var(--primary);font-size:17px"><span>💼 Total CTC (Monthly)</span><strong>${fmtINR(ctc)}</strong></div>
-    <div class="calc-row"><span>Total CTC (Annual)</span><strong>${fmtINR(ctc * 12)}</strong></div>
+    <div class="calc-row calc-total" style="margin-top:16px;padding-top:16px;border-top:2px solid var(--primary);font-size:17px"><span>💼 Total CTC (Monthly)</span><strong>${fmtINR(r.ctc)}</strong></div>
+    <div class="calc-row"><span>Total CTC (Annual)</span><strong>${fmtINR(r.ctc * 12)}</strong></div>
 
     <div style="margin-top:16px;padding-top:16px;border-top:1px dashed var(--border);font-size:13px;color:var(--text-secondary);line-height:1.7">
       <strong style="color:var(--text-primary)">Notes:</strong><br>
       • Basic + DA must also meet the applicable Minimum Wages floor for the employee's skill category — this calculator does not check that separately.<br>
       • PF wages = Gross − HRA (i.e. Basic+DA + all allowances except HRA), capped at the statutory wage ceiling of ₹15,000/month.<br>
       • ESIC applies only where Basic+DA is below ₹21,000/month; both employee and employer contributions stop above that.<br>
-      • Professional Tax shown is for a standard month; Maharashtra charges an extra ₹100 in February for slabs above the exemption limit — use the <a href="#pt" style="color:var(--primary);font-weight:600">Professional Tax calculator</a> below for exact February figures.<br>
-      • MLWF is a half-yearly contribution (₹25 EE / ₹75 ER in Dec &amp; Jun for this wage band), shown here as an averaged monthly provision; applicable only to employees below managerial level.<br>
+      ${st.febNote ? `• ${st.febNote}<br>` : ''}
+      ${st.halfYearly ? `• ${st.name} levies Professional Tax half-yearly (April &amp; October); the figure shown is a monthly-equivalent average — the actual deduction happens as one lump sum twice a year.<br>` : ''}
+      • LWF for ${st.name} is a ${st.lwfFreq} contribution, shown here as an averaged monthly provision; applicable only to employees below managerial/supervisory level, subject to each state's own threshold.<br>
       • Gratuity is a books provision — actually payable only after 5 years' continuous service (1 year for fixed-term employees under the new Labour Codes).<br>
+      • Income-tax (TDS) is not modelled here — consult a tax professional for a personalised computation.<br>
       • These are indicative estimates for general awareness — <a href="contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> to get your exact CTC structure finalised.
     </div>
   `;
