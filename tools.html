@@ -59,18 +59,19 @@
   </div>
 </section>
 
-<!-- 1. CTC <-> Take-Home -->
+<!-- 1. CTC Structure -->
 <section id="ctc-takehome" class="section-pad">
   <div class="container">
     <div class="tag">Payroll Calculator</div>
-    <h2 class="section-title">CTC ↔ Take-Home</h2>
-    <p class="section-sub" style="margin-bottom:28px">Estimate net take-home pay and employer cost from gross monthly salary.</p>
+    <h2 class="section-title">CTC Structure &amp; Take-Home</h2>
+    <p class="section-sub" style="margin-bottom:28px">Break down a monthly gross/CTC figure into Basic, HRA, allowances, statutory deductions, employer cost, and net take-home — the same structure LEAP uses for client payroll.</p>
     <div class="calc-grid">
       <div class="calc-card">
-        <div class="form-group"><label>Gross Monthly Salary (₹)</label><input type="number" id="th-gross" value="40000" oninput="calcTakeHome()" /></div>
-        <div class="form-group"><label>Basic + DA (% of gross)</label><input type="number" id="th-basicpct" value="50" oninput="calcTakeHome()" /></div>
-        <div class="form-group"><label>Month</label><select id="th-month" onchange="calcTakeHome()"><option value="other">Any month except February</option><option value="feb">February</option></select></div>
-        <div class="calc-inline"><input type="checkbox" id="th-female" onchange="calcTakeHome()" style="width:16px;height:16px" /><label for="th-female" style="margin:0;font-size:13px;color:var(--text-secondary)">Female employee (Maharashtra PT exemption below ₹15,000)</label></div>
+        <div class="form-group"><label>Gross Monthly Salary (₹)</label><input type="number" id="ctc-gross" value="50000" oninput="calcTakeHome()" /></div>
+        <div class="form-group"><label>Gender (for Professional Tax)</label><select id="ctc-gender" onchange="calcTakeHome()"><option value="Male">Male</option><option value="Female">Female</option></select></div>
+        <div class="form-group"><label>Communication Allowance, Monthly (₹, if any)</label><input type="number" id="ctc-comm" value="0" oninput="calcTakeHome()" /></div>
+        <div class="form-group"><label>Conveyance / Fuel Allowance, Monthly (₹, if any)</label><input type="number" id="ctc-conv" value="0" oninput="calcTakeHome()" /></div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">Basic + DA is auto-set to 50% of gross (statutory minimum wage floor applies separately by skill category). HRA is auto-set to 50% of Basic + DA. Special Allowance is the balancing figure.</p>
       </div>
       <div class="calc-result" id="th-result"></div>
     </div>
@@ -216,7 +217,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="js/components.js?v=5"></script>
 <script src="js/main.js?v=5"></script>
-<script src="js/tools.js?v=2"></script>
+<script src="js/tools.js?v=3"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
