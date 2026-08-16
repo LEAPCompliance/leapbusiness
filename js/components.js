@@ -18,14 +18,12 @@ function renderNavbar(activePage) {
           <li class="nav-dropdown">
             <a href="services.html"           ${activePage==='services'?'class="active"':''}>Our Services</a>
             <div class="dropdown-menu">
-              <a href="services.html#advisory">Labour Law Advisory</a>
-              <a href="registrations.html">Registrations &amp; Licenses</a>
               <a href="payroll-compliance.html">Payroll Compliance</a>
-              <a href="services.html#factory">Factory Compliance</a>
-              <a href="services.html#posh">POSH Act Compliance</a>
-              <a href="services.html#audit">Employer &amp; Vendor's Compliance Audit</a>
-              <a href="services.html#ir">Industrial Relations</a>
               <a href="services.html#establishment">Establishment Compliance</a>
+              <a href="registrations.html">Registrations &amp; Licenses</a>
+              <a href="services.html#audit">Audit &amp; Inspection</a>
+              <a href="services.html#vendor-audit">Vendor/Client Audit</a>
+              <a href="services.html#factory">Factory Compliance</a>
             </div>
           </li>
           <li class="nav-dropdown">
@@ -97,14 +95,12 @@ function renderNavbar(activePage) {
       <details class="mobile-accordion">
         <summary>Our Services</summary>
         <div class="mobile-accordion-body">
-          <a href="services.html#advisory">Labour Law Advisory</a>
-          <a href="registrations.html">Registrations &amp; Licenses</a>
           <a href="payroll-compliance.html">Payroll Compliance</a>
-          <a href="services.html#factory">Factory Compliance</a>
-          <a href="services.html#posh">POSH Act Compliance</a>
-          <a href="services.html#audit">Employer &amp; Vendor's Compliance Audit</a>
-          <a href="services.html#ir">Industrial Relations</a>
           <a href="services.html#establishment">Establishment Compliance</a>
+          <a href="registrations.html">Registrations &amp; Licenses</a>
+          <a href="services.html#audit">Audit &amp; Inspection</a>
+          <a href="services.html#vendor-audit">Vendor/Client Audit</a>
+          <a href="services.html#factory">Factory Compliance</a>
         </div>
       </details>
 
