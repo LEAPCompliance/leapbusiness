@@ -44,7 +44,7 @@ function animateCounter(el, target, suffix) {
   const timer = setInterval(() => {
     current += step;
     if (current >= target) { current = target; clearInterval(timer); }
-    el.textContent = Math.floor(current) + suffix;
+    el.textContent = Math.floor(current).toLocaleString('en-IN') + suffix;
   }, 25);
 }
 
