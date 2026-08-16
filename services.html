@@ -9,31 +9,6 @@
   <link rel="icon" href="assets/favicon.png?v=2" type="image/png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="stylesheet" href="css/style.css?v=13" />
-  <style>
-    .service-detail { padding: 80px 0; border-bottom: 1px solid var(--border); }
-    .service-detail:nth-child(even) { background: var(--secondary-faint); }
-    .service-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-    .service-detail:nth-child(even) .service-detail-grid { direction: rtl; }
-    .service-detail:nth-child(even) .service-detail-grid > * { direction: ltr; }
-    .service-feature { display: flex; gap: 14px; margin-bottom: 16px; }
-    .sf-icon { width: 32px; height: 32px; background: var(--secondary-light); border-radius: 6px; display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0; }
-    .sf-text strong { display: block; font-size: 15px; color: var(--primary); margin-bottom: 3px; font-family:'Inter',sans-serif; }
-    .sf-text span { font-size: 14px; color: var(--text-secondary); font-family:'Inter',sans-serif; }
-    .service-box { background: linear-gradient(135deg, var(--primary), #1b5a8c); border-radius: var(--radius-lg); padding: 36px; color: #fff; }
-    .service-box h4 { font-family: 'Playfair Display',serif; font-size: 20px; color: #fff; margin-bottom: 16px; }
-    .act-tag { display: inline-block; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.20); color: rgba(255,255,255,0.85); font-size: 12px; padding: 5px 12px; border-radius: 40px; margin: 4px; font-family:'Inter',sans-serif; }
-    .service-img { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); }
-    .service-img img { width: 100%; height: 340px; object-fit: cover; display: block; }
-    @media(max-width:768px){.service-detail-grid{grid-template-columns:1fr}.service-detail:nth-child(even) .service-detail-grid{direction:ltr}}
-    .svc-quicknav { background: var(--background-light); border-bottom: 1px solid var(--border); padding: 16px 0; position: sticky; top: 72px; z-index: 100; }
-    .svc-quicknav-inner { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-    .svc-quicknav-inner .btn { padding: 8px 18px; font-size: 13px; white-space: nowrap; }
-    @media(max-width:768px){
-      .svc-quicknav { padding: 12px 0; }
-      .svc-quicknav-inner { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; padding: 0 16px; }
-      .svc-quicknav-inner::-webkit-scrollbar { display: none; }
-    }
-  </style>
 </head>
 <body>
 <div id="navbar-placeholder"></div>
@@ -48,256 +23,166 @@
   </div>
 </section>
 
-<!-- Quick Nav -->
-<div class="svc-quicknav">
+<!-- ═══ CORE STATUTORY COMPLIANCE ═══ -->
+<section class="section-pad" id="statutory">
   <div class="container">
-    <div class="svc-quicknav-inner">
-      <a href="#advisory" class="btn btn-outline-dark">Labour Law Advisory</a>
-      <a href="registrations.html" class="btn btn-outline-dark">Registrations &amp; Licenses</a>
-      <a href="payroll-compliance.html" class="btn btn-outline-dark">Payroll Compliance</a>
-      <a href="#factory" class="btn btn-outline-dark">Factory Compliance</a>
-      <a href="#posh" class="btn btn-outline-dark">POSH Act Compliance</a>
-      <a href="#audit" class="btn btn-outline-dark">Employer &amp; Vendor's Audit</a>
-      <a href="#ir" class="btn btn-outline-dark">Industrial Relations</a>
-      <a href="#establishment" class="btn btn-outline-dark">Establishment Compliance</a>
-    </div>
-  </div>
-</div>
-
-<!-- Labour Law Advisory -->
-<div class="service-detail" id="advisory">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">Strategic Guidance</div>
-        <h2 class="section-title">Labour Law Advisory</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">Ongoing expert guidance on applicability, interpretation and risk exposure across India's labour statutes, including the new Labour Codes. Direct access to compliance specialists, not call-centre support.</p>
-        <div class="service-feature"><div class="sf-icon">🧭</div><div class="sf-text"><strong>Statute Applicability Review</strong><span>Determine exactly which Acts apply to your establishment based on headcount, state and industry.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">⚖️</div><div class="sf-text"><strong>Labour Codes 2026 Transition Support</strong><span>Guidance on shifting to the four new Labour Codes as central and state rules roll out.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📄</div><div class="sf-text"><strong>Policy &amp; Contract Review</strong><span>HR policies, employment contracts and standing orders reviewed for legal compliance.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📞</div><div class="sf-text"><strong>On-Call Advisory Access</strong><span>Direct phone and email access to your dedicated compliance consultant for day-to-day queries.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Talk to a Compliance Advisor →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80&auto=format&fit=crop"
-             alt="Labour law advisory consultation" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Factory Compliance -->
-<div class="service-detail" id="factory">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">Factories Act, 1948</div>
-        <h2 class="section-title">Factory Compliance</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">For manufacturing and processing units, we manage the full compliance lifecycle under the Factories Act, from licensing to safety registers, so your operations stay inspection-ready year round.</p>
-        <div class="service-feature"><div class="sf-icon">🏭</div><div class="sf-text"><strong>Factory License Registration &amp; Renewal</strong><span>New factory licensing and annual renewal with the state factories inspectorate.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📋</div><div class="sf-text"><strong>Statutory Registers &amp; Returns</strong><span>Muster rolls, annual returns and Form 25 filings maintained and submitted on time.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">⏱️</div><div class="sf-text"><strong>Working Hours &amp; Overtime Compliance</strong><span>Shift scheduling, overtime computation and rest interval compliance.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🦺</div><div class="sf-text"><strong>Safety, Health &amp; Welfare Tracking</strong><span>Canteen, crèche and first-aid provisions tracked as applicable to your factory.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Get Factory Compliance Help →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80&auto=format&fit=crop"
-             alt="Factory floor and manufacturing compliance" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- POSH Act Compliance -->
-<div class="service-detail" id="posh">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">POSH Act, 2013</div>
-        <h2 class="section-title">POSH Act Compliance</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">Prevention of Sexual Harassment compliance handled end-to-end, from Internal Committee formation to annual filings, protecting your employees and your organisation.</p>
-        <div class="service-feature"><div class="sf-icon">👥</div><div class="sf-text"><strong>Internal Committee (IC) Formation &amp; Training</strong><span>IC constitution as per statutory requirements, with training for all members.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📝</div><div class="sf-text"><strong>Policy Drafting &amp; Awareness Sessions</strong><span>POSH policy drafting and employee awareness sessions across your organisation.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🔍</div><div class="sf-text"><strong>Complaint Handling &amp; Inquiry Support</strong><span>Confidential complaint handling and support through the inquiry process.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📑</div><div class="sf-text"><strong>Annual Report Filing</strong><span>Section 21 annual report preparation and filing with the District Officer.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Set Up POSH Compliance →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80&auto=format&fit=crop"
-             alt="Workplace policy and POSH compliance" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PF -->
-<div class="service-detail" id="pf">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">EPF &amp; MP Act, 1952</div>
-        <h2 class="section-title">Provident Fund (PF / EPF) Compliance</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">Mandatory for establishments with 20+ employees. We manage every aspect of your PF compliance — monthly ECR filing, challan payment, and meticulous employee records — so you never miss a deadline or face a notice.</p>
-        <div class="service-feature"><div class="sf-icon">📋</div><div class="sf-text"><strong>Monthly ECR Filing &amp; Payment</strong><span>Electronic Challan cum Return filed by 15th of each month with contribution remittance.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🆔</div><div class="sf-text"><strong>UAN Generation &amp; KYC Linking</strong><span>New joiner UAN allocation, Aadhaar/PAN/Bank linking and EPF passbook management.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📄</div><div class="sf-text"><strong>Annual PF Return (Form 3A, 6A)</strong><span>Year-end consolidated returns and member data submission to EPFO.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🤝</div><div class="sf-text"><strong>Transfer &amp; Withdrawal Assistance</strong><span>Helping employees with PF transfer (Form 13) and settlement claims.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Get PF Compliance Help →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=600&q=80&auto=format&fit=crop"
-             alt="PF compliance and financial documents" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ESIC -->
-<div class="service-detail" id="esic">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">ESI Act, 1948</div>
-        <h2 class="section-title">ESIC Compliance</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">Applicable to establishments with 10+ employees where any employee earns ₹21,000 or less per month. ESIC provides medical and cash benefits — and timely compliance is non-negotiable.</p>
-        <div class="service-feature"><div class="sf-icon">📅</div><div class="sf-text"><strong>Monthly Contribution Filing</strong><span>Employer + employee contributions filed via ESIC portal by the 15th of each month.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🆔</div><div class="sf-text"><strong>Employee IP Registration</strong><span>Insured Person registration for all eligible new employees and dependents.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📑</div><div class="sf-text"><strong>Half-Yearly Return (Form 6)</strong><span>Consolidated return of contributions for April–September and October–March periods.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🏥</div><div class="sf-text"><strong>Claim &amp; Inspection Support</strong><span>Assisting employees with claim filing and supporting during ESIC inspections.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Get ESIC Compliance Help →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80&auto=format&fit=crop"
-             alt="Healthcare and employee insurance compliance" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PT -->
-<div class="service-detail" id="pt">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">State-Specific Act</div>
-        <h2 class="section-title">Professional Tax (PT)</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">Professional Tax is levied by state governments and varies state to state. Maximum PT is ₹2,500 per year. We manage enrollment, registration, deductions, and returns for all applicable states.</p>
-        <div class="service-feature"><div class="sf-icon">📜</div><div class="sf-text"><strong>EC &amp; RC Certificate</strong><span>Enrollment Certificate for employer, Registration Certificate for business — state-specific.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">💳</div><div class="sf-text"><strong>Monthly Deduction &amp; Payment</strong><span>PT deduction from salary as per applicable slab and timely payment to state treasury.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📊</div><div class="sf-text"><strong>Annual / Quarterly Return</strong><span>Return filing as per state-specific periodicity — monthly, quarterly or annually.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Get PT Compliance Help →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=600&q=80&auto=format&fit=crop"
-             alt="Tax filing and professional services" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- LWF -->
-<div class="service-detail" id="lwf">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">State Labour Acts</div>
-        <h2 class="section-title">Labour Welfare Fund (LWF)</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">LWF is a statutory contribution for the social security and welfare of workers, governed by state-specific acts. We track all applicable states for your business and ensure timely contributions.</p>
-        <div class="service-feature"><div class="sf-icon">🗓️</div><div class="sf-text"><strong>Timely Contributions</strong><span>Half-yearly (June &amp; December) or annual contributions as applicable per state.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📝</div><div class="sf-text"><strong>Register Maintenance</strong><span>LWF deduction register and employee contribution records maintained.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🌍</div><div class="sf-text"><strong>Multi-State Management</strong><span>Different state rates and applicability managed through one single point of contact.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Get LWF Compliance Help →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1521791055366-0d553872952f?w=600&q=80&auto=format&fit=crop"
-             alt="Labour welfare and employee benefits" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Employer & Vendor's Compliance Audit -->
-<div class="service-detail" id="audit">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">Risk Management</div>
-        <h2 class="section-title">Employer &amp; Vendor's Compliance Audit</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">A comprehensive, systematic review of your own compliance posture, and that of your contractors and vendors, across all applicable labour laws. We offer a <strong>free initial review within 30 minutes</strong> for all new clients.</p>
-        <div class="service-feature"><div class="sf-icon">🔍</div><div class="sf-text"><strong>Compliance Gap Analysis</strong><span>Detailed review of all filings, registers, notices, and returns under applicable acts.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🤝</div><div class="sf-text"><strong>Vendor &amp; Contractor Due Diligence</strong><span>Verifying labour law compliance of your contract labour suppliers and vendors before onboarding and periodically thereafter.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📊</div><div class="sf-text"><strong>Risk Scoring &amp; Report</strong><span>Clear risk rating (High/Medium/Low) for each compliance area with actionable recommendations.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🛡️</div><div class="sf-text"><strong>Remediation Support</strong><span>Hands-on help to close compliance gaps, filing arrears, applying for registrations, updating records.</span></div></div>
-        <a href="tel:+917977213501" class="btn btn-primary" style="margin-top:8px">📞 Book Free Audit Now</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600&q=80&auto=format&fit=crop"
-             alt="Compliance audit and legal review" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Industrial Relations -->
-<div class="service-detail" id="ir">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">Industrial Relations Code</div>
-        <h2 class="section-title">Industrial Relations</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">Managing employer-employee relations, disciplinary processes and statutory notices under the Industrial Disputes framework and the new Industrial Relations Code.</p>
-        <div class="service-feature"><div class="sf-icon">📜</div><div class="sf-text"><strong>Standing Orders Certification &amp; Compliance</strong><span>Drafting, certification and ongoing compliance with model or certified standing orders.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">⚖️</div><div class="sf-text"><strong>Disciplinary Process &amp; Domestic Enquiry Support</strong><span>Guidance through show-cause notices, domestic enquiries and natural justice procedures.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📤</div><div class="sf-text"><strong>Termination, Retrenchment &amp; Layoff Advisory</strong><span>Statutory notice, compensation computation and procedural compliance for separations.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🗣️</div><div class="sf-text"><strong>Works Committee &amp; Grievance Redressal</strong><span>Setting up grievance redressal committees as required under the IR Code.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Get Industrial Relations Support →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=80&auto=format&fit=crop"
-             alt="Industrial relations and employee grievance management" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Establishment Compliance -->
-<div class="service-detail" id="establishment">
-  <div class="container">
-    <div class="service-detail-grid">
-      <div class="fade-up">
-        <div class="tag">Shops &amp; Establishment Act</div>
-        <h2 class="section-title">Establishment Compliance</h2>
-        <p style="font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:28px">State-wise registration and ongoing compliance under the Shops &amp; Establishment Act for offices, retail outlets and service establishments.</p>
-        <div class="service-feature"><div class="sf-icon">📝</div><div class="sf-text"><strong>State-Wise Registration &amp; Annual Renewal</strong><span>Registration under the applicable state act, with timely annual renewal.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">📋</div><div class="sf-text"><strong>Muster Rolls, Leave &amp; Attendance Registers</strong><span>Statutory registers maintained as required by the applicable state rules.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🕐</div><div class="sf-text"><strong>Working Hours, Holidays &amp; Weekly Off Compliance</strong><span>Ensuring working hours, holidays and weekly off provisions are followed.</span></div></div>
-        <div class="service-feature"><div class="sf-icon">🪧</div><div class="sf-text"><strong>Display Board &amp; Notice Compliance</strong><span>Statutory notice boards and displays maintained as per state requirements.</span></div></div>
-        <a href="contact.html" class="btn btn-primary" style="margin-top:8px">Get Establishment Compliance Help →</a>
-      </div>
-      <div class="service-img fade-up delay-2">
-        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80&auto=format&fit=crop"
-             alt="Office and retail establishment compliance" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Other Acts -->
-<div class="service-detail section-pad" id="other">
-  <div class="container">
-    <div class="text-center fade-up" style="margin-bottom:48px">
-      <div class="tag">Other Statutes</div>
-      <h2 class="section-title">Additional Acts We Manage</h2>
-      <p class="section-sub">Beyond the core four, we handle all applicable Indian labour statutes.</p>
+    <div class="text-center fade-up" style="margin-bottom:40px">
+      <div class="tag">Core Statutory Compliance</div>
+      <h2 class="section-title">Monthly &amp; Periodic Filings, Handled End-to-End</h2>
+      <p class="section-sub">The recurring statutory obligations every employer needs managed accurately and on time.</p>
     </div>
     <div class="services-grid">
-      <div class="service-card fade-up delay-1"><div class="service-icon">🤱</div><div class="service-name">Maternity Benefit Act</div><p class="service-desc">Policy review, paid leave tracking, benefit computation and register maintenance as per the Maternity Benefit (Amendment) Act, 2017.</p></div>
-      <div class="service-card fade-up delay-2"><div class="service-icon">🎁</div><div class="service-name">Payment of Bonus Act</div><p class="service-desc">Annual bonus computation (8.33%–20%), eligibility determination and Form D returns for establishments with 20+ employees.</p></div>
-      <div class="service-card fade-up delay-3"><div class="service-icon">🤝</div><div class="service-name">Payment of Gratuity</div><p class="service-desc">Gratuity fund management, actuarial valuation, Form F nominations, and payment computation for employees with 5+ years of service.</p></div>
-      <div class="service-card fade-up delay-1"><div class="service-icon">🏭</div><div class="service-name">Contract Labour (R&amp;A) Act</div><p class="service-desc">Principal employer registration, contractor license management, Form V/VI returns, and compliance registers for contract workforce.</p></div>
+      <div class="service-card fade-up delay-1" id="pf">
+        <div class="service-icon">📋</div>
+        <div class="service-name">Provident Fund (PF/EPF)</div>
+        <p class="service-desc">Mandatory for 20+ employees. Monthly ECR filing, UAN generation, KYC linking and annual returns — never miss the 15th.</p>
+        <a href="contact.html" class="service-link">Get PF Help →</a>
+      </div>
+      <div class="service-card fade-up delay-2" id="esic">
+        <div class="service-icon">🏥</div>
+        <div class="service-name">ESIC Compliance</div>
+        <p class="service-desc">For 10+ employees where wages are ₹21,000 or below. Monthly contributions, IP registration and half-yearly returns.</p>
+        <a href="contact.html" class="service-link">Get ESIC Help →</a>
+      </div>
+      <div class="service-card fade-up delay-3" id="pt">
+        <div class="service-icon">💳</div>
+        <div class="service-name">Professional Tax (PT)</div>
+        <p class="service-desc">State-specific enrollment, monthly deduction and return filing. We track every state's slab so you don't have to.</p>
+        <a href="contact.html" class="service-link">Get PT Help →</a>
+      </div>
+      <div class="service-card fade-up delay-4" id="lwf">
+        <div class="service-icon">🌍</div>
+        <div class="service-name">Labour Welfare Fund (LWF)</div>
+        <p class="service-desc">Half-yearly or annual contributions across every state you operate in, managed through one single point of contact.</p>
+        <a href="contact.html" class="service-link">Get LWF Help →</a>
+      </div>
+      <div class="service-card fade-up delay-5" id="bonus">
+        <div class="service-icon">🎁</div>
+        <div class="service-name">Payment of Bonus</div>
+        <p class="service-desc">Annual bonus computation (8.33%–20%), eligibility checks and Form D returns for establishments with 20+ employees.</p>
+        <a href="contact.html" class="service-link">Get Bonus Act Help →</a>
+      </div>
+      <div class="service-card fade-up delay-1" id="gratuity">
+        <div class="service-icon">🤝</div>
+        <div class="service-name">Payment of Gratuity</div>
+        <p class="service-desc">Gratuity fund management, Form F nominations and payment computation for employees with 5+ years of service.</p>
+        <a href="contact.html" class="service-link">Get Gratuity Help →</a>
+      </div>
+      <div class="service-card fade-up delay-2" id="maternity">
+        <div class="service-icon">🤱</div>
+        <div class="service-name">Maternity Benefit</div>
+        <p class="service-desc">Policy review, paid leave tracking and register maintenance under the Maternity Benefit (Amendment) Act, 2017.</p>
+        <a href="contact.html" class="service-link">Get Maternity Benefit Help →</a>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- ═══ REGISTRATIONS & ESTABLISHMENT ═══ -->
+<section class="section-pad" style="background:var(--secondary-faint)" id="registrations">
+  <div class="container">
+    <div class="text-center fade-up" style="margin-bottom:40px">
+      <div class="tag">Registrations &amp; Establishment</div>
+      <h2 class="section-title">Set Up Right, Stay Inspection-Ready</h2>
+      <p class="section-sub">New registrations and the ongoing compliance that keeps them valid.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up delay-1" id="establishment">
+        <div class="service-icon">📝</div>
+        <div class="service-name">Shop &amp; Establishment Compliance</div>
+        <p class="service-desc">State-wise registration, annual renewal, muster rolls and display board compliance for offices and retail outlets.</p>
+        <a href="contact.html" class="service-link">Get Help →</a>
+      </div>
+      <div class="service-card fade-up delay-2" id="factory">
+        <div class="service-icon">🏭</div>
+        <div class="service-name">Factory Compliance</div>
+        <p class="service-desc">Factory license renewal, statutory registers, Form 25 filings and working-hours compliance under the Factories Act.</p>
+        <a href="contact.html" class="service-link">Get Help →</a>
+      </div>
+      <div class="service-card fade-up delay-3" id="clra">
+        <div class="service-icon">🤝</div>
+        <div class="service-name">Contract Labour (CLRA)</div>
+        <p class="service-desc">Principal employer registration, contractor license tracking and Form V/VI returns for your contract workforce.</p>
+        <a href="contact.html" class="service-link">Get Help →</a>
+      </div>
+      <div class="service-card fade-up delay-4">
+        <div class="service-icon">📄</div>
+        <div class="service-name">New Registration or License?</div>
+        <p class="service-desc">Setting up in a new state or entity? Our Registrations &amp; Licensing page covers PF, ESIC, PT, CLRA, LWF, BOCW and Shop &amp; Establishment registration in detail.</p>
+        <a href="registrations.html" class="service-link">View Registrations →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RISK, AUDIT & WORKPLACE ═══ -->
+<section class="section-pad" id="risk">
+  <div class="container">
+    <div class="text-center fade-up" style="margin-bottom:40px">
+      <div class="tag">Risk, Audit &amp; Workplace</div>
+      <h2 class="section-title">Stay Ahead of Inspections and Disputes</h2>
+      <p class="section-sub">Advisory, audit and workplace-law obligations beyond routine filings.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up delay-1" id="audit">
+        <div class="service-icon">🔍</div>
+        <div class="service-name">Employer &amp; Vendor Compliance Audit</div>
+        <p class="service-desc">Full compliance gap analysis with risk scoring, plus vendor and contractor due diligence. Free 30-minute initial review for new clients.</p>
+        <a href="tel:+917977213501" class="service-link">📞 Book Free Audit →</a>
+      </div>
+      <div class="service-card fade-up delay-2" id="posh">
+        <div class="service-icon">👥</div>
+        <div class="service-name">POSH Act Compliance</div>
+        <p class="service-desc">Internal Committee formation, policy drafting, complaint handling and Section 21 annual report filing.</p>
+        <a href="contact.html" class="service-link">Set Up POSH →</a>
+      </div>
+      <div class="service-card fade-up delay-3" id="ir">
+        <div class="service-icon">⚖️</div>
+        <div class="service-name">Industrial Relations</div>
+        <p class="service-desc">Standing orders, disciplinary process support, and termination/retrenchment advisory under the IR Code.</p>
+        <a href="contact.html" class="service-link">Get Help →</a>
+      </div>
+      <div class="service-card fade-up delay-4" id="advisory">
+        <div class="service-icon">🧭</div>
+        <div class="service-name">Labour Law Advisory</div>
+        <p class="service-desc">Ongoing guidance on applicability, Labour Codes transition, and HR policy or contract review — direct access to a specialist.</p>
+        <a href="contact.html" class="service-link">Talk to an Advisor →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="section-pad" style="background:var(--background-light);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="text-center fade-up" style="margin-bottom:48px">
+      <div class="tag">Quick Answers</div>
+      <h2 class="section-title">Services FAQ</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item fade-up">
+        <button class="faq-q">What's the difference between registration and ongoing compliance?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Registration is the one-time setup — getting your PF code, ESIC code, PT enrollment or Shop &amp; Establishment license. Ongoing compliance is the recurring work after that — monthly filings, contribution payments, and returns. We handle both; see our Registrations &amp; Licensing page for new setups.</div></div>
+      </div>
+      <div class="faq-item fade-up delay-1">
+        <button class="faq-q">Does my company need both PF and ESIC?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">They apply independently. PF applies once you cross 20 employees, regardless of salary. ESIC applies once you cross 10 employees (varies by state) where any employee earns ₹21,000 or less per month. Many businesses need both at the same time.</div></div>
+      </div>
+      <div class="faq-item fade-up delay-2">
+        <button class="faq-q">We operate in multiple states — do we need a separate consultant for each?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No. Professional Tax and LWF rates and rules differ by state, but LEAP manages all applicable states from a single point of contact, so you don't need to coordinate multiple local vendors.</div></div>
+      </div>
+      <div class="faq-item fade-up delay-3">
+        <button class="faq-q">What does a compliance audit actually cover?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">We review your filings, registers and notices across all applicable acts, score the risk (High/Medium/Low) for each area, and give you a clear remediation plan. Vendor and contractor compliance can be checked the same way before onboarding.</div></div>
+      </div>
+      <div class="faq-item fade-up delay-4">
+        <button class="faq-q">How are you helping clients with the new Labour Codes?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Central rules for all four Labour Codes are notified, but state rules are still rolling out unevenly — Maharashtra's are still in draft. We track the applicable rules as each state finalises them and flag exactly what changes for your business. See our <a href="labour-codes.html">Labour Codes guide</a> for details.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- CTA -->
 <section class="section-pad audit-cta">
