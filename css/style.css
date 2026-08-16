@@ -717,6 +717,7 @@ footer { background: var(--primary); color: rgba(255,255,255,0.68); padding: 64p
   .nav-links, .nav-cta { display: none; }
   .hamburger { display: flex; }
   .mobile-menu.open { display: block; }
+  .hero-title { font-size: 30px; }
   .services-grid { grid-template-columns: 1fr; }
   .why-list { grid-template-columns: 1fr; }
   .offer-grid { grid-template-columns: 1fr 1fr; }
