@@ -207,12 +207,12 @@ function renderFooter() {
 
         <div class="footer-col">
           <h5>Services</h5>
-          <a href="services.html#pf">Provident Fund (PF)</a>
-          <a href="services.html#esic">ESIC Compliance</a>
-          <a href="services.html#pt">Professional Tax (PT)</a>
-          <a href="services.html#lwf">Labour Welfare Fund</a>
-          <a href="payroll-compliance.html">Payroll Management</a>
-          <a href="services.html#audit">Labour Law Audit</a>
+          <a href="payroll-compliance.html">Payroll Compliance</a>
+          <a href="services.html#establishment-compliance">Establishment Compliance</a>
+          <a href="registrations.html">Registrations &amp; Licenses</a>
+          <a href="services.html#audit">Audit &amp; Inspection</a>
+          <a href="services.html#vendor-audit">Vendor/Client Audit</a>
+          <a href="services.html#factory">Factory Compliance</a>
           <a href="services.html#posh">POSH Compliance</a>
         </div>
 
