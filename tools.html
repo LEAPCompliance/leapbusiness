@@ -43,6 +43,20 @@
     .calc-notes ul { margin: 0; padding-left: 18px; }
     .calc-notes li { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; }
     .calc-notes li:last-child { margin-bottom: 0; }
+    .epf-sumgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .epf-sumcard { background: var(--background-light); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+    .epf-sumcard.wide { grid-column: 1 / -1; }
+    .epf-sumcard span { display: block; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+    .epf-sumcard strong { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700; color: var(--primary); letter-spacing: -0.01em; }
+    .epf-group-head { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-secondary); margin: 22px 0 8px; }
+    .epf-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border); }
+    .epf-line:last-child { border-bottom: none; }
+    .epf-line strong { font-weight: 600; white-space: nowrap; }
+    .epf-line.credit { border-bottom: none; border-top: 2px solid var(--secondary); margin-top: 6px; padding-top: 12px; font-size: 15px; color: var(--primary); font-weight: 700; }
+    .epf-src { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-top: 20px; }
+    .epf-src h5 { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .epf-src p { font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; margin: 0; }
+    @media (max-width: 520px) { .epf-sumgrid { grid-template-columns: 1fr; } }
     .calc-sub-row { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0 4px 16px; font-size: 13px; color: var(--text-secondary); }
     @media (max-width: 900px) { .calc-grid { grid-template-columns: 1fr; } }
   </style>
@@ -177,7 +191,7 @@
       <div>
         <div class="calc-card-head" style="margin-bottom:4px">Result</div>
         <p class="calc-card-sub" style="margin-bottom:16px">Monthly contributions across heads.</p>
-        <div class="calc-result" id="epf-result"></div>
+        <div id="epf-result"></div>
 
         <div class="calc-notes">
           <h4>Method and assumptions</h4>
@@ -316,7 +330,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="js/components.js?v=6"></script>
 <script src="js/main.js?v=6"></script>
-<script src="js/tools.js?v=5"></script>
+<script src="js/tools.js?v=6"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
