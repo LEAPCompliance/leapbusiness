@@ -43,6 +43,16 @@
     .calc-notes ul { margin: 0; padding-left: 18px; }
     .calc-notes li { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; }
     .calc-notes li:last-child { margin-bottom: 0; }
+    .wage-table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; font-size: 13px; }
+    .wage-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); padding: 0 6px 8px; border-bottom: 1px solid var(--border); }
+    .wage-table td { padding: 5px 6px; vertical-align: middle; }
+    .wage-table input, .wage-table select { width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-primary); background: var(--white); }
+    .wage-table input:focus, .wage-table select:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(50,153,194,0.11); }
+    .wage-table .row-del { background: none; border: none; color: var(--text-secondary); font-size: 17px; cursor: pointer; line-height: 1; padding: 4px 2px; }
+    .wage-table .row-del:hover { color: #c0392b; }
+    .cat-inc  { background: #eef7f0 !important; }
+    .cat-e50  { background: #fdf4ec !important; }
+    .cat-enot { background: #f2f2f5 !important; }
     .epf-sumgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
     .epf-sumcard { background: var(--background-light); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
     .epf-sumcard.wide { grid-column: 1 / -1; }
@@ -210,14 +220,62 @@
 <section id="esic-split" class="section-pad">
   <div class="container">
     <div class="tag">Payroll Calculator</div>
-    <h2 class="section-title">ESIC Split</h2>
-    <p class="section-sub" style="margin-bottom:28px">Check ESIC eligibility and split employee/employer contributions.</p>
+    <h2 class="section-title">ESIC Wage Base &amp; Contribution (Code on Wages 50% Rule)</h2>
+    <p class="section-sub" style="margin-bottom:28px">Enter your salary structure component by component. The calculator applies the Code on Wages 50% rule, adds back any excess exclusions, derives the ESIC wage base, checks eligibility against the wage ceiling and computes both contributions.</p>
     <div class="calc-grid">
       <div class="calc-card">
-        <div class="form-group"><label>Gross Monthly Wage (₹)</label><input type="number" id="esic-gross" value="18000" oninput="calcEsicSplit()" /></div>
-        <div class="calc-inline"><input type="checkbox" id="esic-pwd" onchange="calcEsicSplit()" style="width:16px;height:16px" /><label for="esic-pwd" style="margin:0;font-size:13px;color:var(--text-secondary)">Person with disability (₹25,000 threshold)</label></div>
+        <div class="calc-card-head">Salary components</div>
+        <p class="calc-card-sub">Enter the monthly amount and choose how each head is treated.</p>
+
+        <div style="overflow-x:auto">
+          <table class="wage-table">
+            <thead>
+              <tr><th style="min-width:150px">Component</th><th style="width:110px">Amount (₹)</th><th style="min-width:180px">Category</th><th style="width:34px"></th></tr>
+            </thead>
+            <tbody id="esic-rows"></tbody>
+          </table>
+        </div>
+        <button type="button" class="btn btn-outline-dark" style="margin-top:14px;padding:8px 16px;font-size:13px" onclick="addEsicRow('', 0, 'e50')">+ Add component</button>
+
+        <div class="epf-group-head" style="margin-top:26px">Rates &amp; ceiling</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div class="form-group" style="margin-bottom:0"><label>Wage ceiling (₹)</label><input type="number" id="esic-ceiling" value="21000" min="0" oninput="calcEsicSplit()" /></div>
+          <div class="form-group" style="margin-bottom:0"><label>Employee %</label><input type="number" id="esic-ee" value="0.75" step="0.01" min="0" oninput="calcEsicSplit()" /></div>
+          <div class="form-group" style="margin-bottom:0"><label>Employer %</label><input type="number" id="esic-er" value="3.25" step="0.01" min="0" oninput="calcEsicSplit()" /></div>
+        </div>
+
+        <div class="calc-switch-row" style="margin-top:20px">
+          <div class="calc-switch-text">
+            <strong>Person with disability</strong>
+            <span>Raises the ESIC wage ceiling to ₹25,000 per month.</span>
+          </div>
+          <label class="calc-switch">
+            <input type="checkbox" id="esic-pwd" onchange="onEsicPwd()" />
+            <span class="calc-switch-slider"></span>
+          </label>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:20px">
+          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcEsicSplit()">Calculate</button>
+          <button type="button" class="btn btn-outline-dark" onclick="resetEsic()">↺ Reset</button>
+        </div>
       </div>
-      <div class="calc-result" id="esic-result"></div>
+
+      <div>
+        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
+        <p class="calc-card-sub" style="margin-bottom:16px">Wage base after the 50% rule, and monthly ESIC liability.</p>
+        <div id="esic-result"></div>
+
+        <div class="calc-notes">
+          <h4>Method and assumptions</h4>
+          <ul>
+            <li><strong>The 50% rule:</strong> where components marked &ldquo;Excluded (counts toward 50%)&rdquo; exceed 50% of total remuneration, the excess is added back into the wage base. This mirrors the proviso to the definition of wages under the Code on Wages, 2019, which the Social Security Code adopts for ESIC.</li>
+            <li><strong>&ldquo;Excluded (NOT in 50% test)&rdquo;</strong> takes an item out of wages without letting it affect the 50% test, typically used for gratuity and retrenchment compensation.</li>
+            <li>Eligibility is a simple monthly check of the ESIC wage base against the ceiling. Actual coverage also depends on contribution periods: an employee who crosses the ceiling mid-period continues to contribute until the end of that contribution period.</li>
+            <li>Overtime is included when computing the contribution payable, but is disregarded when testing whether an employee is within the wage ceiling. Treat the overtime row accordingly for each purpose.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -394,7 +452,7 @@
 <script src="js/components.js?v=6"></script>
 <script src="js/main.js?v=6"></script>
 <script src="js/pt-data.js?v=1"></script>
-<script src="js/tools.js?v=7"></script>
+<script src="js/tools.js?v=8"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

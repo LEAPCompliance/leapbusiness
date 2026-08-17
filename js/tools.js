@@ -245,25 +245,156 @@ function resetEpfSplit() {
   calcEpfSplit();
 }
 
-/* ---------- 3. ESIC Split ---------- */
-function calcEsicSplit() {
-  const gross = parseFloat(document.getElementById('esic-gross').value) || 0;
-  const pwd = document.getElementById('esic-pwd').checked;
-  const threshold = pwd ? 25000 : 21000;
+/* ---------- 3. ESIC wage base under the Code on Wages 50% rule ---------- */
+/* Mirrors the LEAP ESIC wage-code template:
+     TR     = total remuneration (every component)
+     E50    = exclusions that count toward the 50% test
+     ENOT   = exclusions kept out of the 50% test
+     cap    = 50% of TR
+     excess = max(0, E50 - cap)                       -> added back to wages
+     wages  = TR - ENOT - min(E50, cap)               == included + excess       */
 
-  if (gross > threshold) {
-    document.getElementById('esic-result').innerHTML = `
-      <div class="calc-row"><span>Status</span><strong>Not Covered</strong></div>
-      <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Gross wage exceeds the ₹${threshold.toLocaleString('en-IN')} ESIC threshold, so ESIC is not applicable for this employee (unless already covered and contribution period is ongoing).</p>
-    `;
+const ESIC_CATS = {
+  inc:  'Included in Wages',
+  e50:  'Excluded (counts toward 50%)',
+  enot: 'Excluded (NOT in 50% test)'
+};
+
+const ESIC_DEFAULT_ROWS = [
+  ['Basic Pay',                     0, 'inc'],
+  ['Dearness Allowance (DA)',       0, 'inc'],
+  ['Retaining Allowance (RA)',      0, 'inc'],
+  ['House Rent Allowance (HRA)',    0, 'e50'],
+  ['Conveyance Allowance',          0, 'e50'],
+  ['Special / Other Allowance',     0, 'e50'],
+  ['Overtime',                      0, 'e50'],
+  ['Bonus / Incentive',             0, 'e50'],
+  ['Commission',                    0, 'e50'],
+  ['Employer PF / Pension',         0, 'e50'],
+  ['Gratuity',                      0, 'enot'],
+  ['Retrenchment Compensation',     0, 'enot']
+];
+
+function esicRowHtml(name, amount, cat) {
+  const opts = Object.keys(ESIC_CATS)
+    .map(k => `<option value="${k}"${k === cat ? ' selected' : ''}>${ESIC_CATS[k]}</option>`).join('');
+  return `<tr>
+    <td><input type="text" value="${name.replace(/"/g,'&quot;')}" oninput="calcEsicSplit()" /></td>
+    <td><input type="number" class="esic-amt" value="${amount}" min="0" oninput="calcEsicSplit()" /></td>
+    <td><select class="esic-cat cat-${cat}" onchange="this.className='esic-cat cat-'+this.value;calcEsicSplit()">${opts}</select></td>
+    <td><button type="button" class="row-del" title="Remove" onclick="this.closest('tr').remove();calcEsicSplit()">×</button></td>
+  </tr>`;
+}
+
+function addEsicRow(name, amount, cat) {
+  document.getElementById('esic-rows').insertAdjacentHTML('beforeend', esicRowHtml(name, amount, cat));
+  calcEsicSplit();
+}
+
+function buildEsicRows() {
+  document.getElementById('esic-rows').innerHTML =
+    ESIC_DEFAULT_ROWS.map(r => esicRowHtml(r[0], r[1], r[2])).join('');
+}
+
+function onEsicPwd() {
+  document.getElementById('esic-ceiling').value =
+    document.getElementById('esic-pwd').checked ? 25000 : 21000;
+  calcEsicSplit();
+}
+
+function resetEsic() {
+  buildEsicRows();
+  document.getElementById('esic-ceiling').value = 21000;
+  document.getElementById('esic-ee').value = 0.75;
+  document.getElementById('esic-er').value = 3.25;
+  document.getElementById('esic-pwd').checked = false;
+  calcEsicSplit();
+}
+
+function calcEsicSplit() {
+  const tbody = document.getElementById('esic-rows');
+  if (!tbody) return;
+
+  let TR = 0, E50 = 0, ENOT = 0, INC = 0, basic = 0;
+  const rows = [...tbody.querySelectorAll('tr')];
+  rows.forEach((tr, i) => {
+    const amt = parseFloat(tr.querySelector('.esic-amt').value) || 0;
+    const cat = tr.querySelector('.esic-cat').value;
+    TR += amt;
+    if (cat === 'e50') E50 += amt;
+    else if (cat === 'enot') ENOT += amt;
+    else { INC += amt; if (i === 0) basic = amt; }
+  });
+
+  const ceiling = parseFloat(document.getElementById('esic-ceiling').value) || 0;
+  const eeRate  = (parseFloat(document.getElementById('esic-ee').value) || 0) / 100;
+  const erRate  = (parseFloat(document.getElementById('esic-er').value) || 0) / 100;
+
+  const cap    = 0.5 * TR;
+  const excess = Math.max(0, E50 - cap);
+  const wages  = TR - ENOT - Math.min(E50, cap);
+  const adjBasic = basic + excess;
+
+  const el = document.getElementById('esic-result');
+  if (TR <= 0) {
+    el.innerHTML = '<p style="font-size:14px;color:var(--text-secondary);margin:0">Enter at least one component amount to see the wage base.</p>';
     return;
   }
-  const employee = gross * 0.0075;
-  const employer = gross * 0.0325;
-  document.getElementById('esic-result').innerHTML = `
-    <div class="calc-row"><span>Employee Contribution (0.75%)</span><strong>${fmtINR(employee)}</strong></div>
-    <div class="calc-row"><span>Employer Contribution (3.25%)</span><strong>${fmtINR(employer)}</strong></div>
-    <div class="calc-row calc-total"><span>Total Monthly ESIC Contribution</span><strong>${fmtINR(employee + employer)}</strong></div>
+
+  const eligible = wages <= ceiling;
+  const ee = eligible ? Math.round(wages * eeRate) : 0;
+  const er = eligible ? Math.round(wages * erRate) : 0;
+  const e50Pct = TR > 0 ? (E50 / TR) * 100 : 0;
+  const breached = excess > 0;
+
+  el.innerHTML = `
+    <div class="epf-sumgrid">
+      <div class="epf-sumcard"><span>ESIC wage base</span><strong>${fmtINR(wages)}</strong></div>
+      <div class="epf-sumcard"><span>ESIC applicable?</span><strong style="color:${eligible ? '#1a7d3c' : '#c0392b'}">${eligible ? 'Yes' : 'No'}</strong></div>
+      <div class="epf-sumcard wide"><span>Total monthly ESIC contribution</span><strong>${fmtINR(ee + er)}</strong></div>
+    </div>
+
+    <div class="epf-group-head">The 50% test</div>
+    <div class="epf-line"><span>Total remuneration (TR)</span><strong>${fmtINR(TR)}</strong></div>
+    <div class="epf-line"><span>Exclusions counting toward the 50% test</span><strong>${fmtINR(E50)} <span style="font-weight:400;color:var(--text-secondary)">(${e50Pct.toFixed(1)}%)</span></strong></div>
+    <div class="epf-line"><span>50% of TR (the cap)</span><strong>${fmtINR(cap)}</strong></div>
+    <div class="epf-line"><span>Excess to add back to wages</span><strong style="color:${breached ? '#c0392b' : 'inherit'}">${fmtINR(excess)}</strong></div>
+
+    <div class="epf-group-head">Wage base build-up</div>
+    <div class="epf-line"><span>Components included in wages</span><strong>${fmtINR(INC)}</strong></div>
+    <div class="epf-line"><span>Add back: excess over the 50% cap</span><strong>${fmtINR(excess)}</strong></div>
+    <div class="epf-line"><span>Excluded, kept out of the 50% test</span><strong>${fmtINR(ENOT)}</strong></div>
+    <div class="epf-line credit"><span>Wages for ESIC</span><strong>${fmtINR(wages)}</strong></div>
+    <div class="epf-line"><span>Adjusted Basic for ESIC (Basic + excess)</span><strong>${fmtINR(adjBasic)}</strong></div>
+
+    <div class="epf-group-head">Contribution</div>
+    ${eligible ? `
+      <div class="epf-line"><span>Employee (${(eeRate*100).toFixed(2)}% of ${fmtINR(wages)})</span><strong>${fmtINR(ee)}</strong></div>
+      <div class="epf-line"><span>Employer (${(erRate*100).toFixed(2)}% of ${fmtINR(wages)})</span><strong>${fmtINR(er)}</strong></div>
+      <div class="epf-line credit"><span>Total monthly ESIC</span><strong>${fmtINR(ee + er)}</strong></div>`
+    : `<p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin:8px 0 0">
+         The ESIC wage base of ${fmtINR(wages)} exceeds the ${fmtINR(ceiling)} ceiling, so ESIC is not applicable for this employee. If the employee was already covered, contributions continue until the end of the running contribution period.
+       </p>`}
+
+    ${breached ? `
+      <div class="epf-src" style="border-left:3px solid #c0392b">
+        <h5>50% cap breached</h5>
+        <p>Exclusions are ${e50Pct.toFixed(1)}% of total remuneration, above the 50% limit. ${fmtINR(excess)} has been added back into the wage base, which raises PF, gratuity and bonus liability as well, not just ESIC. Restructuring Basic upward would remove this add-back.</p>
+      </div>`
+    : `
+      <div class="epf-src" style="border-left:3px solid #1a7d3c">
+        <h5>Structure meets the 50% floor</h5>
+        <p>Exclusions are ${e50Pct.toFixed(1)}% of total remuneration, within the 50% limit, so nothing is added back to wages.</p>
+      </div>`}
+
+    <div class="epf-src">
+      <h5>Source provisions</h5>
+      <p>
+        Definition of wages and the 50% proviso: Section 2(y), Code on Wages, 2019, adopted by Section 2(88), Code on Social Security, 2020.<br>
+        ESIC contribution rates 0.75% employee / 3.25% employer: Rule 51, ESI (Central) Rules, 1950, w.e.f. 01.07.2019.<br>
+        Wage ceiling ₹21,000 per month (₹25,000 for persons with disability): Rule 50, ESI (Central) Rules, 1950.
+      </p>
+    </div>
   `;
 }
 
@@ -486,6 +617,6 @@ function calcHeatmap() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  calcTakeHome(); calcEpfSplit(); calcEsicSplit(); onPtStateChange();
+  calcTakeHome(); calcEpfSplit(); buildEsicRows(); calcEsicSplit(); onPtStateChange();
   calcGratuity(); calcBonus(); calcMaternity(); calcHeatmap();
 });
