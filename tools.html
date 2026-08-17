@@ -43,6 +43,10 @@
     .calc-notes ul { margin: 0; padding-left: 18px; }
     .calc-notes li { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; }
     .calc-notes li:last-child { margin-bottom: 0; }
+    .calc-alert { border: 1px solid rgba(192,57,43,0.35); background: #fdf3f2; border-radius: var(--radius); padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; }
+    .calc-alert-icon { font-size: 16px; line-height: 1.3; }
+    .calc-alert h5 { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: #c0392b; margin-bottom: 4px; }
+    .calc-alert p { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.65; margin: 0; }
     .opt-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
     .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
     .opt-card { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; background: var(--white); transition: border-color .15s ease, box-shadow .15s ease; }
@@ -454,14 +458,58 @@
   <div class="container">
     <div class="tag">Statutory Payout</div>
     <h2 class="section-title">Statutory Bonus Calculator</h2>
-    <p class="section-sub" style="margin-bottom:28px">Estimate annual bonus payable under the Payment of Bonus Act, 1965.</p>
+    <p class="section-sub" style="margin-bottom:28px">Compute the annual statutory bonus payable under the Payment of Bonus Act, 1965. Applies the ₹21,000 eligibility ceiling, the ₹7,000 or scheduled-minimum-wage calculation floor, the 8.33% to 20% band and pro-rating by days worked.</p>
     <div class="calc-grid">
       <div class="calc-card">
-        <div class="form-group"><label>Basic + DA, Monthly (₹)</label><input type="number" id="bonus-basic" value="9000" oninput="calcBonus()" /></div>
-        <div class="form-group"><label>Gross Monthly Wage (₹, for eligibility check)</label><input type="number" id="bonus-gross" value="18000" oninput="calcBonus()" /></div>
-        <div class="form-group"><label>Bonus % (<span id="bonus-pct-label">8.33%</span>)</label><input type="range" id="bonus-pct" min="8.33" max="20" step="0.01" value="8.33" oninput="calcBonus()" style="width:100%" /></div>
+        <div class="calc-card-head">Inputs</div>
+        <p class="calc-card-sub">Provide wage details for the accounting year.</p>
+
+        <div class="form-group">
+          <label>Monthly salary or wage <span style="font-weight:400;color:var(--text-secondary)">(Section 2(21))</span></label>
+          <input type="number" id="bonus-salary" value="21000" min="0" oninput="calcBonus()" />
+        </div>
+
+        <div class="form-group">
+          <label>Scheduled minimum wage (monthly, optional)</label>
+          <input type="number" id="bonus-minwage" value="11000" min="0" oninput="calcBonus()" />
+          <p class="calc-hint">Leave blank if minimum wage does not exceed ₹7,000.</p>
+        </div>
+
+        <div class="form-group">
+          <label>Days worked in accounting year</label>
+          <input type="number" id="bonus-days" value="365" min="0" max="365" oninput="calcBonus()" />
+          <p class="calc-hint">Use 365 for a full year. Minimum 30 days required (Section 8).</p>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <label style="margin-bottom:0">Bonus rate: <span id="bonus-pct-label">8.33%</span></label>
+            <span style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text-secondary)">8.33% to 20%</span>
+          </div>
+          <input type="range" id="bonus-pct" min="8.33" max="20" step="0.01" value="8.33" oninput="calcBonus()" style="width:100%;margin-top:10px;accent-color:var(--primary)" />
+          <p class="calc-hint">Rate set by allocable surplus under Sections 10 and 11. Default 8.33% is the statutory minimum.</p>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcBonus()">Calculate</button>
+          <button type="button" class="btn btn-outline-dark" onclick="resetBonus()">↺ Reset</button>
+        </div>
       </div>
-      <div class="calc-result" id="bonus-result"></div>
+
+      <div>
+        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
+        <p class="calc-card-sub" style="margin-bottom:16px">Annual statutory bonus payable.</p>
+        <div id="bonus-result"></div>
+
+        <div class="calc-notes">
+          <h4>Method and assumptions</h4>
+          <ul>
+            <li>Eligibility ceiling of ₹21,000/month was last revised by the Payment of Bonus (Amendment) Act, 2015 with retrospective effect from 01.04.2014.</li>
+            <li>Where the employee&rsquo;s salary exceeds ₹7,000 and the scheduled minimum wage for that scheduled employment is higher than ₹7,000, bonus is computed on the minimum wage; otherwise on ₹7,000.</li>
+            <li>Bonus must be paid within 8 months from the close of the accounting year (Section 19). Disqualifications under Section 9 (fraud, riotous behaviour or theft) are not modelled here.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -525,7 +573,7 @@
 <script src="js/components.js?v=6"></script>
 <script src="js/main.js?v=6"></script>
 <script src="js/pt-data.js?v=1"></script>
-<script src="js/tools.js?v=9"></script>
+<script src="js/tools.js?v=10"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

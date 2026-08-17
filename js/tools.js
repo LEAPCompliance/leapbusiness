@@ -653,25 +653,90 @@ function calcGratuity() {
 }
 
 /* ---------- 6. Statutory Bonus ---------- */
-function calcBonus() {
-  const basicDA = parseFloat(document.getElementById('bonus-basic').value) || 0;
-  const gross = parseFloat(document.getElementById('bonus-gross').value) || 0;
-  const pct = parseFloat(document.getElementById('bonus-pct').value) || 8.33;
-  document.getElementById('bonus-pct-label').textContent = pct + '%';
+const BONUS_ELIG_CEILING = 21000;   /* Section 2(13) */
+const BONUS_CALC_FLOOR   = 7000;    /* proviso to Section 12 */
+const BONUS_MIN_DAYS     = 30;      /* Section 8 */
 
-  if (gross > 21000) {
-    document.getElementById('bonus-result').innerHTML = `
-      <div class="calc-row"><span>Status</span><strong>Not Covered Under Bonus Act</strong></div>
-      <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Gross wage exceeds the ₹21,000/month eligibility threshold under the Payment of Bonus Act.</p>
-    `;
+function resetBonus() {
+  document.getElementById('bonus-salary').value  = 21000;
+  document.getElementById('bonus-minwage').value = 11000;
+  document.getElementById('bonus-days').value    = 365;
+  document.getElementById('bonus-pct').value     = 8.33;
+  calcBonus();
+}
+
+function bonusAlert(title, msg) {
+  return `<div class="calc-alert"><span class="calc-alert-icon">⚠</span><div><h5>${title}</h5><p>${msg}</p></div></div>`;
+}
+
+function calcBonus() {
+  const salary  = parseFloat(document.getElementById('bonus-salary').value) || 0;
+  const minWage = parseFloat(document.getElementById('bonus-minwage').value) || 0;
+  const days    = parseFloat(document.getElementById('bonus-days').value) || 0;
+  const rate    = parseFloat(document.getElementById('bonus-pct').value) || 8.33;
+  const el = document.getElementById('bonus-result');
+  if (!el) return;
+
+  document.getElementById('bonus-pct-label').textContent = rate.toFixed(2).replace(/\.?0+$/,'') + '%';
+
+  if (salary <= 0) {
+    el.innerHTML = '<p style="font-size:14px;color:var(--text-secondary);margin:0">Enter a monthly salary to compute the bonus.</p>';
     return;
   }
-  const bonusWage = Math.min(basicDA, 7000);
-  const annualBonus = bonusWage * 12 * (pct / 100);
-  document.getElementById('bonus-result').innerHTML = `
-    <div class="calc-row"><span>Bonus-eligible wage (capped at ₹7,000)</span><strong>${fmtINR(bonusWage)}</strong></div>
-    <div class="calc-row calc-total"><span>Estimated Annual Bonus (${pct}%)</span><strong>${fmtINR(annualBonus)}</strong></div>
-    <p style="font-size:13px;color:var(--text-secondary);margin-top:10px">Applicable to establishments with 20+ employees; bonus ranges from 8.33% (minimum) to 20% (maximum) of eligible wage.</p>
+
+  /* Section 2(13): employees drawing above the ceiling are outside the Act. */
+  if (salary > BONUS_ELIG_CEILING) {
+    el.innerHTML = bonusAlert('Not eligible for statutory bonus',
+      `Salary ${fmtINR(salary)} exceeds the eligibility ceiling of ${fmtINR(BONUS_ELIG_CEILING)} under Section 2(13).`);
+    return;
+  }
+
+  /* Section 8: at least 30 working days in the accounting year. */
+  if (days < BONUS_MIN_DAYS) {
+    el.innerHTML = bonusAlert('Not eligible for statutory bonus',
+      `${days} day(s) worked is below the minimum of ${BONUS_MIN_DAYS} working days in the accounting year required by Section 8.`);
+    return;
+  }
+
+  /* Proviso to Section 12: cap the basis at the higher of ₹7,000 and the
+     scheduled minimum wage, but never above what the employee actually earns. */
+  const ceilingBasis = Math.max(BONUS_CALC_FLOOR, minWage);
+  const basis        = Math.min(salary, ceilingBasis);
+
+  let basisSource;
+  if (salary <= ceilingBasis)          basisSource = 'Actual salary (at or below the calculation ceiling)';
+  else if (minWage > BONUS_CALC_FLOOR) basisSource = 'Higher of ₹7,000 and scheduled minimum wage';
+  else                                 basisSource = '₹7,000 calculation ceiling';
+
+  const daysCapped = Math.min(days, 365);
+  const proRata    = daysCapped / 365;
+  const annualBasis = basis * 12 * proRata;
+  const bonus       = Math.round(annualBasis * (rate / 100));
+
+  el.innerHTML = `
+    <div class="epf-sumgrid">
+      <div class="epf-sumcard wide">
+        <span>Annual bonus payable</span>
+        <strong>${fmtINR(bonus)}</strong>
+        <div style="font-family:'Inter',sans-serif;font-size:12.5px;color:var(--text-secondary);margin-top:6px">At ${rate}% on an annual basis of ${fmtINR(annualBasis)}.</div>
+      </div>
+    </div>
+
+    <div class="epf-line"><span>Basis wage (monthly)</span><strong>${fmtINR(basis)}</strong></div>
+    <div class="epf-line"><span>Basis source</span><strong>${basisSource}</strong></div>
+    <div class="epf-line"><span>Annual basis${daysCapped < 365 ? ' (pro-rated)' : ''}</span><strong>${fmtINR(annualBasis)}</strong></div>
+    <div class="epf-line"><span>Bonus rate</span><strong>${rate}%</strong></div>
+    ${daysCapped < 365 ? `<div class="epf-line"><span>Pro-rating applied</span><strong>${daysCapped} / 365 days</strong></div>` : ''}
+
+    <div class="epf-src">
+      <h5>Source provisions</h5>
+      <p>
+        Eligibility: Section 2(13) and Section 8, Payment of Bonus Act, 1965.<br>
+        Calculation ceiling: proviso to Section 12.<br>
+        Rate band: Section 10 (min 8.33%) and Section 11 (max 20%).<br>
+        Pro-rating: Section 13.
+      </p>
+    </div>
   `;
 }
 
