@@ -267,27 +267,138 @@ function calcEsicSplit() {
   `;
 }
 
-/* ---------- 4. Professional Tax (Maharashtra) ---------- */
-function maharashtraPT(gross, female, month) {
-  if (female) {
-    if (gross <= 25000) return 0;
-    return month === 'feb' ? 300 : 200;
+/* ---------- 4. Professional Tax (PAN-India) ---------- */
+/* Slab data comes from js/pt-data.js, shared with the Knowledge Hub reference table. */
+
+function ptSlabMatch(slabs, income) {
+  for (const row of slabs) {
+    const upto = row[0];
+    if (upto === null || income <= upto) return { amt: row[1], feb: row[2] || null };
   }
-  if (gross <= 7500) return 0;
-  if (gross <= 10000) return 175;
-  return month === 'feb' ? 300 : 200;
+  return { amt: 0, feb: null };
+}
+
+/* Returns the PT amount in the state's own basis unit, plus how many
+   times a year that amount is levied. */
+function ptCompute(stateName, monthlyWage, female) {
+  const st = PT_DATA[stateName];
+  if (!st || !st.applicable) return null;
+  const k = st.calc;
+
+  const periodsPerYear = k.basis === 'monthly' ? 12 : (k.basis === 'halfyearly' ? 2 : 1);
+  const income = k.basis === 'monthly' ? monthlyWage
+               : k.basis === 'halfyearly' ? monthlyWage * 6
+               : monthlyWage * 12;
+
+  const slabs = k.gender ? (female ? k.slabsFemale : k.slabsMale) : k.slabs;
+  const hit = ptSlabMatch(slabs, income);
+  const perPeriod = hit.amt;
+
+  let annual = perPeriod * periodsPerYear;
+  let febAmount = null;
+
+  /* Only the slabs that would otherwise fall short carry a higher February
+     figure, used to reach (without exceeding) the ₹2,500 annual cap. */
+  if (hit.feb && k.basis === 'monthly' && perPeriod > 0) {
+    febAmount = hit.feb;
+    annual = perPeriod * 11 + hit.feb;
+  }
+
+  return {
+    basis: k.basis, periodsPerYear, income, perPeriod, febAmount,
+    annual, monthlyEquivalent: annual / 12, act: k.act, genderBased: !!k.gender
+  };
+}
+
+function onPtStateChange() {
+  const stateName = document.getElementById('pt-state').value;
+  const st = PT_DATA[stateName];
+  const femaleRow = document.getElementById('pt-female-row');
+  femaleRow.style.display = (st && st.applicable && st.calc.gender) ? 'flex' : 'none';
+  calcPT();
 }
 
 function calcPT() {
-  const gross = parseFloat(document.getElementById('pt-gross').value) || 0;
+  const stateName = document.getElementById('pt-state').value;
+  const wage   = parseFloat(document.getElementById('pt-gross').value) || 0;
   const female = document.getElementById('pt-female').checked;
-  const month = document.getElementById('pt-month').value;
-  const pt = maharashtraPT(gross, female, month);
+  const el = document.getElementById('pt-result');
+  const st = PT_DATA[stateName];
 
-  document.getElementById('pt-result').innerHTML = `
-    <div class="calc-row"><span>Monthly Professional Tax (Maharashtra)</span><strong>${fmtINR(pt)}</strong></div>
-    <p style="font-size:13px;color:var(--text-secondary);margin-top:10px">Maharashtra slabs: Male — ₹0–7,500 Nil, ₹7,501–10,000 ₹175/month, above ₹10,000 ₹200/month (₹300 in February). Female — up to ₹25,000 Nil, above ₹25,000 ₹200/month (₹300 in February). For other states, see our full <a href="knowledge.html">Knowledge Hub PT reference tool</a>.</p>
+  if (!st) { el.innerHTML = ''; return; }
+
+  if (!st.applicable) {
+    el.innerHTML = `
+      <div class="epf-sumgrid">
+        <div class="epf-sumcard wide"><span>Monthly liability</span><strong>Not applicable</strong></div>
+      </div>
+      <div class="epf-src" style="margin-top:12px">
+        <h5>Professional Tax is not levied in ${stateName}</h5>
+        <p>${st.note ? st.note : 'No PT registration, deduction, remittance or return obligations apply to establishments in this state.'}</p>
+      </div>`;
+    return;
+  }
+
+  if (wage <= 0) {
+    el.innerHTML = '<p style="font-size:14px;color:var(--text-secondary);margin:0">Enter a gross monthly wage to see the liability.</p>';
+    return;
+  }
+
+  const r = ptCompute(stateName, wage, female);
+  const basisLabel = r.basis === 'monthly' ? 'month' : (r.basis === 'halfyearly' ? 'half-year' : 'year');
+  const monthlyDisplay = r.basis === 'monthly' ? r.perPeriod : r.monthlyEquivalent;
+
+  let periodRow = '';
+  if (r.basis !== 'monthly') {
+    periodRow = `<div class="epf-line"><span>${r.basis === 'halfyearly' ? 'Half-yearly' : 'Annual'} income assessed</span><strong>${fmtINR(r.income)}</strong></div>
+                 <div class="epf-line"><span>PT per ${basisLabel} (as notified)</span><strong>${fmtINR(r.perPeriod)}</strong></div>`;
+  }
+
+  el.innerHTML = `
+    <div class="epf-sumgrid">
+      <div class="epf-sumcard"><span>${r.basis === 'monthly' ? 'Monthly liability' : 'Monthly equivalent'}</span><strong>${fmtINR(monthlyDisplay)}</strong></div>
+      <div class="epf-sumcard"><span>Annual</span><strong>${fmtINR(r.annual)}</strong></div>
+    </div>
+
+    <div class="epf-src" style="margin-top:4px">
+      <h5>Article 276 ceiling</h5>
+      <p>Annual professional tax cannot exceed ₹2,500 per person under Article 276(2) of the Constitution.</p>
+    </div>
+
+    <div class="epf-group-head">How this is computed</div>
+    <div class="epf-line"><span>State</span><strong>${stateName}</strong></div>
+    <div class="epf-line"><span>Gross monthly wage</span><strong>${fmtINR(wage)}</strong></div>
+    ${r.genderBased ? `<div class="epf-line"><span>Slab applied</span><strong>${female ? 'Female' : 'Male'}</strong></div>` : ''}
+    ${periodRow}
+    ${r.febAmount ? `<div class="epf-line"><span>Regular months (Mar to Jan)</span><strong>${fmtINR(r.perPeriod)} × 11</strong></div>
+                     <div class="epf-line"><span>February (catch-up to the annual cap)</span><strong>${fmtINR(r.febAmount)}</strong></div>` : ''}
+    <div class="epf-line credit"><span>Annual liability</span><strong>${fmtINR(r.annual)}</strong></div>
+
+    ${r.basis !== 'monthly' ? `<p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">${stateName} levies PT ${r.basis === 'halfyearly' ? 'half-yearly' : 'annually'}, so the monthly figure shown is an averaged equivalent. The actual deduction is made ${r.periodsPerYear === 1 ? 'once a year' : 'twice a year'} as a lump sum.</p>` : ''}
+    ${r.febAmount ? `<p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">${fmtINR(r.febAmount)} is payable in February (${fmtINR(r.perPeriod)} regular + ${fmtINR(r.febAmount - r.perPeriod)} catch-up) so the annual liability reaches, but does not exceed, ₹2,500.</p>` : ''}
+
+    <div class="epf-src">
+      <h5>Source provision</h5>
+      <p>${r.act}</p>
+    </div>
+
+    <div class="epf-src" style="border-left:3px solid var(--secondary)">
+      <h5>Employer obligations in ${stateName}</h5>
+      <p>
+        Employee PT periodicity: ${st.empPeriodicity} &nbsp;|&nbsp; Due: ${st.empDue}<br>
+        Employer PT (EC): ${st.employerAmt} &nbsp;|&nbsp; Due: ${st.employerDue}<br>
+        Remittance: ${st.remittance} &nbsp;|&nbsp; Returns: ${st.returnMode}<br>
+        Full state-wise reference: <a href="knowledge.html#pt" style="color:var(--primary);font-weight:600">Knowledge Hub PT tool →</a>
+      </p>
+    </div>
   `;
+}
+
+function resetPT() {
+  document.getElementById('pt-state').value = 'Maharashtra';
+  document.getElementById('pt-gross').value = 25000;
+  document.getElementById('pt-female').checked = false;
+  onPtStateChange();
 }
 
 /* ---------- 5. Gratuity ---------- */
@@ -375,6 +486,6 @@ function calcHeatmap() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  calcTakeHome(); calcEpfSplit(); calcEsicSplit(); calcPT();
+  calcTakeHome(); calcEpfSplit(); calcEsicSplit(); onPtStateChange();
   calcGratuity(); calcBonus(); calcMaternity(); calcHeatmap();
 });
