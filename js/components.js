@@ -19,7 +19,7 @@ function renderNavbar(activePage) {
             <a href="services.html"           ${activePage==='services'?'class="active"':''}>Our Services</a>
             <div class="dropdown-menu">
               <a href="payroll-compliance.html">Payroll Compliance</a>
-              <a href="services.html#establishment">Establishment Compliance</a>
+              <a href="services.html#establishment-compliance">Establishment Compliance</a>
               <a href="registrations.html">Registrations &amp; Licenses</a>
               <a href="services.html#audit">Audit &amp; Inspection</a>
               <a href="services.html#vendor-audit">Vendor/Client Audit</a>
@@ -96,7 +96,7 @@ function renderNavbar(activePage) {
         <summary>Our Services</summary>
         <div class="mobile-accordion-body">
           <a href="payroll-compliance.html">Payroll Compliance</a>
-          <a href="services.html#establishment">Establishment Compliance</a>
+          <a href="services.html#establishment-compliance">Establishment Compliance</a>
           <a href="registrations.html">Registrations &amp; Licenses</a>
           <a href="services.html#audit">Audit &amp; Inspection</a>
           <a href="services.html#vendor-audit">Vendor/Client Audit</a>
