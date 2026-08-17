@@ -43,6 +43,15 @@
     .calc-notes ul { margin: 0; padding-left: 18px; }
     .calc-notes li { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; }
     .calc-notes li:last-child { margin-bottom: 0; }
+    .opt-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+    .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .opt-card { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; background: var(--white); transition: border-color .15s ease, box-shadow .15s ease; }
+    .opt-card:hover { border-color: var(--secondary); }
+    .opt-card.on { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,74,110,0.13); }
+    .opt-card input[type=radio] { margin: 3px 0 0; width: 15px; height: 15px; flex-shrink: 0; accent-color: var(--primary); }
+    .opt-card strong { display: block; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; color: var(--primary); line-height: 1.35; }
+    .opt-card em { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    @media (max-width: 520px) { .opt-grid { grid-template-columns: 1fr; } }
     .wage-table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; font-size: 13px; }
     .wage-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); padding: 0 6px 8px; border-bottom: 1px solid var(--border); }
     .wage-table td { padding: 5px 6px; vertical-align: middle; }
@@ -365,13 +374,77 @@
   <div class="container">
     <div class="tag">Statutory Payout</div>
     <h2 class="section-title">Gratuity Calculator</h2>
-    <p class="section-sub" style="margin-bottom:28px">Estimate gratuity payable under the Payment of Gratuity Act, 1972.</p>
+    <p class="section-sub" style="margin-bottom:28px">Compute gratuity under the Payment of Gratuity Act, 1972 and the Code on Social Security, 2020. Supports permanent and fixed-term employees. Results are indicative; verify against the wage definition applicable to your establishment.</p>
     <div class="calc-grid">
       <div class="calc-card">
-        <div class="form-group"><label>Last Drawn Basic + DA, Monthly (₹)</label><input type="number" id="grat-basic" value="25000" oninput="calcGratuity()" /></div>
-        <div class="form-group"><label>Years of Continuous Service</label><input type="number" id="grat-years" value="7" oninput="calcGratuity()" /></div>
+        <div class="calc-card-head">Inputs</div>
+        <p class="calc-card-sub">Provide service and wage details to compute gratuity.</p>
+
+        <div class="opt-label">Governing regime</div>
+        <div class="opt-grid">
+          <label class="opt-card on" id="gr-reg-act-card">
+            <input type="radio" name="gr-regime" value="act" checked onchange="onGratRegime()" />
+            <span><strong>Payment of Gratuity Act, 1972</strong><em>Currently in force.</em></span>
+          </label>
+          <label class="opt-card" id="gr-reg-code-card">
+            <input type="radio" name="gr-regime" value="code" onchange="onGratRegime()" />
+            <span><strong>Code on Social Security, 2020</strong><em>Pending notification.</em></span>
+          </label>
+        </div>
+
+        <div class="opt-label">Employee type</div>
+        <div class="opt-grid">
+          <label class="opt-card on" id="gr-type-perm-card">
+            <input type="radio" name="gr-type" value="perm" checked onchange="onGratRegime()" />
+            <span><strong>Permanent (monthly-rated)</strong><em>5-year threshold</em></span>
+          </label>
+          <label class="opt-card" id="gr-type-ft-card">
+            <input type="radio" name="gr-type" value="ft" onchange="onGratRegime()" />
+            <span><strong>Fixed-term employee</strong><em id="gr-ft-desc">5-year threshold under 1972 Act</em></span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Last drawn monthly wages <span style="font-weight:400;color:var(--text-secondary)">(basic + DA + retaining allowance)</span></label>
+          <input type="number" id="grat-wages" value="50000" min="0" oninput="calcGratuity()" />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="form-group"><label>Years of service</label><input type="number" id="grat-years" value="7" min="0" oninput="calcGratuity()" /></div>
+          <div class="form-group"><label>Additional months</label><input type="number" id="grat-months" value="3" min="0" max="11" oninput="calcGratuity()" /></div>
+        </div>
+
+        <div class="opt-label">Reason for cessation</div>
+        <div class="opt-grid">
+          <label class="opt-card on" id="gr-c-resign-card"><input type="radio" name="gr-cause" value="resign" checked onchange="onGratCause()" /><span><strong>Resignation</strong></span></label>
+          <label class="opt-card" id="gr-c-retire-card"><input type="radio" name="gr-cause" value="retire" onchange="onGratCause()" /><span><strong>Retirement / superannuation</strong></span></label>
+          <label class="opt-card" id="gr-c-death-card"><input type="radio" name="gr-cause" value="death" onchange="onGratCause()" /><span><strong>Death</strong></span></label>
+          <label class="opt-card" id="gr-c-disable-card"><input type="radio" name="gr-cause" value="disable" onchange="onGratCause()" /><span><strong>Disablement</strong></span></label>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:8px">
+          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcGratuity()">Calculate gratuity</button>
+          <button type="button" class="btn btn-outline-dark" onclick="resetGratuity()">↺ Reset</button>
+        </div>
       </div>
-      <div class="calc-result" id="grat-result"></div>
+
+      <div>
+        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
+        <p class="calc-card-sub" style="margin-bottom:16px">Indicative computation. Subject to your establishment&rsquo;s wage definition.</p>
+        <div id="grat-result"></div>
+
+        <div class="calc-notes">
+          <h4>Method and assumptions</h4>
+          <ul>
+            <li>Monthly-rated employees: gratuity equals (last drawn wages × 15 × years of service) ÷ 26.</li>
+            <li>Service rounding: a fraction of more than six months in the final year is treated as one full year. Fixed-term employees under the Code on Social Security, 2020 receive gratuity on a pro-rata basis once one year of service is completed.</li>
+            <li>Eligibility is tested on actual continuous service, not on the rounded figure. Several High Courts have held that 4 years and 240 days in the fifth year qualifies; that reading is not applied here by default.</li>
+            <li>The five-year qualifying period does not apply where service ends due to death or disablement.</li>
+            <li>Statutory ceiling of ₹20,00,000 applies under Section 4(3) of the 1972 Act and Section 53(2) of the Code on Social Security, 2020.</li>
+            <li>Wages must include basic, dearness allowance and retaining allowance. The Code&rsquo;s 50% floor rule under Section 2(88) may apply once notified.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -452,7 +525,7 @@
 <script src="js/components.js?v=6"></script>
 <script src="js/main.js?v=6"></script>
 <script src="js/pt-data.js?v=1"></script>
-<script src="js/tools.js?v=8"></script>
+<script src="js/tools.js?v=9"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

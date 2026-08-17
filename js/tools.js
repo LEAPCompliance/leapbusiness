@@ -533,24 +533,122 @@ function resetPT() {
 }
 
 /* ---------- 5. Gratuity ---------- */
-function calcGratuity() {
-  const basicDA = parseFloat(document.getElementById('grat-basic').value) || 0;
-  const years = parseFloat(document.getElementById('grat-years').value) || 0;
-  const cap = 2000000;
+const GRAT_CEILING = 2000000;
 
-  if (years < 5) {
-    document.getElementById('grat-result').innerHTML = `
-      <div class="calc-row"><span>Status</span><strong>Not Eligible</strong></div>
-      <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Gratuity under the Payment of Gratuity Act generally requires 5+ years of continuous service (with specific exceptions such as death or disablement).</p>
-    `;
+function gratSel(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : null;
+}
+
+function gratPaint(name, map) {
+  Object.keys(map).forEach(v => {
+    const card = document.getElementById(map[v]);
+    if (card) card.classList.toggle('on', gratSel(name) === v);
+  });
+}
+
+function onGratRegime() {
+  gratPaint('gr-regime', { act: 'gr-reg-act-card', code: 'gr-reg-code-card' });
+  gratPaint('gr-type',   { perm: 'gr-type-perm-card', ft: 'gr-type-ft-card' });
+  /* The fixed-term rule only changes once the Code is in force. */
+  document.getElementById('gr-ft-desc').textContent =
+    gratSel('gr-regime') === 'code' ? 'Pro-rata after 1 year' : '5-year threshold under 1972 Act';
+  calcGratuity();
+}
+
+function onGratCause() {
+  gratPaint('gr-cause', {
+    resign: 'gr-c-resign-card', retire: 'gr-c-retire-card',
+    death: 'gr-c-death-card',  disable: 'gr-c-disable-card'
+  });
+  calcGratuity();
+}
+
+function resetGratuity() {
+  document.querySelector('input[name="gr-regime"][value="act"]').checked = true;
+  document.querySelector('input[name="gr-type"][value="perm"]').checked = true;
+  document.querySelector('input[name="gr-cause"][value="resign"]').checked = true;
+  document.getElementById('grat-wages').value = 50000;
+  document.getElementById('grat-years').value = 7;
+  document.getElementById('grat-months').value = 3;
+  onGratRegime(); onGratCause();
+}
+
+function gratSource(regime, type, proRata) {
+  if (regime === 'code') {
+    return proRata ? 'Proviso to Section 53(2), Code on Social Security, 2020'
+                   : 'Section 53(1), Code on Social Security, 2020';
+  }
+  return 'Section 4(1), Payment of Gratuity Act, 1972';
+}
+
+function calcGratuity() {
+  const wages  = parseFloat(document.getElementById('grat-wages').value) || 0;
+  const years  = parseFloat(document.getElementById('grat-years').value) || 0;
+  const months = parseFloat(document.getElementById('grat-months').value) || 0;
+  const regime = gratSel('gr-regime');
+  const type   = gratSel('gr-type');
+  const cause  = gratSel('gr-cause');
+  const el = document.getElementById('grat-result');
+  if (!el) return;
+
+  const actualService = years + months / 12;
+  /* Fixed-term employees get pro-rata treatment only under the Code. */
+  const proRata   = (regime === 'code' && type === 'ft');
+  const threshold = proRata ? 1 : 5;
+  const waived    = (cause === 'death' || cause === 'disable');
+  const eligible  = waived || actualService >= threshold;
+
+  let basis;
+  if (waived) basis = 'Five-year threshold waived: cessation due to ' + (cause === 'death' ? 'death.' : 'disablement.');
+  else if (eligible) basis = 'Qualifying-service threshold met.';
+  else basis = `Qualifying service of ${actualService.toFixed(2)} years is below the ${threshold}-year threshold.`;
+
+  if (!eligible) {
+    el.innerHTML = `
+      <div class="epf-sumgrid">
+        <div class="epf-sumcard wide"><span>Gratuity payable</span><strong>Not eligible</strong></div>
+      </div>
+      <div class="epf-group-head">Why</div>
+      <div class="epf-line"><span>Service completed</span><strong>${years} year(s) ${months} month(s)</strong></div>
+      <div class="epf-line"><span>Threshold required</span><strong>${threshold} year(s)</strong></div>
+      <div class="epf-line"><span>Eligibility basis</span><strong>${basis}</strong></div>
+      <div class="epf-src">
+        <h5>Note</h5>
+        <p>The threshold does not apply where service ends due to death or disablement. Several High Courts have also held that 4 years and 240 days of service in the fifth year satisfies the five-year requirement; that interpretation is not applied automatically here.</p>
+      </div>`;
     return;
   }
-  const raw = (15 * basicDA * years) / 26;
-  const gratuity = Math.min(raw, cap);
-  document.getElementById('grat-result').innerHTML = `
-    <div class="calc-row"><span>Formula: (15 × Last Drawn Basic+DA × Years) ÷ 26</span><strong>${fmtINR(raw)}</strong></div>
-    <div class="calc-row calc-total"><span>Payable Gratuity (capped at ₹20,00,000)</span><strong>${fmtINR(gratuity)}</strong></div>
-    ${raw > cap ? '<p style="font-size:13px;color:var(--text-secondary);margin-top:10px">Calculated amount exceeds the statutory tax-exempt ceiling of ₹20,00,000; amount shown is capped accordingly.</p>' : ''}
+
+  /* Pro-rata keeps the fraction; otherwise a part-year over six months rounds up. */
+  const qualifying = proRata ? actualService : (months > 6 ? years + 1 : years);
+  const qualLabel  = proRata ? qualifying.toFixed(4) : qualifying;
+
+  const raw    = (wages * 15 * qualifying) / 26;
+  const capped = Math.min(raw, GRAT_CEILING);
+
+  el.innerHTML = `
+    <div class="epf-sumgrid">
+      <div class="epf-sumcard wide"><span>Gratuity payable</span><strong>${fmtINR(capped)}</strong></div>
+    </div>
+
+    <div class="epf-line"><span>Formula</span><strong>(${fmtINR(wages)} × 15 × ${qualLabel}) / 26</strong></div>
+    <div class="epf-line"><span>Qualifying service used</span><strong>${qualLabel} year(s)</strong></div>
+    <div class="epf-line"><span>Days multiplier</span><strong>15</strong></div>
+    <div class="epf-line"><span>Divisor</span><strong>26</strong></div>
+    <div class="epf-line"><span>Eligibility basis</span><strong>${basis}</strong></div>
+    ${raw > GRAT_CEILING ? `<div class="epf-line"><span>Computed before ceiling</span><strong>${fmtINR(raw)}</strong></div>
+      <div class="epf-line credit"><span>Capped at the statutory ceiling</span><strong>${fmtINR(GRAT_CEILING)}</strong></div>` : ''}
+
+    ${!proRata && months > 6 ? `<p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">${months} months in the final year exceeds six, so service has been rounded up to ${qualifying} years.</p>` : ''}
+    ${!proRata && months > 0 && months <= 6 ? `<p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">${months} months in the final year is six or fewer, so the part-year is disregarded.</p>` : ''}
+    ${proRata ? `<p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">Fixed-term employee under the Code: gratuity is computed pro-rata on ${qualLabel} years of actual service rather than on rounded completed years.</p>` : ''}
+    ${qualifying === 0 ? `<p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">The threshold is waived, but service rounds to zero completed years, so the formula yields nil. Where death or disablement occurs very early in service, check whether any group gratuity or insurance scheme provides a minimum benefit.</p>` : ''}
+
+    <div class="epf-src">
+      <h5>Source provision</h5>
+      <p>${gratSource(regime, type, proRata)}</p>
+    </div>
   `;
 }
 
@@ -618,5 +716,5 @@ function calcHeatmap() {
 
 document.addEventListener('DOMContentLoaded', () => {
   calcTakeHome(); calcEpfSplit(); buildEsicRows(); calcEsicSplit(); onPtStateChange();
-  calcGratuity(); calcBonus(); calcMaternity(); calcHeatmap();
+  onGratRegime(); onGratCause(); calcBonus(); calcMaternity(); calcHeatmap();
 });
