@@ -97,6 +97,7 @@ function ctcSolveGross(targetVal, getter, p) {
 }
 
 function calcTakeHome() {
+  if (!document.getElementById('ctc-amount')) return;
   const amount = parseFloat(document.getElementById('ctc-amount').value) || 0;
   const stateCode = document.getElementById('ctc-state').value;
   const gender = document.getElementById('ctc-gender').value;
@@ -165,6 +166,7 @@ function calcTakeHome() {
 
 /* ---------- 2. EPF Split ---------- */
 function calcEpfSplit() {
+  if (!document.getElementById('epf-wages')) return;
   const wages   = parseFloat(document.getElementById('epf-wages').value) || 0;
   const ceiling = parseFloat(document.getElementById('epf-ceiling').value) || 0;
   const iw      = document.getElementById('epf-iw').checked;
@@ -442,6 +444,7 @@ function ptCompute(stateName, monthlyWage, female) {
 }
 
 function onPtStateChange() {
+  if (!document.getElementById('pt-state')) return;
   const stateName = document.getElementById('pt-state').value;
   const st = PT_DATA[stateName];
   const femaleRow = document.getElementById('pt-female-row');
@@ -450,6 +453,7 @@ function onPtStateChange() {
 }
 
 function calcPT() {
+  if (!document.getElementById('pt-state')) return;
   const stateName = document.getElementById('pt-state').value;
   const wage   = parseFloat(document.getElementById('pt-gross').value) || 0;
   const female = document.getElementById('pt-female').checked;
@@ -548,6 +552,7 @@ function gratPaint(name, map) {
 }
 
 function onGratRegime() {
+  if (!document.getElementById('gr-ft-desc')) return;
   gratPaint('gr-regime', { act: 'gr-reg-act-card', code: 'gr-reg-code-card' });
   gratPaint('gr-type',   { perm: 'gr-type-perm-card', ft: 'gr-type-ft-card' });
   /* The fixed-term rule only changes once the Code is in force. */
@@ -670,6 +675,7 @@ function bonusAlert(title, msg) {
 }
 
 function calcBonus() {
+  if (!document.getElementById('bonus-salary')) return;   /* section not on this page */
   const salary  = parseFloat(document.getElementById('bonus-salary').value) || 0;
   const minWage = parseFloat(document.getElementById('bonus-minwage').value) || 0;
   const days    = parseFloat(document.getElementById('bonus-days').value) || 0;
@@ -742,6 +748,7 @@ function calcBonus() {
 
 /* ---------- 7. Maternity Benefit ---------- */
 function calcMaternity() {
+  if (!document.getElementById('mat-salary')) return;
   const salary = parseFloat(document.getElementById('mat-salary').value) || 0;
   const childCount = document.getElementById('mat-children').value;
   const days = childCount === '3plus' ? 84 : 182;
@@ -758,6 +765,7 @@ function calcMaternity() {
 
 /* ---------- 8. Allowance Heatmap (Code on Wages 50% rule) ---------- */
 function calcHeatmap() {
+  if (!document.getElementById('hm-basic')) return;
   const basic = parseFloat(document.getElementById('hm-basic').value) || 0;
   const da = parseFloat(document.getElementById('hm-da').value) || 0;
   const hra = parseFloat(document.getElementById('hm-hra').value) || 0;
@@ -779,7 +787,14 @@ function calcHeatmap() {
   `;
 }
 
+/* Each calculator is independent: run them in isolation so a failure in one
+   (for example a stale cached script meeting freshly deployed markup) cannot
+   stop the others from initialising. */
 document.addEventListener('DOMContentLoaded', () => {
-  calcTakeHome(); calcEpfSplit(); buildEsicRows(); calcEsicSplit(); onPtStateChange();
-  onGratRegime(); onGratCause(); calcBonus(); calcMaternity(); calcHeatmap();
+  [calcTakeHome, calcEpfSplit, buildEsicRows, calcEsicSplit, onPtStateChange,
+   onGratRegime, onGratCause, calcBonus, calcMaternity, calcHeatmap]
+    .forEach(fn => {
+      try { fn(); }
+      catch (err) { console.warn('Calculator init skipped:', fn.name, err); }
+    });
 });
