@@ -165,22 +165,63 @@ function calcTakeHome() {
 
 /* ---------- 2. EPF Split ---------- */
 function calcEpfSplit() {
-  const basicDA = parseFloat(document.getElementById('epf-basic').value) || 0;
-  const employee = basicDA * 0.12;
-  const epsWageCeiling = 15000;
-  const epsBase = Math.min(basicDA, epsWageCeiling);
-  const eps = epsBase * 0.0833;
-  const employerEPF = (basicDA * 0.12) - eps;
-  const edli = epsBase * 0.005;
+  const wages   = parseFloat(document.getElementById('epf-wages').value) || 0;
+  const ceiling = parseFloat(document.getElementById('epf-ceiling').value) || 0;
+  const iw      = document.getElementById('epf-iw').checked;
+  const restrictBox = document.getElementById('epf-restrict');
 
-  document.getElementById('epf-result').innerHTML = `
-    <div class="calc-row"><span>Employee Contribution (12% of Basic+DA)</span><strong>${fmtINR(employee)}</strong></div>
-    <div class="calc-row"><span>Employer → EPF (Provident Fund)</span><strong>${fmtINR(employerEPF)}</strong></div>
-    <div class="calc-row"><span>Employer → EPS (Pension, capped at ₹15,000 wage)</span><strong>${fmtINR(eps)}</strong></div>
-    <div class="calc-row"><span>Employer → EDLI (0.5%, capped at ₹15,000 wage)</span><strong>${fmtINR(edli)}</strong></div>
-    <div class="calc-row calc-total"><span>Total PF Contribution (Employee + Employer)</span><strong>${fmtINR(employee + employerEPF + eps)}</strong></div>
-    <p style="font-size:13px;color:var(--text-secondary);margin-top:10px">Note: Employer also pays PF admin charges of 0.5% of PF wages, subject to a ₹500/month minimum per establishment (not per employee).</p>
+  /* International workers have no wage ceiling at all, so the restrict option
+     does not apply and is disabled to avoid an impossible EPS > employer-total split. */
+  restrictBox.disabled = iw;
+  const restrict = iw ? false : restrictBox.checked;
+
+  const el = document.getElementById('epf-result');
+  if (wages <= 0) {
+    el.innerHTML = '<p style="font-size:14px;color:var(--text-secondary);margin:0">Enter PF wages above to see the contribution split.</p>';
+    return;
+  }
+
+  const cappedWage   = ceiling > 0 ? Math.min(wages, ceiling) : wages;
+  const employerBase = restrict ? cappedWage : wages;
+  const epsBase      = iw ? wages : cappedWage;
+
+  const employee      = Math.round(wages * 0.12);
+  const employerTotal = Math.round(employerBase * 0.12);
+  const eps           = Math.round(epsBase * 0.0833);
+  const employerEPF   = Math.max(employerTotal - eps, 0);
+  const edli          = Math.round(cappedWage * 0.005);
+  const admin         = Math.round(employerBase * 0.005);
+
+  const toAccount   = employee + employerEPF;
+  const employerOut = employerTotal + edli + admin;
+
+  el.innerHTML = `
+    <div class="calc-row"><span>PF wages (monthly)</span><strong>${fmtINR(wages)}</strong></div>
+    <div class="calc-row"><span>Wage base for employer share</span><strong>${fmtINR(employerBase)}</strong></div>
+
+    <div class="calc-row" style="margin-top:8px"><span><strong>Employee share</strong> (12% of PF wages)</span><strong>${fmtINR(employee)}</strong></div>
+
+    <div class="calc-row"><span><strong>Employer share</strong> (12%)</span><strong>${fmtINR(employerTotal)}</strong></div>
+    <div class="calc-sub-row"><span>→ EPS / Pension (8.33% of ${fmtINR(epsBase)})</span><span>${fmtINR(eps)}</span></div>
+    <div class="calc-sub-row"><span>→ EPF (balance of employer 12%)</span><span>${fmtINR(employerEPF)}</span></div>
+
+    <div class="calc-row"><span>EDLI (0.5%, capped at ${fmtINR(cappedWage)} wage)</span><strong>${fmtINR(edli)}</strong></div>
+    <div class="calc-row"><span>EPF admin charges (0.5%)</span><strong>${fmtINR(admin)}</strong></div>
+
+    <div class="calc-row calc-total"><span>Credited to employee&rsquo;s PF account</span><strong>${fmtINR(toAccount)}</strong></div>
+    <div class="calc-row calc-total" style="border-top:none;margin-top:0;padding-top:6px"><span>Total employer outgo</span><strong>${fmtINR(employerOut)}</strong></div>
+
+    ${iw ? '<p style="font-size:13px;color:var(--text-secondary);margin-top:12px"><strong>International worker:</strong> EPS is computed on full PF wages with no ceiling, so the employer share is also computed on full wages.</p>' : ''}
+    <p style="font-size:13px;color:var(--text-secondary);margin-top:${iw ? '6' : '12'}px">Admin charges shown are 0.5% of this employee&rsquo;s wages. In practice the charge applies to the establishment&rsquo;s total EPF wages, subject to a minimum of ₹500 per month (₹75 for non-functional establishments).</p>
   `;
+}
+
+function resetEpfSplit() {
+  document.getElementById('epf-wages').value   = 25000;
+  document.getElementById('epf-ceiling').value = 15000;
+  document.getElementById('epf-restrict').checked = true;
+  document.getElementById('epf-iw').checked       = false;
+  calcEpfSplit();
 }
 
 /* ---------- 3. ESIC Split ---------- */

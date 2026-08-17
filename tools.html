@@ -25,6 +25,25 @@
     .ctc-toggle-btn { flex: 1; text-align: center; padding: 10px 12px; font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; color: var(--text-secondary); background: transparent; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
     .ctc-toggle-btn.active { background: var(--white); color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
     .ctc-summary { background: var(--secondary-light); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px; font-size: 14px; color: var(--primary); font-weight: 600; }
+    .calc-card-head { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--primary); margin-bottom: 4px; }
+    .calc-card-sub { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
+    .calc-hint { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+    .calc-switch-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; background: var(--background-light); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 20px; }
+    .calc-switch-text strong { display: block; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--primary); margin-bottom: 3px; }
+    .calc-switch-text span { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
+    .calc-switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; margin-top: 2px; }
+    .calc-switch input { opacity: 0; width: 0; height: 0; }
+    .calc-switch-slider { position: absolute; cursor: pointer; inset: 0; background: #cbd5e1; border-radius: 24px; transition: 0.25s; }
+    .calc-switch-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.25s; }
+    .calc-switch input:checked + .calc-switch-slider { background: var(--primary); }
+    .calc-switch input:checked + .calc-switch-slider:before { transform: translateX(20px); }
+    .calc-switch input:disabled + .calc-switch-slider { opacity: 0.45; cursor: not-allowed; }
+    .calc-notes { background: var(--white); border: 1px solid var(--border); border-left: 3px solid var(--secondary); border-radius: var(--radius); padding: 20px; margin-top: 20px; }
+    .calc-notes h4 { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); margin-bottom: 12px; }
+    .calc-notes ul { margin: 0; padding-left: 18px; }
+    .calc-notes li { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; }
+    .calc-notes li:last-child { margin-bottom: 0; }
+    .calc-sub-row { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0 4px 16px; font-size: 13px; color: var(--text-secondary); }
     @media (max-width: 900px) { .calc-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -109,13 +128,66 @@
 <section id="epf-split" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="container">
     <div class="tag">Payroll Calculator</div>
-    <h2 class="section-title">EPF Split</h2>
-    <p class="section-sub" style="margin-bottom:28px">Break down Provident Fund into Employee, EPF, EPS (Pension) and EDLI shares.</p>
+    <h2 class="section-title">EPF Calculator</h2>
+    <p class="section-sub" style="margin-bottom:28px">Split monthly EPF contributions into employee share, employer EPS and EPF shares, EDLI and administrative charges under the Employees&rsquo; Provident Funds and Miscellaneous Provisions Act, 1952.</p>
     <div class="calc-grid">
       <div class="calc-card">
-        <div class="form-group"><label>Basic + DA, Monthly (₹)</label><input type="number" id="epf-basic" value="20000" oninput="calcEpfSplit()" /></div>
+        <div class="calc-card-head">Inputs</div>
+        <p class="calc-card-sub">Enter PF wages and choose ceiling treatment.</p>
+
+        <div class="form-group">
+          <label>PF wages (monthly) <span style="font-weight:400;color:var(--text-secondary)">(basic + DA + retaining allowance)</span></label>
+          <input type="number" id="epf-wages" value="25000" min="0" oninput="calcEpfSplit()" />
+        </div>
+
+        <div class="calc-switch-row">
+          <div class="calc-switch-text">
+            <strong>Restrict employer share to ceiling</strong>
+            <span>Standard practice for domestic workers. Disable to compute on full PF wages.</span>
+          </div>
+          <label class="calc-switch">
+            <input type="checkbox" id="epf-restrict" checked onchange="calcEpfSplit()" />
+            <span class="calc-switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>EPF wage ceiling (₹/month)</label>
+          <input type="number" id="epf-ceiling" value="15000" min="0" oninput="calcEpfSplit()" />
+          <p class="calc-hint">Editable to reflect future EPFO notifications (currently ₹15,000).</p>
+        </div>
+
+        <div class="calc-switch-row">
+          <div class="calc-switch-text">
+            <strong>International worker</strong>
+            <span>EPS contribution computed on full PF wages (no ceiling) for international workers.</span>
+          </div>
+          <label class="calc-switch">
+            <input type="checkbox" id="epf-iw" onchange="calcEpfSplit()" />
+            <span class="calc-switch-slider"></span>
+          </label>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcEpfSplit()">Calculate</button>
+          <button type="button" class="btn btn-outline-dark" onclick="resetEpfSplit()">↺ Reset</button>
+        </div>
       </div>
-      <div class="calc-result" id="epf-result"></div>
+
+      <div>
+        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
+        <p class="calc-card-sub" style="margin-bottom:16px">Monthly contributions across heads.</p>
+        <div class="calc-result" id="epf-result"></div>
+
+        <div class="calc-notes">
+          <h4>Method and assumptions</h4>
+          <ul>
+            <li>Employer&rsquo;s 12% is split as EPS 8.33% (on wages capped at ₹15,000 for domestic workers) and EPF 3.67% (balance). Where the employer voluntarily contributes on PF wages above the ceiling, the excess flows entirely into EPF.</li>
+            <li>International workers&rsquo; EPS contribution is computed on full gross wages without the ceiling, per the EPFO circular dated 01.10.2008.</li>
+            <li>EDLI is always capped at ₹15,000. EPF admin charges are 0.5% with a monthly minimum of ₹500 per establishment (₹75 for non-functional establishments).</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -244,7 +316,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="js/components.js?v=6"></script>
 <script src="js/main.js?v=6"></script>
-<script src="js/tools.js?v=4"></script>
+<script src="js/tools.js?v=5"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
