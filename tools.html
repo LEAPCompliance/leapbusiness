@@ -19,8 +19,42 @@
     .calc-inline { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
     .jump-pill { display: inline-block; padding: 7px 16px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; color: var(--primary); text-decoration: none; margin: 4px 6px 4px 0; background: var(--white); }
     .jump-pill:hover { background: var(--secondary); color: var(--white); border-color: var(--secondary); }
-    .heatmap-bar { width: 100%; height: 14px; background: var(--border); border-radius: 7px; overflow: hidden; margin: 10px 0; }
-    .heatmap-fill { height: 100%; transition: width 0.3s ease; }
+    .hm-info { display: flex; gap: 12px; align-items: flex-start; background: var(--secondary-faint); border: 1px solid rgba(50,153,194,0.25); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 28px; }
+    .hm-info-icon { font-size: 16px; line-height: 1.4; flex-shrink: 0; }
+    .hm-info h5 { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .hm-info p { font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; margin: 0; }
+    .hm-info strong { color: var(--primary); }
+    .hm-filter-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 26px; margin-bottom: 24px; }
+    .hm-filter-card h4 { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--primary); margin-bottom: 4px; }
+    .hm-filter-card > p { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); margin-bottom: 18px; }
+    .hm-search-wrap { position: relative; margin-bottom: 18px; }
+    .hm-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.5; pointer-events: none; }
+    .hm-search { width: 100%; padding: 11px 14px 11px 38px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-primary); background: var(--white); }
+    .hm-search:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(50,153,194,0.11); }
+    .hm-filter-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+    .hm-filter-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+    .hm-filter-btn { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-primary); background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; cursor: pointer; transition: all 0.15s ease; }
+    .hm-filter-btn:hover { border-color: var(--secondary); }
+    .hm-filter-btn.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
+    .hm-count { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+    .hm-table-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .hm-table-scroll { overflow-x: auto; }
+    .hm-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    .hm-table th { text-align: left; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--background-light); white-space: nowrap; }
+    .hm-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text-primary); vertical-align: top; }
+    .hm-table tr:last-child td { border-bottom: none; }
+    .hm-table tr:hover td { background: var(--background-light); }
+    .hm-clause { color: var(--text-secondary); white-space: nowrap; }
+    .hm-note { color: var(--text-secondary); line-height: 1.6; min-width: 260px; }
+    .hm-empty { text-align: center; color: var(--text-secondary); padding: 32px 16px !important; }
+    .hm-badge, .hm-risk { display: inline-block; font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em; padding: 4px 11px; border-radius: 20px; border: 1px solid transparent; white-space: nowrap; }
+    .hm-badge-included { background: #eef7f0; color: #1a7d3c; border-color: #cdebd3; }
+    .hm-badge-excluded { background: var(--white); color: var(--text-secondary); border-color: var(--border); }
+    .hm-badge-conditional { background: #fdf4ec; color: #a85d00; border-color: #f3ddc1; }
+    .hm-risk-low { background: var(--secondary-faint); color: var(--primary); border-color: rgba(50,153,194,0.25); text-transform: uppercase; }
+    .hm-risk-medium { background: #fdf6e3; color: #92620a; border-color: #f1e2b0; text-transform: uppercase; }
+    .hm-risk-high { background: #fdf3f2; color: #c0392b; border-color: rgba(192,57,43,0.25); text-transform: uppercase; }
+    @media (max-width: 700px) { .hm-filter-row { flex-direction: column; align-items: flex-start; } }
     .ctc-toggle { display: flex; background: var(--background-light); border-radius: var(--radius); padding: 4px; margin-bottom: 20px; }
     .ctc-toggle-btn { flex: 1; text-align: center; padding: 10px 12px; font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; color: var(--text-secondary); background: transparent; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
     .ctc-toggle-btn.active { background: var(--white); color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
@@ -588,17 +622,54 @@
 <section id="allowance-heatmap" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="container">
     <div class="tag">Reckoner</div>
-    <h2 class="section-title">Allowance Heatmap — Code on Wages 50% Rule</h2>
-    <p class="section-sub" style="margin-bottom:28px">Check whether your salary structure meets the new statutory wage floor: Basic + DA must be at least 50% of total remuneration, or the excess allowance gets added back to "wages" for PF, gratuity and bonus calculations.</p>
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="form-group"><label>Basic, Monthly (₹)</label><input type="number" id="hm-basic" value="20000" oninput="calcHeatmap()" /></div>
-        <div class="form-group"><label>DA, Monthly (₹)</label><input type="number" id="hm-da" value="0" oninput="calcHeatmap()" /></div>
-        <div class="form-group"><label>HRA, Monthly (₹)</label><input type="number" id="hm-hra" value="10000" oninput="calcHeatmap()" /></div>
-        <div class="form-group"><label>Conveyance Allowance, Monthly (₹)</label><input type="number" id="hm-conv" value="5000" oninput="calcHeatmap()" /></div>
-        <div class="form-group"><label>Other/Special Allowances, Monthly (₹)</label><input type="number" id="hm-other" value="15000" oninput="calcHeatmap()" /></div>
+    <h2 class="section-title">Allowance Heatmap: Code on Wages s.2(y) Reckoner</h2>
+    <p class="section-sub" style="margin-bottom:28px">Classify common payroll components against Section 2(y) of the Code on Wages, 2019. Each row shows the verdict, the statutory clause it rests on, and an audit-risk flag to guide review of the 50% wages floor.</p>
+
+    <div class="hm-info">
+      <span class="hm-info-icon">ℹ️</span>
+      <div>
+        <h5>How to read this reckoner</h5>
+        <p><strong>Included</strong> heads count towards wages for the proviso (basic + DA + retaining allowance &ge; 50% of total remuneration). <strong>Excluded</strong> heads are listed in Section 2(y)(a) to (k). <strong>Conditional</strong> heads depend on how the component is structured in the salary letter and on documentation.</p>
       </div>
-      <div class="calc-result" id="hm-result"></div>
+    </div>
+
+    <div class="hm-filter-card">
+      <h4>Filter</h4>
+      <p>Search by component name or clause. Filter by verdict.</p>
+      <div class="hm-search-wrap">
+        <span class="hm-search-icon">&#128269;</span>
+        <input type="text" id="hm-search" class="hm-search" placeholder="e.g. HRA, conveyance, bonus, ESOP" oninput="renderHeatmap()" />
+      </div>
+      <div class="hm-filter-row">
+        <div class="hm-filter-btns">
+          <button type="button" class="hm-filter-btn active" data-filter="all" onclick="setHeatmapFilter('all')">All</button>
+          <button type="button" class="hm-filter-btn" data-filter="included" onclick="setHeatmapFilter('included')">Included</button>
+          <button type="button" class="hm-filter-btn" data-filter="excluded" onclick="setHeatmapFilter('excluded')">Excluded</button>
+          <button type="button" class="hm-filter-btn" data-filter="conditional" onclick="setHeatmapFilter('conditional')">Conditional</button>
+        </div>
+        <div class="hm-count" id="hm-count">Showing 40 of 40</div>
+      </div>
+    </div>
+
+    <div class="hm-table-card">
+      <div class="hm-table-scroll">
+        <table class="hm-table">
+          <thead>
+            <tr><th>Component</th><th>Verdict</th><th>Clause</th><th>Risk</th><th>Note</th></tr>
+          </thead>
+          <tbody id="hm-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="epf-src" style="margin-top:24px">
+      <h5>Source provisions</h5>
+      <p>
+        Section 2(y), Code on Wages, 2019 (definition of "wages") with proviso and explanation.<br>
+        The 50% rule: where excluded heads exceed one-half of the total remuneration, the excess is added back to wages.<br>
+        Use the <a href="#ctc-takehome" style="color:var(--secondary);font-weight:600">CTC calculator</a> to test wage-floor compliance for a specific salary stack.<br>
+        This reckoner is illustrative; verdicts must be tested against the actual salary letter and component definitions.
+      </p>
     </div>
   </div>
 </section>
@@ -627,7 +698,7 @@
 <script src="js/components.js?v=6"></script>
 <script src="js/main.js?v=6"></script>
 <script src="js/pt-data.js?v=1"></script>
-<script src="js/tools.js?v=13"></script>
+<script src="js/tools.js?v=14"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
