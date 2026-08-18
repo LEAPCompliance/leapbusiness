@@ -747,19 +747,89 @@ function calcBonus() {
 }
 
 /* ---------- 7. Maternity Benefit ---------- */
-function calcMaternity() {
-  if (!document.getElementById('mat-salary')) return;
-  const salary = parseFloat(document.getElementById('mat-salary').value) || 0;
-  const childCount = document.getElementById('mat-children').value;
-  const days = childCount === '3plus' ? 84 : 182;
-  const avgDailyWage = (salary * 12) / 365;
-  const total = avgDailyWage * days;
+const MAT_MEDICAL_BONUS = 3500;   /* Section 8 */
+const MAT_MIN_DAYS      = 80;     /* Section 5(2) */
 
-  document.getElementById('mat-result').innerHTML = `
-    <div class="calc-row"><span>Average Daily Wage</span><strong>${fmtINR(avgDailyWage)}</strong></div>
-    <div class="calc-row"><span>Paid Leave Duration</span><strong>${days} days (${days === 182 ? '26 weeks' : '12 weeks'})</strong></div>
-    <div class="calc-row calc-total"><span>Estimated Total Maternity Benefit</span><strong>${fmtINR(total)}</strong></div>
-    <p style="font-size:13px;color:var(--text-secondary);margin-top:10px">26 weeks applies for the first two children; 12 weeks for the third child onward, as per the Maternity Benefit (Amendment) Act, 2017.</p>
+const MAT_SCENARIOS = {
+  first2: {
+    days: 182,
+    label: '26 weeks (182 days) under Section 5(3) for first two surviving children.'
+  },
+  third: {
+    days: 84,
+    label: '12 weeks (84 days) under proviso to Section 5(3) where the woman has two or more surviving children.'
+  },
+  adopt: {
+    days: 84,
+    label: '12 weeks (84 days) under Section 5(4) for commissioning or adopting mother of a child below three months.'
+  },
+  miscarriage: {
+    days: 42,
+    label: '6 weeks (42 days) leave with wages from the day of miscarriage or medical termination under Section 9.'
+  }
+};
+
+function resetMaternity() {
+  document.getElementById('mat-wage').value     = 25000;
+  document.getElementById('mat-days').value     = 240;
+  document.getElementById('mat-scenario').value = 'first2';
+  document.getElementById('mat-prepaid').checked = false;
+  calcMaternity();
+}
+
+function calcMaternity() {
+  if (!document.getElementById('mat-wage')) return;
+  const wage      = parseFloat(document.getElementById('mat-wage').value) || 0;
+  const daysWork  = parseFloat(document.getElementById('mat-days').value) || 0;
+  const scenKey   = document.getElementById('mat-scenario').value;
+  const prepaid   = document.getElementById('mat-prepaid').checked;
+  const el = document.getElementById('mat-result');
+  const scen = MAT_SCENARIOS[scenKey];
+
+  if (wage <= 0) {
+    el.innerHTML = '<p style="font-size:14px;color:var(--text-secondary);margin:0">Enter a monthly wage to compute the benefit.</p>';
+    return;
+  }
+
+  /* Section 5(2): at least 80 days actually worked in the preceding 12 months. */
+  if (daysWork < MAT_MIN_DAYS) {
+    el.innerHTML = `<div class="calc-alert"><span class="calc-alert-icon">⚠</span><div>
+      <h5>Not eligible for maternity benefit</h5>
+      <p>${daysWork} day(s) actually worked is below the minimum of ${MAT_MIN_DAYS} days in the 12 months immediately preceding the expected date of delivery, required by Section 5(2) of the Maternity Benefit Act, 1961.</p>
+    </div></div>`;
+    return;
+  }
+
+  const dailyWage   = wage / 30;
+  const leaveDays   = scen.days;
+  const cashBenefit = dailyWage * leaveDays;
+  const bonus       = prepaid ? 0 : MAT_MEDICAL_BONUS;
+  const total       = cashBenefit + bonus;
+
+  el.innerHTML = `
+    <div class="epf-sumgrid">
+      <div class="epf-sumcard wide">
+        <span>Total benefit payable</span>
+        <strong>${fmtINR(total)}</strong>
+        <div style="font-family:'Inter',sans-serif;font-size:12.5px;color:var(--text-secondary);margin-top:6px">${leaveDays} days of paid leave at average daily wage of ${fmtINR(dailyWage)}.</div>
+      </div>
+    </div>
+
+    <div class="epf-line"><span>Leave days</span><strong>${leaveDays} days</strong></div>
+    <div class="epf-line"><span>Average daily wage</span><strong>${fmtINR(dailyWage)}</strong></div>
+    <div class="epf-line"><span>Cash benefit (wages × days)</span><strong>${fmtINR(cashBenefit)}</strong></div>
+    <div class="epf-line"><span>Medical bonus</span><strong>${prepaid ? 'Not applicable' : fmtINR(bonus)}</strong></div>
+
+    <div class="epf-src">
+      <h5>Source provisions</h5>
+      <p>
+        ${scen.label}<br>
+        Eligibility: Section 5(2), Maternity Benefit Act, 1961.<br>
+        Cash benefit: Section 5(1) and Section 6.<br>
+        Medical bonus: Section 8 (₹3,500, may be increased by Central Government notification).<br>
+        Nursing breaks: Section 11 (till child attains 15 months).
+      </p>
+    </div>
   `;
 }
 
