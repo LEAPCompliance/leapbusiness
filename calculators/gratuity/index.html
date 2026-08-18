@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gratuity Calculator India (2026) | Payment of Gratuity Act &amp; Code on Social Security | LEAP</title>
+  <meta name="description" content="Free gratuity calculator for India. Compute gratuity under the Payment of Gratuity Act, 1972 and the Code on Social Security, 2020, for permanent and fixed-term employees. Instant and accurate, by LEAP Business Solutions." />
+  <meta name="keywords" content="gratuity calculator, gratuity calculator india, payment of gratuity act calculator, code on social security gratuity, fixed term employee gratuity" />
+  <meta property="og:title" content="Gratuity Calculator India | LEAP" />
+  <meta property="og:description" content="Compute gratuity under the Payment of Gratuity Act, 1972 and the Code on Social Security, 2020. Free, instant, for permanent and fixed-term employees." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.leapbusiness.in/calculators/gratuity/" />
+  <link rel="canonical" href="https://www.leapbusiness.in/calculators/gratuity/" />
+  <link rel="icon" href="/assets/favicon.png?v=2" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/css/style.css?v=13" />
+  <link rel="stylesheet" href="/css/calculators.css?v=2" />
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
+    {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://www.leapbusiness.in/tools.html"},
+    {"@type": "ListItem", "position": 3, "name": "Gratuity Calculator", "item": "https://www.leapbusiness.in/calculators/gratuity/"}
+  ]}
+  </script>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="/index.html">Home</a> <span>›</span> <a href="/tools.html">Tools</a> <span>›</span> <span>Gratuity Calculator</span></div>
+      <h1 class="page-hero-title">Gratuity Calculator</h1>
+      <p class="page-hero-desc">Free, instant gratuity calculation under the Payment of Gratuity Act, 1972 and the Code on Social Security, 2020.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<section style="background:var(--secondary-faint);border-bottom:1px solid var(--border);padding:16px 0">
+  <div class="container" style="font-size:14px;color:var(--text-secondary);text-align:center">
+    ⚠️ This calculator gives an indicative estimate for general awareness, based on standard statutory rates as of July 2026. It is not a substitute for professional advice; <a href="/contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> for figures specific to your business.
+  </div>
+</section>
+
+<section id="gratuity" class="section-pad">
+  <div class="container">
+    <div class="tag">Statutory Payout</div>
+    <h2 class="section-title">Gratuity Calculator</h2>
+    <p class="section-sub" style="margin-bottom:28px">Compute gratuity under the Payment of Gratuity Act, 1972 and the Code on Social Security, 2020. Supports permanent and fixed-term employees. Results are indicative; verify against the wage definition applicable to your establishment.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="calc-card-head">Inputs</div>
+        <p class="calc-card-sub">Provide service and wage details to compute gratuity.</p>
+
+        <div class="opt-label">Governing regime</div>
+        <div class="opt-grid">
+          <label class="opt-card on" id="gr-reg-act-card">
+            <input type="radio" name="gr-regime" value="act" checked onchange="onGratRegime()" />
+            <span><strong>Payment of Gratuity Act, 1972</strong><em>Currently in force.</em></span>
+          </label>
+          <label class="opt-card" id="gr-reg-code-card">
+            <input type="radio" name="gr-regime" value="code" onchange="onGratRegime()" />
+            <span><strong>Code on Social Security, 2020</strong><em>Pending notification.</em></span>
+          </label>
+        </div>
+
+        <div class="opt-label">Employee type</div>
+        <div class="opt-grid">
+          <label class="opt-card on" id="gr-type-perm-card">
+            <input type="radio" name="gr-type" value="perm" checked onchange="onGratRegime()" />
+            <span><strong>Permanent (monthly-rated)</strong><em>5-year threshold</em></span>
+          </label>
+          <label class="opt-card" id="gr-type-ft-card">
+            <input type="radio" name="gr-type" value="ft" onchange="onGratRegime()" />
+            <span><strong>Fixed-term employee</strong><em id="gr-ft-desc">5-year threshold under 1972 Act</em></span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Last drawn monthly wages <span style="font-weight:400;color:var(--text-secondary)">(basic + DA + retaining allowance)</span></label>
+          <input type="number" id="grat-wages" value="50000" min="0" oninput="calcGratuity()" />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="form-group"><label>Years of service</label><input type="number" id="grat-years" value="7" min="0" oninput="calcGratuity()" /></div>
+          <div class="form-group"><label>Additional months</label><input type="number" id="grat-months" value="3" min="0" max="11" oninput="calcGratuity()" /></div>
+        </div>
+
+        <div class="opt-label">Reason for cessation</div>
+        <div class="opt-grid">
+          <label class="opt-card on" id="gr-c-resign-card"><input type="radio" name="gr-cause" value="resign" checked onchange="onGratCause()" /><span><strong>Resignation</strong></span></label>
+          <label class="opt-card" id="gr-c-retire-card"><input type="radio" name="gr-cause" value="retire" onchange="onGratCause()" /><span><strong>Retirement / superannuation</strong></span></label>
+          <label class="opt-card" id="gr-c-death-card"><input type="radio" name="gr-cause" value="death" onchange="onGratCause()" /><span><strong>Death</strong></span></label>
+          <label class="opt-card" id="gr-c-disable-card"><input type="radio" name="gr-cause" value="disable" onchange="onGratCause()" /><span><strong>Disablement</strong></span></label>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:8px">
+          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcGratuity()">Calculate gratuity</button>
+          <button type="button" class="btn btn-outline-dark" onclick="resetGratuity()">↺ Reset</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
+        <p class="calc-card-sub" style="margin-bottom:16px">Indicative computation. Subject to your establishment&rsquo;s wage definition.</p>
+        <div id="grat-result"></div>
+
+        <div class="calc-notes">
+          <h4>Method and assumptions</h4>
+          <ul>
+            <li>Monthly-rated employees: gratuity equals (last drawn wages × 15 × years of service) ÷ 26.</li>
+            <li>Service rounding: a fraction of more than six months in the final year is treated as one full year. Fixed-term employees under the Code on Social Security, 2020 receive gratuity on a pro-rata basis once one year of service is completed.</li>
+            <li>Eligibility is tested on actual continuous service, not on the rounded figure. Several High Courts have held that 4 years and 240 days in the fifth year qualifies; that reading is not applied here by default.</li>
+            <li>The five-year qualifying period does not apply where service ends due to death or disablement.</li>
+            <li>Statutory ceiling of ₹20,00,000 applies under Section 4(3) of the 1972 Act and Section 53(2) of the Code on Social Security, 2020.</li>
+            <li>Wages must include basic, dearness allowance and retaining allowance. The Code&rsquo;s 50% floor rule under Section 2(88) may apply once notified.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--border)">
+      <div style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px;font-weight:700;margin-bottom:10px">MORE FREE CALCULATORS</div>
+      <div class="related-calcs">
+        <a href="/calculators/ctc/" class="jump-pill">CTC ↔ Take-Home</a>
+        <a href="/calculators/allowance-heatmap/" class="jump-pill">New Wage Code Calculator</a>
+        <a href="/calculators/epf/" class="jump-pill">EPF Calculator</a>
+        <a href="/calculators/esic/" class="jump-pill">ESIC Calculator</a>
+        <a href="/calculators/professional-tax/" class="jump-pill">Professional Tax</a>
+        <a href="/calculators/bonus/" class="jump-pill">Statutory Bonus</a>
+        <a href="/calculators/maternity/" class="jump-pill">Maternity Benefit</a>
+        <a href="/tools.html" class="jump-pill">See all calculators →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-pad audit-cta">
+  <div class="container">
+    <div class="audit-inner">
+      <div class="fade-up">
+        <div class="tag">Need Exact Figures?</div>
+        <h2 class="audit-title">This is an estimate. Let's get it exactly right for your business.</h2>
+        <p class="audit-desc">Book a free 30-minute compliance review and we'll walk through your actual payroll structure, Labour Code readiness, and statutory obligations.</p>
+      </div>
+      <div class="audit-box fade-up delay-2">
+        <div class="audit-free-tag">✦ 100% Free ✦</div>
+        <div class="audit-time">Book a Call</div>
+        <div class="audit-sub">Our expert will call you within the hour</div>
+        <a href="tel:+917977213501" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px">📞 +91 79772 13501</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<div id="whatsapp-placeholder"></div>
+<script src="/js/components.js?v=9"></script>
+<script src="/js/main.js?v=6"></script>
+<script src="/js/tools.js?v=16"></script>
+<script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
+</body>
+</html>

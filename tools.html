@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free Payroll & Compliance Calculators | PF, ESIC, PT, Gratuity | LEAP</title>
-  <meta name="description" content="Free instant calculators for CTC to take-home, EPF split, ESIC split, Professional Tax, Gratuity, Statutory Bonus, Maternity Benefit and Code on Wages allowance compliance. By LEAP Business Solutions, Mumbai." />
+  <title>Free Labour Law Calculators | CTC, PF, ESIC, PT, Gratuity | LEAP</title>
+  <meta name="description" content="Eight free calculators for CTC to take-home, EPF, ESIC, Professional Tax, Gratuity, Statutory Bonus, Maternity Benefit and Code on Wages allowance compliance. By LEAP Business Solutions, Mumbai." />
   <link rel="canonical" href="https://www.leapbusiness.in/tools.html" />
-  <link rel="icon" href="assets/favicon.png?v=2" type="image/png" />
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="stylesheet" href="css/style.css?v=13" />
-  <link rel="stylesheet" href="css/calculators.css?v=1" />
+  <link rel="icon" href="/assets/favicon.png?v=2" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/css/style.css?v=13" />
+  <link rel="stylesheet" href="/css/calculators.css?v=2" />
 </head>
 <body>
 <div id="navbar-placeholder"></div>
@@ -17,595 +17,79 @@
 <section class="page-hero">
   <div class="container">
     <div class="page-hero-content">
-      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Tools</span></div>
-      <h1 class="page-hero-title">Payroll &amp; Compliance Calculators</h1>
-      <p class="page-hero-desc">Free, instant tools to estimate PF, ESIC, PT, Gratuity, Bonus, Maternity Benefit, and Code on Wages allowance compliance.</p>
+      <div class="breadcrumb"><a href="/index.html">Home</a> <span>›</span> <span>Tools</span></div>
+      <h1 class="page-hero-title">Labour Law Calculators</h1>
+      <p class="page-hero-desc">Eight free calculators covering payroll splits and statutory payouts under Indian labour law. Each calculator cites the underlying act or section so your HR team can verify the working.</p>
     </div>
   </div>
 </section>
 
-<!-- Disclaimer -->
-<section style="background:var(--secondary-faint);border-bottom:1px solid var(--border);padding:16px 0">
-  <div class="container" style="font-size:14px;color:var(--text-secondary);text-align:center">
-    ⚠️ These calculators give indicative estimates for general awareness, based on standard statutory rates as of July 2026. They are not a substitute for professional advice — <a href="contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> for figures specific to your business.
-  </div>
-</section>
-
-<!-- Quick jump -->
-<section class="section-pad-sm" style="border-bottom:1px solid var(--border)">
+<section class="section-pad">
   <div class="container">
-    <div style="margin-bottom:14px"><strong style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px">PAYROLL CALCULATORS</strong><br>
-      <a href="#ctc-takehome" class="jump-pill">CTC ↔ Take-Home</a><a href="#epf-split" class="jump-pill">EPF Split</a><a href="#esic-split" class="jump-pill">ESIC Split</a><a href="#pt" class="jump-pill">Professional Tax</a>
-    </div>
-    <div style="margin-bottom:14px"><strong style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px">STATUTORY PAYOUTS</strong><br>
-      <a href="#gratuity" class="jump-pill">Gratuity</a><a href="#bonus" class="jump-pill">Statutory Bonus</a><a href="#maternity" class="jump-pill">Maternity Benefit</a>
-    </div>
-    <div><strong style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px">RECKONERS</strong><br>
-      <a href="#allowance-heatmap" class="jump-pill">Allowance Heatmap</a>
-    </div>
-  </div>
-</section>
 
-<!-- 1. CTC Structure -->
-<section id="ctc-takehome" class="section-pad">
-  <div class="container">
-    <div class="tag">Payroll Calculator</div>
-    <h2 class="section-title">CTC &harr; Take-Home</h2>
-    <p class="section-sub" style="margin-bottom:8px">Work in either direction: know your CTC and want the take-home, or know your desired take-home and want the CTC to offer. Breaks down Basic, HRA, allowances, statutory deductions and employer cost by state, the same structure LEAP uses for client payroll.</p>
-    <p style="margin-bottom:28px"><a href="ctc-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="ctc-toggle">
-          <button type="button" class="ctc-toggle-btn active" id="ctc-dir-ctc" onclick="setCtcDirection('ctc')">CTC &rarr; Take-Home</button>
-          <button type="button" class="ctc-toggle-btn" id="ctc-dir-th" onclick="setCtcDirection('th')">Take-Home &rarr; CTC</button>
+    <div class="calc-hub-section">
+      <div class="calc-hub-label">Payroll Calculators</div>
+      <div class="calc-hub-grid">
+        <div class="calc-hub-card">
+          <h3>CTC &harr; Take-home</h3>
+          <p>Convert CTC to monthly take-home, or take-home to CTC, with statutory deductions by state.</p>
+          <a href="/calculators/ctc/" class="calc-hub-open">Open calculator &rarr;</a>
         </div>
-        <div class="form-group"><label id="ctc-amount-label">Monthly CTC (&#8377;)</label><input type="number" id="ctc-amount" value="50000" oninput="calcTakeHome()" /></div>
-        <div class="form-group"><label>State (for Professional Tax &amp; LWF)</label>
-          <select id="ctc-state" onchange="calcTakeHome()">
-            <option value="MH">Maharashtra</option>
-            <option value="KA">Karnataka</option>
-            <option value="GJ">Gujarat</option>
-            <option value="WB">West Bengal</option>
-            <option value="TN">Tamil Nadu</option>
-            <option value="TS">Telangana</option>
-            <option value="AP">Andhra Pradesh</option>
-            <option value="MP">Madhya Pradesh</option>
-          </select>
+        <div class="calc-hub-card">
+          <h3>EPF split</h3>
+          <p>Employee, employer EPS and EPF shares, EDLI and admin charges.</p>
+          <a href="/calculators/epf/" class="calc-hub-open">Open calculator &rarr;</a>
         </div>
-        <div class="form-group"><label>Gender (for Professional Tax, where applicable)</label><select id="ctc-gender" onchange="calcTakeHome()"><option value="Male">Male</option><option value="Female">Female</option></select></div>
-        <div class="grid-2" style="gap:16px">
-          <div class="form-group"><label>Basic + DA (% of Gross)</label><input type="number" id="ctc-basicpct" value="50" min="1" max="100" oninput="calcTakeHome()" /></div>
-          <div class="form-group"><label>HRA (% of Basic)</label><input type="number" id="ctc-hrapct" value="50" min="0" max="100" oninput="calcTakeHome()" /></div>
+        <div class="calc-hub-card">
+          <h3>ESIC split</h3>
+          <p>Employee and employer ESIC contribution, with the Code on Wages 50% rule applied.</p>
+          <a href="/calculators/esic/" class="calc-hub-open">Open calculator &rarr;</a>
         </div>
-        <div class="form-group"><label>Communication Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-comm" value="0" oninput="calcTakeHome()" /></div>
-        <div class="form-group"><label>Conveyance / Fuel Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-conv" value="0" oninput="calcTakeHome()" /></div>
-        <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">Special Allowance is the balancing figure. Basic + DA must also meet the statutory minimum wage floor for the employee's skill category &mdash; not checked separately here.</p>
-      </div>
-      <div>
-        <div class="ctc-summary" id="ctc-summary"></div>
-        <div class="calc-result" id="th-result"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 2. EPF Split -->
-<section id="epf-split" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div class="container">
-    <div class="tag">Payroll Calculator</div>
-    <h2 class="section-title">EPF Calculator</h2>
-    <p class="section-sub" style="margin-bottom:8px">Split monthly EPF contributions into employee share, employer EPS and EPF shares, EDLI and administrative charges under the Employees&rsquo; Provident Funds and Miscellaneous Provisions Act, 1952.</p>
-    <p style="margin-bottom:28px"><a href="epf-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="calc-card-head">Inputs</div>
-        <p class="calc-card-sub">Enter PF wages and choose ceiling treatment.</p>
-
-        <div class="form-group">
-          <label>PF wages (monthly) <span style="font-weight:400;color:var(--text-secondary)">(basic + DA + retaining allowance)</span></label>
-          <input type="number" id="epf-wages" value="25000" min="0" oninput="calcEpfSplit()" />
-        </div>
-
-        <div class="calc-switch-row">
-          <div class="calc-switch-text">
-            <strong>Restrict employer share to ceiling</strong>
-            <span>Standard practice for domestic workers. Disable to compute on full PF wages.</span>
-          </div>
-          <label class="calc-switch">
-            <input type="checkbox" id="epf-restrict" checked onchange="calcEpfSplit()" />
-            <span class="calc-switch-slider"></span>
-          </label>
-        </div>
-
-        <div class="form-group">
-          <label>EPF wage ceiling (₹/month)</label>
-          <input type="number" id="epf-ceiling" value="15000" min="0" oninput="calcEpfSplit()" />
-          <p class="calc-hint">Editable to reflect future EPFO notifications (currently ₹15,000).</p>
-        </div>
-
-        <div class="calc-switch-row">
-          <div class="calc-switch-text">
-            <strong>International worker</strong>
-            <span>EPS contribution computed on full PF wages (no ceiling) for international workers.</span>
-          </div>
-          <label class="calc-switch">
-            <input type="checkbox" id="epf-iw" onchange="calcEpfSplit()" />
-            <span class="calc-switch-slider"></span>
-          </label>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:24px">
-          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcEpfSplit()">Calculate</button>
-          <button type="button" class="btn btn-outline-dark" onclick="resetEpfSplit()">↺ Reset</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
-        <p class="calc-card-sub" style="margin-bottom:16px">Monthly contributions across heads.</p>
-        <div id="epf-result"></div>
-
-        <div class="calc-notes">
-          <h4>Method and assumptions</h4>
-          <ul>
-            <li>Employer&rsquo;s 12% is split as EPS 8.33% (on wages capped at ₹15,000 for domestic workers) and EPF 3.67% (balance). Where the employer voluntarily contributes on PF wages above the ceiling, the excess flows entirely into EPF.</li>
-            <li>International workers&rsquo; EPS contribution is computed on full gross wages without the ceiling, per the EPFO circular dated 01.10.2008.</li>
-            <li>EDLI is always capped at ₹15,000. EPF admin charges are shown at a straight 0.5% of EPF wages; the ₹500 monthly minimum per establishment (₹75 for non-functional establishments) is taken as already met at establishment level.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 3. ESIC Split -->
-<section id="esic-split" class="section-pad">
-  <div class="container">
-    <div class="tag">Payroll Calculator</div>
-    <h2 class="section-title">ESIC Wage Base &amp; Contribution (Code on Wages 50% Rule)</h2>
-    <p class="section-sub" style="margin-bottom:8px">Enter your salary structure component by component. The calculator applies the Code on Wages 50% rule, adds back any excess exclusions, derives the ESIC wage base, checks eligibility against the wage ceiling and computes both contributions.</p>
-    <p style="margin-bottom:28px"><a href="esic-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="calc-card-head">Salary components</div>
-        <p class="calc-card-sub">Enter the monthly amount and choose how each head is treated.</p>
-
-        <div style="overflow-x:auto">
-          <table class="wage-table">
-            <thead>
-              <tr><th style="min-width:150px">Component</th><th style="width:110px">Amount (₹)</th><th style="min-width:180px">Category</th><th style="width:34px"></th></tr>
-            </thead>
-            <tbody id="esic-rows"></tbody>
-          </table>
-        </div>
-        <button type="button" class="btn btn-outline-dark" style="margin-top:14px;padding:8px 16px;font-size:13px" onclick="addEsicRow('', 0, 'e50')">+ Add component</button>
-
-        <div class="epf-group-head" style="margin-top:26px">Rates &amp; ceiling</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-          <div class="form-group" style="margin-bottom:0"><label>Wage ceiling (₹)</label><input type="number" id="esic-ceiling" value="21000" min="0" oninput="calcEsicSplit()" /></div>
-          <div class="form-group" style="margin-bottom:0"><label>Employee %</label><input type="number" id="esic-ee" value="0.75" step="0.01" min="0" oninput="calcEsicSplit()" /></div>
-          <div class="form-group" style="margin-bottom:0"><label>Employer %</label><input type="number" id="esic-er" value="3.25" step="0.01" min="0" oninput="calcEsicSplit()" /></div>
-        </div>
-
-        <div class="calc-switch-row" style="margin-top:20px">
-          <div class="calc-switch-text">
-            <strong>Person with disability</strong>
-            <span>Raises the ESIC wage ceiling to ₹25,000 per month.</span>
-          </div>
-          <label class="calc-switch">
-            <input type="checkbox" id="esic-pwd" onchange="onEsicPwd()" />
-            <span class="calc-switch-slider"></span>
-          </label>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:20px">
-          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcEsicSplit()">Calculate</button>
-          <button type="button" class="btn btn-outline-dark" onclick="resetEsic()">↺ Reset</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
-        <p class="calc-card-sub" style="margin-bottom:16px">Wage base after the 50% rule, and monthly ESIC liability.</p>
-        <div id="esic-result"></div>
-
-        <div class="calc-notes">
-          <h4>Method and assumptions</h4>
-          <ul>
-            <li><strong>The 50% rule:</strong> where components marked &ldquo;Excluded (counts toward 50%)&rdquo; exceed 50% of total remuneration, the excess is added back into the wage base. This mirrors the proviso to the definition of wages under the Code on Wages, 2019, which the Social Security Code adopts for ESIC.</li>
-            <li><strong>&ldquo;Excluded (NOT in 50% test)&rdquo;</strong> takes an item out of wages without letting it affect the 50% test, typically used for gratuity and retrenchment compensation.</li>
-            <li>Eligibility is a simple monthly check of the ESIC wage base against the ceiling. Actual coverage also depends on contribution periods: an employee who crosses the ceiling mid-period continues to contribute until the end of that contribution period.</li>
-            <li>Overtime is included when computing the contribution payable, but is disregarded when testing whether an employee is within the wage ceiling. Treat the overtime row accordingly for each purpose.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 4. Professional Tax -->
-<section id="pt" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div class="container">
-    <div class="tag">Payroll Calculator</div>
-    <h2 class="section-title">Professional Tax Calculator</h2>
-    <p class="section-sub" style="margin-bottom:8px">Compute monthly professional tax for every PT-levying state under each state&rsquo;s own enactment, subject to the ₹2,500 per annum ceiling in Article 276(2) of the Constitution. Verify each slab against the latest state notification before reliance.</p>
-    <p style="margin-bottom:28px"><a href="professional-tax-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="calc-card-head">Inputs</div>
-        <p class="calc-card-sub">Choose state and provide monthly wage.</p>
-
-        <div class="form-group">
-          <label>State</label>
-          <select id="pt-state" onchange="onPtStateChange()">
-            <optgroup label="PT applicable">
-          <option value="Andhra Pradesh">Andhra Pradesh</option>
-          <option value="Assam">Assam</option>
-          <option value="Bihar">Bihar</option>
-          <option value="Gujarat">Gujarat</option>
-          <option value="Jharkhand">Jharkhand</option>
-          <option value="Karnataka">Karnataka</option>
-          <option value="Kerala">Kerala</option>
-          <option value="Madhya Pradesh">Madhya Pradesh</option>
-          <option value="Maharashtra" selected>Maharashtra</option>
-          <option value="Manipur">Manipur</option>
-          <option value="Meghalaya">Meghalaya</option>
-          <option value="Mizoram">Mizoram</option>
-          <option value="Nagaland">Nagaland</option>
-          <option value="Puducherry">Puducherry</option>
-          <option value="Punjab">Punjab</option>
-          <option value="Sikkim">Sikkim</option>
-          <option value="Tamil Nadu">Tamil Nadu</option>
-          <option value="Telangana">Telangana</option>
-          <option value="Tripura">Tripura</option>
-          <option value="West Bengal">West Bengal</option>
-            </optgroup>
-            <optgroup label="PT not levied">
-          <option value="Arunachal Pradesh">Arunachal Pradesh (PT not levied)</option>
-          <option value="Chandigarh">Chandigarh (PT not levied)</option>
-          <option value="Delhi">Delhi (PT not levied)</option>
-          <option value="Haryana">Haryana (PT not levied)</option>
-          <option value="Odisha">Odisha (PT not levied)</option>
-          <option value="Rajasthan">Rajasthan (PT not levied)</option>
-          <option value="Uttar Pradesh">Uttar Pradesh (PT not levied)</option>
-          <option value="Uttarakhand">Uttarakhand (PT not levied)</option>
-            </optgroup>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Gross monthly wage (₹)</label>
-          <input type="number" id="pt-gross" value="25000" min="0" oninput="calcPT()" />
-        </div>
-
-        <div class="calc-switch-row" id="pt-female-row">
-          <div class="calc-switch-text">
-            <strong>Woman employee</strong>
-            <span>Women employees with monthly salary up to ₹25,000 are exempt in Maharashtra.</span>
-          </div>
-          <label class="calc-switch">
-            <input type="checkbox" id="pt-female" onchange="calcPT()" />
-            <span class="calc-switch-slider"></span>
-          </label>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:24px">
-          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcPT()">Calculate</button>
-          <button type="button" class="btn btn-outline-dark" onclick="resetPT()">↺ Reset</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
-        <p class="calc-card-sub" style="margin-bottom:16px">Monthly liability based on the latest notified slabs.</p>
-        <div id="pt-result"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 5. Gratuity -->
-<section id="gratuity" class="section-pad">
-  <div class="container">
-    <div class="tag">Statutory Payout</div>
-    <h2 class="section-title">Gratuity Calculator</h2>
-    <p class="section-sub" style="margin-bottom:8px">Compute gratuity under the Payment of Gratuity Act, 1972 and the Code on Social Security, 2020. Supports permanent and fixed-term employees. Results are indicative; verify against the wage definition applicable to your establishment.</p>
-    <p style="margin-bottom:28px"><a href="gratuity-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="calc-card-head">Inputs</div>
-        <p class="calc-card-sub">Provide service and wage details to compute gratuity.</p>
-
-        <div class="opt-label">Governing regime</div>
-        <div class="opt-grid">
-          <label class="opt-card on" id="gr-reg-act-card">
-            <input type="radio" name="gr-regime" value="act" checked onchange="onGratRegime()" />
-            <span><strong>Payment of Gratuity Act, 1972</strong><em>Currently in force.</em></span>
-          </label>
-          <label class="opt-card" id="gr-reg-code-card">
-            <input type="radio" name="gr-regime" value="code" onchange="onGratRegime()" />
-            <span><strong>Code on Social Security, 2020</strong><em>Pending notification.</em></span>
-          </label>
-        </div>
-
-        <div class="opt-label">Employee type</div>
-        <div class="opt-grid">
-          <label class="opt-card on" id="gr-type-perm-card">
-            <input type="radio" name="gr-type" value="perm" checked onchange="onGratRegime()" />
-            <span><strong>Permanent (monthly-rated)</strong><em>5-year threshold</em></span>
-          </label>
-          <label class="opt-card" id="gr-type-ft-card">
-            <input type="radio" name="gr-type" value="ft" onchange="onGratRegime()" />
-            <span><strong>Fixed-term employee</strong><em id="gr-ft-desc">5-year threshold under 1972 Act</em></span>
-          </label>
-        </div>
-
-        <div class="form-group">
-          <label>Last drawn monthly wages <span style="font-weight:400;color:var(--text-secondary)">(basic + DA + retaining allowance)</span></label>
-          <input type="number" id="grat-wages" value="50000" min="0" oninput="calcGratuity()" />
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-          <div class="form-group"><label>Years of service</label><input type="number" id="grat-years" value="7" min="0" oninput="calcGratuity()" /></div>
-          <div class="form-group"><label>Additional months</label><input type="number" id="grat-months" value="3" min="0" max="11" oninput="calcGratuity()" /></div>
-        </div>
-
-        <div class="opt-label">Reason for cessation</div>
-        <div class="opt-grid">
-          <label class="opt-card on" id="gr-c-resign-card"><input type="radio" name="gr-cause" value="resign" checked onchange="onGratCause()" /><span><strong>Resignation</strong></span></label>
-          <label class="opt-card" id="gr-c-retire-card"><input type="radio" name="gr-cause" value="retire" onchange="onGratCause()" /><span><strong>Retirement / superannuation</strong></span></label>
-          <label class="opt-card" id="gr-c-death-card"><input type="radio" name="gr-cause" value="death" onchange="onGratCause()" /><span><strong>Death</strong></span></label>
-          <label class="opt-card" id="gr-c-disable-card"><input type="radio" name="gr-cause" value="disable" onchange="onGratCause()" /><span><strong>Disablement</strong></span></label>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:8px">
-          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcGratuity()">Calculate gratuity</button>
-          <button type="button" class="btn btn-outline-dark" onclick="resetGratuity()">↺ Reset</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
-        <p class="calc-card-sub" style="margin-bottom:16px">Indicative computation. Subject to your establishment&rsquo;s wage definition.</p>
-        <div id="grat-result"></div>
-
-        <div class="calc-notes">
-          <h4>Method and assumptions</h4>
-          <ul>
-            <li>Monthly-rated employees: gratuity equals (last drawn wages × 15 × years of service) ÷ 26.</li>
-            <li>Service rounding: a fraction of more than six months in the final year is treated as one full year. Fixed-term employees under the Code on Social Security, 2020 receive gratuity on a pro-rata basis once one year of service is completed.</li>
-            <li>Eligibility is tested on actual continuous service, not on the rounded figure. Several High Courts have held that 4 years and 240 days in the fifth year qualifies; that reading is not applied here by default.</li>
-            <li>The five-year qualifying period does not apply where service ends due to death or disablement.</li>
-            <li>Statutory ceiling of ₹20,00,000 applies under Section 4(3) of the 1972 Act and Section 53(2) of the Code on Social Security, 2020.</li>
-            <li>Wages must include basic, dearness allowance and retaining allowance. The Code&rsquo;s 50% floor rule under Section 2(88) may apply once notified.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 6. Statutory Bonus -->
-<section id="bonus" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div class="container">
-    <div class="tag">Statutory Payout</div>
-    <h2 class="section-title">Statutory Bonus Calculator</h2>
-    <p class="section-sub" style="margin-bottom:8px">Compute the annual statutory bonus payable under the Payment of Bonus Act, 1965. Applies the ₹21,000 eligibility ceiling, the ₹7,000 or scheduled-minimum-wage calculation floor, the 8.33% to 20% band and pro-rating by days worked.</p>
-    <p style="margin-bottom:28px"><a href="bonus-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="calc-card-head">Inputs</div>
-        <p class="calc-card-sub">Provide wage details for the accounting year.</p>
-
-        <div class="form-group">
-          <label>Monthly salary or wage <span style="font-weight:400;color:var(--text-secondary)">(Section 2(21))</span></label>
-          <input type="number" id="bonus-salary" value="21000" min="0" oninput="calcBonus()" />
-        </div>
-
-        <div class="form-group">
-          <label>Scheduled minimum wage (monthly, optional)</label>
-          <input type="number" id="bonus-minwage" value="11000" min="0" oninput="calcBonus()" />
-          <p class="calc-hint">Leave blank if minimum wage does not exceed ₹7,000.</p>
-        </div>
-
-        <div class="form-group">
-          <label>Days worked in accounting year</label>
-          <input type="number" id="bonus-days" value="365" min="0" max="365" oninput="calcBonus()" />
-          <p class="calc-hint">Use 365 for a full year. Minimum 30 days required (Section 8).</p>
-        </div>
-
-        <div class="form-group">
-          <div style="display:flex;justify-content:space-between;align-items:baseline">
-            <label style="margin-bottom:0">Bonus rate: <span id="bonus-pct-label">8.33%</span></label>
-            <span style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text-secondary)">8.33% to 20%</span>
-          </div>
-          <input type="range" id="bonus-pct" min="8.33" max="20" step="0.01" value="8.33" oninput="calcBonus()" style="width:100%;margin-top:10px;accent-color:var(--primary)" />
-          <p class="calc-hint">Rate set by allocable surplus under Sections 10 and 11. Default 8.33% is the statutory minimum.</p>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:24px">
-          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcBonus()">Calculate</button>
-          <button type="button" class="btn btn-outline-dark" onclick="resetBonus()">↺ Reset</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
-        <p class="calc-card-sub" style="margin-bottom:16px">Annual statutory bonus payable.</p>
-        <div id="bonus-result"></div>
-
-        <div class="calc-notes">
-          <h4>Method and assumptions</h4>
-          <ul>
-            <li>Eligibility ceiling of ₹21,000/month was last revised by the Payment of Bonus (Amendment) Act, 2015 with retrospective effect from 01.04.2014.</li>
-            <li>Where the employee&rsquo;s salary exceeds ₹7,000 and the scheduled minimum wage for that scheduled employment is higher than ₹7,000, bonus is computed on the minimum wage; otherwise on ₹7,000.</li>
-            <li>Bonus must be paid within 8 months from the close of the accounting year (Section 19). Disqualifications under Section 9 (fraud, riotous behaviour or theft) are not modelled here.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. Maternity Benefit -->
-<section id="maternity" class="section-pad">
-  <div class="container">
-    <div class="tag">Statutory Payout</div>
-    <h2 class="section-title">Maternity Benefit Calculator</h2>
-    <p class="section-sub" style="margin-bottom:8px">Compute paid maternity leave and cash benefit under the Maternity Benefit Act, 1961 (as amended by the Maternity Benefit (Amendment) Act, 2017) read with Chapter VI of the Code on Social Security, 2020.</p>
-    <p style="margin-bottom:28px"><a href="maternity-benefit-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="calc-card-head">Inputs</div>
-        <p class="calc-card-sub">Provide wage and service details.</p>
-
-        <div class="form-group">
-          <label>Monthly wage (₹)</label>
-          <input type="number" id="mat-wage" value="25000" min="0" oninput="calcMaternity()" />
-          <p class="calc-hint">Average gross monthly wage in the three calendar months before the date of notice.</p>
-        </div>
-
-        <div class="form-group">
-          <label>Days actually worked in last 12 months</label>
-          <input type="number" id="mat-days" value="240" min="0" max="366" oninput="calcMaternity()" />
-          <p class="calc-hint">Minimum 80 days required in the 12 months preceding expected delivery (Section 5(2)).</p>
-        </div>
-
-        <div class="form-group">
-          <label>Scenario</label>
-          <select id="mat-scenario" onchange="calcMaternity()">
-            <option value="first2">First or second surviving child (26 weeks)</option>
-            <option value="third">Third or more surviving children (12 weeks)</option>
-            <option value="adopt">Commissioning or adopting mother (12 weeks)</option>
-            <option value="miscarriage">Miscarriage / medical termination (6 weeks)</option>
-          </select>
-        </div>
-
-        <div class="calc-switch-row">
-          <div class="calc-switch-text">
-            <strong>Employer provides prepaid medical care</strong>
-            <span>If yes, Section 8 medical bonus does not apply.</span>
-          </div>
-          <label class="calc-switch">
-            <input type="checkbox" id="mat-prepaid" onchange="calcMaternity()" />
-            <span class="calc-switch-slider"></span>
-          </label>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:24px">
-          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcMaternity()">Calculate</button>
-          <button type="button" class="btn btn-outline-dark" onclick="resetMaternity()">↺ Reset</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
-        <p class="calc-card-sub" style="margin-bottom:16px">Paid leave and cash benefit.</p>
-        <div id="mat-result"></div>
-
-        <div class="calc-notes">
-          <h4>Method and assumptions</h4>
-          <ul>
-            <li>An establishment with 50 or more employees must provide a creche facility within the prescribed distance (Section 11A).</li>
-            <li>Work-from-home may be permitted after the leave period on terms mutually agreed (Section 5(5)).</li>
-            <li>Dismissal during pregnancy or maternity leave is prohibited (Section 12). Discharge during this period still entitles the woman to maternity benefit and medical bonus.</li>
-            <li>Nursing breaks under Section 11 are payable till the child attains 15 months.</li>
-            <li>Average daily wage is taken as the monthly wage divided by 30. Related: <a href="labour-codes.html">Code on Social Security</a>, <a href="#ctc-takehome">CTC calculator</a>.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 8. Allowance Heatmap -->
-<section id="allowance-heatmap" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div class="container">
-    <div class="tag">Reckoner</div>
-    <h2 class="section-title">Allowance Heatmap: Code on Wages s.2(y) Reckoner</h2>
-    <p class="section-sub" style="margin-bottom:8px">Classify common payroll components against Section 2(y) of the Code on Wages, 2019. Each row shows the verdict, the statutory clause it rests on, and an audit-risk flag to guide review of the 50% wages floor.</p>
-    <p style="margin-bottom:28px"><a href="wage-code-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
-
-    <div class="hm-info">
-      <span class="hm-info-icon">ℹ️</span>
-      <div>
-        <h5>How to read this reckoner</h5>
-        <p><strong>Included</strong> heads count towards wages for the proviso (basic + DA + retaining allowance &ge; 50% of total remuneration). <strong>Excluded</strong> heads are listed in Section 2(y)(a) to (k). <strong>Conditional</strong> heads depend on how the component is structured in the salary letter and on documentation.</p>
-      </div>
-    </div>
-
-    <div class="hm-filter-card">
-      <h4>Filter</h4>
-      <p>Search by component name or clause. Filter by verdict.</p>
-      <div class="hm-search-wrap">
-        <span class="hm-search-icon">&#128269;</span>
-        <input type="text" id="hm-search" class="hm-search" placeholder="e.g. HRA, conveyance, bonus, ESOP" oninput="renderHeatmap()" />
-      </div>
-      <div class="hm-filter-row">
-        <div class="hm-filter-btns">
-          <button type="button" class="hm-filter-btn active" data-filter="all" onclick="setHeatmapFilter('all')">All</button>
-          <button type="button" class="hm-filter-btn" data-filter="included" onclick="setHeatmapFilter('included')">Included</button>
-          <button type="button" class="hm-filter-btn" data-filter="excluded" onclick="setHeatmapFilter('excluded')">Excluded</button>
-          <button type="button" class="hm-filter-btn" data-filter="conditional" onclick="setHeatmapFilter('conditional')">Conditional</button>
-        </div>
-        <div class="hm-count" id="hm-count">Showing 40 of 40</div>
-      </div>
-    </div>
-
-    <div class="hm-table-card">
-      <div class="hm-table-scroll">
-        <table class="hm-table">
-          <thead>
-            <tr><th>Component</th><th>Verdict</th><th>Clause</th><th>Risk</th><th>Note</th></tr>
-          </thead>
-          <tbody id="hm-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div id="wf-calc" style="margin-top:44px">
-      <h3 class="calc-card-head" style="font-size:22px;margin-bottom:6px">Test your salary structure</h3>
-      <p class="calc-card-sub" style="margin-bottom:24px">Add your own components, using the classification above as a guide, and check whether the structure meets the 50% wages floor used for PF, gratuity and bonus purposes.</p>
-
-      <div class="calc-grid">
-        <div class="calc-card">
-          <div class="calc-card-head">Salary components</div>
-          <p class="calc-card-sub">Type a component name (suggestions come from the 40 rows above) and choose how it is treated. Conditional heads need your own judgement based on documentation; the treatment is not locked.</p>
-
-          <div style="overflow-x:auto">
-            <table class="wage-table">
-              <thead>
-                <tr><th style="min-width:170px">Component</th><th style="width:110px">Amount (₹)</th><th style="min-width:210px">Treatment</th><th style="width:34px"></th></tr>
-              </thead>
-              <tbody id="wf-rows"></tbody>
-            </table>
-          </div>
-          <datalist id="wf-component-list"></datalist>
-          <button type="button" class="btn btn-outline-dark" style="margin-top:14px;padding:8px 16px;font-size:13px" onclick="addWfRow('', 0, 'inc')">+ Add component</button>
-
-          <div style="display:flex;gap:12px;margin-top:20px">
-            <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcWageFloor()">Calculate</button>
-            <button type="button" class="btn btn-outline-dark" onclick="resetWf()">↺ Reset</button>
-          </div>
-        </div>
-
-        <div>
-          <div class="calc-card-head" style="margin-bottom:4px">Result</div>
-          <p class="calc-card-sub" style="margin-bottom:16px">Wages after the 50% rule add-back, if any.</p>
-          <div id="wf-result"></div>
+        <div class="calc-hub-card">
+          <h3>Professional Tax</h3>
+          <p>Monthly PT liability across all 20 PT-levying states, for a chosen wage.</p>
+          <a href="/calculators/professional-tax/" class="calc-hub-open">Open calculator &rarr;</a>
         </div>
       </div>
     </div>
 
-    <div class="epf-src" style="margin-top:32px">
-      <h5>Source provisions</h5>
-      <p>
-        Section 2(y), Code on Wages, 2019 (definition of "wages") with proviso and explanation.<br>
-        The 50% rule: where excluded heads exceed one-half of the total remuneration, the excess is added back to wages.<br>
-        Use the calculator above to test wage-floor compliance for a specific salary stack.<br>
-        This reckoner is illustrative; verdicts must be tested against the actual salary letter and component definitions.
-      </p>
+    <div class="calc-hub-section">
+      <div class="calc-hub-label">Statutory Payouts</div>
+      <div class="calc-hub-grid">
+        <div class="calc-hub-card">
+          <h3>Gratuity</h3>
+          <p>Gratuity under the Payment of Gratuity Act, 1972, and the Code on Social Security, 2020.</p>
+          <a href="/calculators/gratuity/" class="calc-hub-open">Open calculator &rarr;</a>
+        </div>
+        <div class="calc-hub-card">
+          <h3>Statutory Bonus</h3>
+          <p>Annual bonus under the Payment of Bonus Act, 1965, 8.33% to 20%.</p>
+          <a href="/calculators/bonus/" class="calc-hub-open">Open calculator &rarr;</a>
+        </div>
+        <div class="calc-hub-card">
+          <h3>Maternity Benefit</h3>
+          <p>Paid leave and cash benefit under the Maternity Benefit Act, 1961.</p>
+          <a href="/calculators/maternity/" class="calc-hub-open">Open calculator &rarr;</a>
+        </div>
+      </div>
     </div>
+
+    <div class="calc-hub-section">
+      <div class="calc-hub-label">Reckoners</div>
+      <div class="calc-hub-grid">
+        <div class="calc-hub-card">
+          <h3>New Wage Code Calculator</h3>
+          <p>Classify payroll components against the Code on Wages s.2(y), and test the 50% wage floor.</p>
+          <a href="/calculators/allowance-heatmap/" class="calc-hub-open">Open calculator &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-hub-note">
+      <h4>A note on accuracy</h4>
+      <p>Calculators are illustrative and reflect the rates and thresholds in force as of July 2026. For matters with statutory consequence, verify the working against the latest notification and consult LEAP or your own counsel. Calculations do not account for company-specific allowances, exemptions, or circumstances beyond what each tool asks for.</p>
+    </div>
+
   </div>
 </section>
 
@@ -630,10 +114,8 @@
 
 <div id="footer-placeholder"></div>
 <div id="whatsapp-placeholder"></div>
-<script src="js/components.js?v=8"></script>
-<script src="js/main.js?v=6"></script>
-<script src="js/pt-data.js?v=1"></script>
-<script src="js/tools.js?v=16"></script>
+<script src="/js/components.js?v=9"></script>
+<script src="/js/main.js?v=6"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

@@ -9,75 +9,75 @@ function renderNavbar(activePage) {
     <div class="container">
       <div class="nav-inner">
 
-        <a href="index.html" class="nav-logo">
-          <img src="assets/logo.png" alt="LEAP Business Solutions" class="nav-logo-img" />
+        <a href="/index.html" class="nav-logo">
+          <img src="/assets/logo.png" alt="LEAP Business Solutions" class="nav-logo-img" />
         </a>
 
         <ul class="nav-links">
-          <li><a href="index.html"            ${activePage==='home'    ?'class="active"':''}>Home</a></li>
+          <li><a href="/index.html"            ${activePage==='home'    ?'class="active"':''}>Home</a></li>
           <li class="nav-dropdown">
-            <a href="services.html"           ${activePage==='services'?'class="active"':''}>Our Services</a>
+            <a href="/services.html"           ${activePage==='services'?'class="active"':''}>Our Services</a>
             <div class="dropdown-menu">
-              <a href="payroll-compliance.html">Payroll Compliance</a>
-              <a href="services.html#establishment-compliance">Establishment Compliance</a>
-              <a href="registrations.html">Registrations &amp; Licenses</a>
-              <a href="services.html#audit">Audit &amp; Inspection</a>
-              <a href="services.html#vendor-audit">Vendor/Client Audit</a>
-              <a href="services.html#factory">Factory Compliance</a>
+              <a href="/payroll-compliance.html">Payroll Compliance</a>
+              <a href="/services.html#establishment-compliance">Establishment Compliance</a>
+              <a href="/registrations.html">Registrations &amp; Licenses</a>
+              <a href="/services.html#audit">Audit &amp; Inspection</a>
+              <a href="/services.html#vendor-audit">Vendor/Client Audit</a>
+              <a href="/services.html#factory">Factory Compliance</a>
             </div>
           </li>
           <li class="nav-dropdown">
-            <a href="blog.html" ${activePage==='blog'||activePage==='registrations'||activePage==='faq'||activePage==='labourcodes'||activePage==='resources'?'class="active"':''}>Resources</a>
+            <a href="/blog.html" ${activePage==='blog'||activePage==='registrations'||activePage==='faq'||activePage==='labourcodes'||activePage==='resources'?'class="active"':''}>Resources</a>
             <div class="dropdown-menu dropdown-mega">
               <div>
                 <div class="dropdown-heading">Reference Hubs</div>
-                <a href="coming-soon.html?item=Downloads">Downloads</a>
-                <a href="coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
-                <a href="registrations.html">Registrations</a>
-                <a href="knowledge.html">Knowledge Hub</a>
-                <a href="knowledge.html#lwf">Labour Welfare Fund</a>
-                <a href="knowledge.html#pt">Professional Tax</a>
-                <a href="coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
-                <a href="coming-soon.html?item=Minimum Wages">Minimum Wages</a>
-                <a href="coming-soon.html?item=Holidays">Holidays</a>
+                <a href="/coming-soon.html?item=Downloads">Downloads</a>
+                <a href="/coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
+                <a href="/registrations.html">Registrations</a>
+                <a href="/knowledge.html">Knowledge Hub</a>
+                <a href="/knowledge.html#lwf">Labour Welfare Fund</a>
+                <a href="/knowledge.html#pt">Professional Tax</a>
+                <a href="/coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
+                <a href="/coming-soon.html?item=Minimum Wages">Minimum Wages</a>
+                <a href="/coming-soon.html?item=Holidays">Holidays</a>
               </div>
               <div>
                 <div class="dropdown-heading">Compliance</div>
-                <a href="labour-codes.html">Labour Codes 2026</a>
-                <a href="coming-soon.html?item=Compliance Calendar">Compliance Calendar</a>
-                <a href="coming-soon.html?item=Guidance">Guidance</a>
+                <a href="/labour-codes.html">Labour Codes 2026</a>
+                <a href="/coming-soon.html?item=Compliance Calendar">Compliance Calendar</a>
+                <a href="/coming-soon.html?item=Guidance">Guidance</a>
               </div>
               <div>
                 <div class="dropdown-heading">Editorial</div>
-                <a href="blog.html">Articles</a>
-                <a href="faq.html">FAQs</a>
-                <a href="coming-soon.html?item=Govt. FAQs">Govt. FAQs</a>
+                <a href="/blog.html">Articles</a>
+                <a href="/faq.html">FAQs</a>
+                <a href="/coming-soon.html?item=Govt. FAQs">Govt. FAQs</a>
               </div>
             </div>
           </li>
           <li class="nav-dropdown">
-            <a href="tools.html" ${activePage==='tools'?'class="active"':''}>Tools</a>
+            <a href="/tools.html" ${activePage==='tools'?'class="active"':''}>Tools</a>
             <div class="dropdown-menu dropdown-wide">
               <div class="dropdown-heading">Payroll Calculators</div>
-              <a href="ctc-calculator.html">CTC ↔ Take-Home</a>
-              <a href="epf-calculator.html">EPF Split</a>
-              <a href="esic-calculator.html">ESIC Split</a>
-              <a href="professional-tax-calculator.html">Professional Tax</a>
+              <a href="/calculators/ctc/">CTC ↔ Take-Home</a>
+              <a href="/calculators/epf/">EPF Split</a>
+              <a href="/calculators/esic/">ESIC Split</a>
+              <a href="/calculators/professional-tax/">Professional Tax</a>
               <div class="dropdown-divider"></div>
               <div class="dropdown-heading">Statutory Payouts</div>
-              <a href="gratuity-calculator.html">Gratuity</a>
-              <a href="bonus-calculator.html">Statutory Bonus</a>
-              <a href="maternity-benefit-calculator.html">Maternity Benefit</a>
+              <a href="/calculators/gratuity/">Gratuity</a>
+              <a href="/calculators/bonus/">Statutory Bonus</a>
+              <a href="/calculators/maternity/">Maternity Benefit</a>
               <div class="dropdown-divider"></div>
               <div class="dropdown-heading">Reckoners</div>
-              <a href="wage-code-calculator.html">Allowance Heatmap</a>
+              <a href="/calculators/allowance-heatmap/">Allowance Heatmap</a>
             </div>
           </li>
           <li class="nav-dropdown">
-            <a href="about.html" ${activePage==='about'||activePage==='contact'?'class="active"':''}>About Us</a>
+            <a href="/about.html" ${activePage==='about'||activePage==='contact'?'class="active"':''}>About Us</a>
             <div class="dropdown-menu">
-              <a href="about.html">About Us</a>
-              <a href="contact.html">Contact</a>
+              <a href="/about.html">About Us</a>
+              <a href="/contact.html">Contact</a>
             </div>
           </li>
         </ul>
@@ -90,17 +90,17 @@ function renderNavbar(activePage) {
     </div>
 
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-      <a href="index.html">Home</a>
+      <a href="/index.html">Home</a>
 
       <details class="mobile-accordion">
         <summary>Our Services</summary>
         <div class="mobile-accordion-body">
-          <a href="payroll-compliance.html">Payroll Compliance</a>
-          <a href="services.html#establishment-compliance">Establishment Compliance</a>
-          <a href="registrations.html">Registrations &amp; Licenses</a>
-          <a href="services.html#audit">Audit &amp; Inspection</a>
-          <a href="services.html#vendor-audit">Vendor/Client Audit</a>
-          <a href="services.html#factory">Factory Compliance</a>
+          <a href="/payroll-compliance.html">Payroll Compliance</a>
+          <a href="/services.html#establishment-compliance">Establishment Compliance</a>
+          <a href="/registrations.html">Registrations &amp; Licenses</a>
+          <a href="/services.html#audit">Audit &amp; Inspection</a>
+          <a href="/services.html#vendor-audit">Vendor/Client Audit</a>
+          <a href="/services.html#factory">Factory Compliance</a>
         </div>
       </details>
 
@@ -108,23 +108,23 @@ function renderNavbar(activePage) {
         <summary>Resources</summary>
         <div class="mobile-accordion-body">
           <div class="mobile-accordion-heading">Reference Hubs</div>
-          <a href="coming-soon.html?item=Downloads">Downloads</a>
-          <a href="coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
-          <a href="registrations.html">Registrations</a>
-          <a href="knowledge.html">Knowledge Hub</a>
-          <a href="knowledge.html#lwf">Labour Welfare Fund</a>
-          <a href="knowledge.html#pt">Professional Tax</a>
-          <a href="coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
-          <a href="coming-soon.html?item=Minimum Wages">Minimum Wages</a>
-          <a href="coming-soon.html?item=Holidays">Holidays</a>
+          <a href="/coming-soon.html?item=Downloads">Downloads</a>
+          <a href="/coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
+          <a href="/registrations.html">Registrations</a>
+          <a href="/knowledge.html">Knowledge Hub</a>
+          <a href="/knowledge.html#lwf">Labour Welfare Fund</a>
+          <a href="/knowledge.html#pt">Professional Tax</a>
+          <a href="/coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
+          <a href="/coming-soon.html?item=Minimum Wages">Minimum Wages</a>
+          <a href="/coming-soon.html?item=Holidays">Holidays</a>
           <div class="mobile-accordion-heading">Compliance</div>
-          <a href="labour-codes.html">Labour Codes 2026</a>
-          <a href="coming-soon.html?item=Compliance Calendar">Compliance Calendar</a>
-          <a href="coming-soon.html?item=Guidance">Guidance</a>
+          <a href="/labour-codes.html">Labour Codes 2026</a>
+          <a href="/coming-soon.html?item=Compliance Calendar">Compliance Calendar</a>
+          <a href="/coming-soon.html?item=Guidance">Guidance</a>
           <div class="mobile-accordion-heading">Editorial</div>
-          <a href="blog.html">Articles</a>
-          <a href="faq.html">FAQs</a>
-          <a href="coming-soon.html?item=Govt. FAQs">Govt. FAQs</a>
+          <a href="/blog.html">Articles</a>
+          <a href="/faq.html">FAQs</a>
+          <a href="/coming-soon.html?item=Govt. FAQs">Govt. FAQs</a>
         </div>
       </details>
 
@@ -132,24 +132,24 @@ function renderNavbar(activePage) {
         <summary>Tools</summary>
         <div class="mobile-accordion-body">
           <div class="mobile-accordion-heading">Payroll Calculators</div>
-          <a href="ctc-calculator.html">CTC ↔ Take-Home</a>
-          <a href="epf-calculator.html">EPF Split</a>
-          <a href="esic-calculator.html">ESIC Split</a>
-          <a href="professional-tax-calculator.html">Professional Tax</a>
+          <a href="/calculators/ctc/">CTC ↔ Take-Home</a>
+          <a href="/calculators/epf/">EPF Split</a>
+          <a href="/calculators/esic/">ESIC Split</a>
+          <a href="/calculators/professional-tax/">Professional Tax</a>
           <div class="mobile-accordion-heading">Statutory Payouts</div>
-          <a href="gratuity-calculator.html">Gratuity</a>
-          <a href="bonus-calculator.html">Statutory Bonus</a>
-          <a href="maternity-benefit-calculator.html">Maternity Benefit</a>
+          <a href="/calculators/gratuity/">Gratuity</a>
+          <a href="/calculators/bonus/">Statutory Bonus</a>
+          <a href="/calculators/maternity/">Maternity Benefit</a>
           <div class="mobile-accordion-heading">Reckoners</div>
-          <a href="wage-code-calculator.html">Allowance Heatmap</a>
+          <a href="/calculators/allowance-heatmap/">Allowance Heatmap</a>
         </div>
       </details>
 
       <details class="mobile-accordion">
         <summary>About Us</summary>
         <div class="mobile-accordion-body">
-          <a href="about.html">About Us</a>
-          <a href="contact.html">Contact</a>
+          <a href="/about.html">About Us</a>
+          <a href="/contact.html">Contact</a>
         </div>
       </details>
     </div>
@@ -194,8 +194,8 @@ function renderFooter() {
       <div class="footer-grid">
 
         <div class="footer-brand">
-          <a href="index.html">
-            <img src="assets/logo.png" alt="LEAP Business Solutions" class="footer-logo-img" />
+          <a href="/index.html">
+            <img src="/assets/logo.png" alt="LEAP Business Solutions" class="footer-logo-img" />
           </a>
           <p>Your trusted partner for comprehensive Labour Law Compliance across India. Based in Mumbai, serving businesses pan-India since 2022.</p>
           <div class="footer-social">
@@ -207,24 +207,24 @@ function renderFooter() {
 
         <div class="footer-col">
           <h5>Services</h5>
-          <a href="payroll-compliance.html">Payroll Compliance</a>
-          <a href="services.html#establishment-compliance">Establishment Compliance</a>
-          <a href="registrations.html">Registrations &amp; Licenses</a>
-          <a href="services.html#audit">Audit &amp; Inspection</a>
-          <a href="services.html#vendor-audit">Vendor/Client Audit</a>
-          <a href="services.html#factory">Factory Compliance</a>
-          <a href="services.html#posh">POSH Compliance</a>
+          <a href="/payroll-compliance.html">Payroll Compliance</a>
+          <a href="/services.html#establishment-compliance">Establishment Compliance</a>
+          <a href="/registrations.html">Registrations &amp; Licenses</a>
+          <a href="/services.html#audit">Audit &amp; Inspection</a>
+          <a href="/services.html#vendor-audit">Vendor/Client Audit</a>
+          <a href="/services.html#factory">Factory Compliance</a>
+          <a href="/services.html#posh">POSH Compliance</a>
         </div>
 
         <div class="footer-col">
           <h5>Company</h5>
-          <a href="index.html">Home</a>
-          <a href="about.html">About Us</a>
-          <a href="blog.html">Resources &amp; Blog</a>
-          <a href="faq.html">FAQs</a>
-          <a href="contact.html">Contact Us</a>
-          <a href="tools.html">Tools &amp; Calculators</a>
-          <a href="labour-codes.html">Labour Codes 2026</a>
+          <a href="/index.html">Home</a>
+          <a href="/about.html">About Us</a>
+          <a href="/blog.html">Resources &amp; Blog</a>
+          <a href="/faq.html">FAQs</a>
+          <a href="/contact.html">Contact Us</a>
+          <a href="/tools.html">Tools &amp; Calculators</a>
+          <a href="/labour-codes.html">Labour Codes 2026</a>
         </div>
 
         <div class="footer-col">

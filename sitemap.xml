@@ -10,13 +10,13 @@
   <url><loc>https://www.leapbusiness.in/blog.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.leapbusiness.in/knowledge.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.leapbusiness.in/tools.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.leapbusiness.in/gratuity-calculator.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.leapbusiness.in/ctc-calculator.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.leapbusiness.in/wage-code-calculator.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.leapbusiness.in/epf-calculator.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.leapbusiness.in/esic-calculator.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.leapbusiness.in/professional-tax-calculator.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.leapbusiness.in/bonus-calculator.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.leapbusiness.in/maternity-benefit-calculator.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.leapbusiness.in/calculators/gratuity/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.leapbusiness.in/calculators/ctc/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.leapbusiness.in/calculators/allowance-heatmap/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.leapbusiness.in/calculators/epf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.leapbusiness.in/calculators/esic/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.leapbusiness.in/calculators/professional-tax/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.leapbusiness.in/calculators/bonus/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.leapbusiness.in/calculators/maternity/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.leapbusiness.in/faq.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
