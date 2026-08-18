@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Wage Code Calculator | Code on Wages Allowance &amp; 50% Wage Floor | LEAP</title>
+  <meta name="description" content="Free New Wage Code calculator. Check whether payroll components are included or excluded under Section 2(y) of the Code on Wages, 2019, and test your salary structure against the 50% wage floor rule. By LEAP Business Solutions." />
+  <meta name="keywords" content="new wage code calculator, wage code calculator, code on wages calculator, 50 percent wage rule calculator, code on wages 2019 allowance calculator" />
+  <meta property="og:title" content="New Wage Code Calculator | LEAP" />
+  <meta property="og:description" content="Classify 40 common payroll components under the Code on Wages, 2019 and test your salary structure against the 50% wage floor. Free and instant." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.leapbusiness.in/wage-code-calculator.html" />
+  <link rel="canonical" href="https://www.leapbusiness.in/wage-code-calculator.html" />
+  <link rel="icon" href="assets/favicon.png?v=2" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/style.css?v=13" />
+  <link rel="stylesheet" href="css/calculators.css?v=1" />
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
+    {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://www.leapbusiness.in/tools.html"},
+    {"@type": "ListItem", "position": 3, "name": "New Wage Code Calculator", "item": "https://www.leapbusiness.in/wage-code-calculator.html"}
+  ]}
+  </script>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <a href="tools.html">Tools</a> <span>›</span> <span>New Wage Code Calculator</span></div>
+      <h1 class="page-hero-title">New Wage Code Calculator</h1>
+      <p class="page-hero-desc">Classify payroll components under the Code on Wages, 2019 and test your salary structure against the 50% wage floor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<section style="background:var(--secondary-faint);border-bottom:1px solid var(--border);padding:16px 0">
+  <div class="container" style="font-size:14px;color:var(--text-secondary);text-align:center">
+    ⚠️ This tool gives indicative guidance for general awareness, based on the Code on Wages, 2019 as notified as of July 2026. It is not a substitute for professional advice; <a href="contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> for figures specific to your business.
+  </div>
+</section>
+
+<section id="allowance-heatmap" class="section-pad" style="background:var(--secondary-faint);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tag">Reckoner</div>
+    <h2 class="section-title">Allowance Heatmap: Code on Wages s.2(y) Reckoner</h2>
+    <p class="section-sub" style="margin-bottom:28px">Classify common payroll components against Section 2(y) of the Code on Wages, 2019. Each row shows the verdict, the statutory clause it rests on, and an audit-risk flag to guide review of the 50% wages floor.</p>
+
+    <div class="hm-info">
+      <span class="hm-info-icon">ℹ️</span>
+      <div>
+        <h5>How to read this reckoner</h5>
+        <p><strong>Included</strong> heads count towards wages for the proviso (basic + DA + retaining allowance &ge; 50% of total remuneration). <strong>Excluded</strong> heads are listed in Section 2(y)(a) to (k). <strong>Conditional</strong> heads depend on how the component is structured in the salary letter and on documentation.</p>
+      </div>
+    </div>
+
+    <div class="hm-filter-card">
+      <h4>Filter</h4>
+      <p>Search by component name or clause. Filter by verdict.</p>
+      <div class="hm-search-wrap">
+        <span class="hm-search-icon">&#128269;</span>
+        <input type="text" id="hm-search" class="hm-search" placeholder="e.g. HRA, conveyance, bonus, ESOP" oninput="renderHeatmap()" />
+      </div>
+      <div class="hm-filter-row">
+        <div class="hm-filter-btns">
+          <button type="button" class="hm-filter-btn active" data-filter="all" onclick="setHeatmapFilter('all')">All</button>
+          <button type="button" class="hm-filter-btn" data-filter="included" onclick="setHeatmapFilter('included')">Included</button>
+          <button type="button" class="hm-filter-btn" data-filter="excluded" onclick="setHeatmapFilter('excluded')">Excluded</button>
+          <button type="button" class="hm-filter-btn" data-filter="conditional" onclick="setHeatmapFilter('conditional')">Conditional</button>
+        </div>
+        <div class="hm-count" id="hm-count">Showing 40 of 40</div>
+      </div>
+    </div>
+
+    <div class="hm-table-card">
+      <div class="hm-table-scroll">
+        <table class="hm-table">
+          <thead>
+            <tr><th>Component</th><th>Verdict</th><th>Clause</th><th>Risk</th><th>Note</th></tr>
+          </thead>
+          <tbody id="hm-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="wf-calc" style="margin-top:44px">
+      <h3 class="calc-card-head" style="font-size:22px;margin-bottom:6px">Test your salary structure</h3>
+      <p class="calc-card-sub" style="margin-bottom:24px">Add your own components, using the classification above as a guide, and check whether the structure meets the 50% wages floor used for PF, gratuity and bonus purposes.</p>
+
+      <div class="calc-grid">
+        <div class="calc-card">
+          <div class="calc-card-head">Salary components</div>
+          <p class="calc-card-sub">Type a component name (suggestions come from the 40 rows above) and choose how it is treated. Conditional heads need your own judgement based on documentation; the treatment is not locked.</p>
+
+          <div style="overflow-x:auto">
+            <table class="wage-table">
+              <thead>
+                <tr><th style="min-width:170px">Component</th><th style="width:110px">Amount (₹)</th><th style="min-width:210px">Treatment</th><th style="width:34px"></th></tr>
+              </thead>
+              <tbody id="wf-rows"></tbody>
+            </table>
+          </div>
+          <datalist id="wf-component-list"></datalist>
+          <button type="button" class="btn btn-outline-dark" style="margin-top:14px;padding:8px 16px;font-size:13px" onclick="addWfRow('', 0, 'inc')">+ Add component</button>
+
+          <div style="display:flex;gap:12px;margin-top:20px">
+            <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcWageFloor()">Calculate</button>
+            <button type="button" class="btn btn-outline-dark" onclick="resetWf()">↺ Reset</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="calc-card-head" style="margin-bottom:4px">Result</div>
+          <p class="calc-card-sub" style="margin-bottom:16px">Wages after the 50% rule add-back, if any.</p>
+          <div id="wf-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="epf-src" style="margin-top:32px">
+      <h5>Source provisions</h5>
+      <p>
+        Section 2(y), Code on Wages, 2019 (definition of "wages") with proviso and explanation.<br>
+        The 50% rule: where excluded heads exceed one-half of the total remuneration, the excess is added back to wages.<br>
+        Use the calculator above to test wage-floor compliance for a specific salary stack.<br>
+        This reckoner is illustrative; verdicts must be tested against the actual salary letter and component definitions.
+      </p>
+    </div>
+
+    <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--border)">
+      <div style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px;font-weight:700;margin-bottom:10px">MORE FREE CALCULATORS</div>
+      <div class="related-calcs">
+        <a href="gratuity-calculator.html" class="jump-pill">Gratuity Calculator</a>
+        <a href="ctc-calculator.html" class="jump-pill">CTC ↔ Take-Home</a>
+        <a href="tools.html#epf-split" class="jump-pill">EPF Split</a>
+        <a href="tools.html#esic-split" class="jump-pill">ESIC Split</a>
+        <a href="tools.html#pt" class="jump-pill">Professional Tax</a>
+        <a href="tools.html#bonus" class="jump-pill">Statutory Bonus</a>
+        <a href="tools.html#maternity" class="jump-pill">Maternity Benefit</a>
+        <a href="tools.html" class="jump-pill">See all calculators →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-pad audit-cta">
+  <div class="container">
+    <div class="audit-inner">
+      <div class="fade-up">
+        <div class="tag">Need Exact Figures?</div>
+        <h2 class="audit-title">These are estimates. Let's get it exactly right for your business.</h2>
+        <p class="audit-desc">Book a free 30-minute compliance review and we'll walk through your actual payroll structure, Labour Code readiness, and statutory obligations.</p>
+      </div>
+      <div class="audit-box fade-up delay-2">
+        <div class="audit-free-tag">✦ 100% Free ✦</div>
+        <div class="audit-time">Book a Call</div>
+        <div class="audit-sub">Our expert will call you within the hour</div>
+        <a href="tel:+917977213501" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px">📞 +91 79772 13501</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<div id="whatsapp-placeholder"></div>
+<script src="js/components.js?v=7"></script>
+<script src="js/main.js?v=6"></script>
+<script src="js/tools.js?v=15"></script>
+<script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
+</body>
+</html>

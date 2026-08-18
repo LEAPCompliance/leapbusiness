@@ -9,116 +9,7 @@
   <link rel="icon" href="assets/favicon.png?v=2" type="image/png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="stylesheet" href="css/style.css?v=13" />
-  <style>
-    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
-    .calc-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; }
-    .calc-result { background: var(--background-light); border-radius: var(--radius); padding: 20px; }
-    .calc-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border); }
-    .calc-row:last-child { border-bottom: none; }
-    .calc-total { font-size: 16px; color: var(--primary); font-weight: 700; border-top: 2px solid var(--secondary); margin-top: 6px; padding-top: 12px; }
-    .calc-inline { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .jump-pill { display: inline-block; padding: 7px 16px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; color: var(--primary); text-decoration: none; margin: 4px 6px 4px 0; background: var(--white); }
-    .jump-pill:hover { background: var(--secondary); color: var(--white); border-color: var(--secondary); }
-    .hm-info { display: flex; gap: 12px; align-items: flex-start; background: var(--secondary-faint); border: 1px solid rgba(50,153,194,0.25); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 28px; }
-    .hm-info-icon { font-size: 16px; line-height: 1.4; flex-shrink: 0; }
-    .hm-info h5 { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-    .hm-info p { font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; margin: 0; }
-    .hm-info strong { color: var(--primary); }
-    .hm-filter-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 26px; margin-bottom: 24px; }
-    .hm-filter-card h4 { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--primary); margin-bottom: 4px; }
-    .hm-filter-card > p { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); margin-bottom: 18px; }
-    .hm-search-wrap { position: relative; margin-bottom: 18px; }
-    .hm-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.5; pointer-events: none; }
-    .hm-search { width: 100%; padding: 11px 14px 11px 38px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-primary); background: var(--white); }
-    .hm-search:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(50,153,194,0.11); }
-    .hm-filter-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
-    .hm-filter-btns { display: flex; flex-wrap: wrap; gap: 8px; }
-    .hm-filter-btn { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-primary); background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; cursor: pointer; transition: all 0.15s ease; }
-    .hm-filter-btn:hover { border-color: var(--secondary); }
-    .hm-filter-btn.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
-    .hm-count { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
-    .hm-table-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
-    .hm-table-scroll { overflow-x: auto; }
-    .hm-table { width: 100%; border-collapse: collapse; min-width: 760px; }
-    .hm-table th { text-align: left; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--background-light); white-space: nowrap; }
-    .hm-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text-primary); vertical-align: top; }
-    .hm-table tr:last-child td { border-bottom: none; }
-    .hm-table tr:hover td { background: var(--background-light); }
-    .hm-clause { color: var(--text-secondary); white-space: nowrap; }
-    .hm-note { color: var(--text-secondary); line-height: 1.6; min-width: 260px; }
-    .hm-empty { text-align: center; color: var(--text-secondary); padding: 32px 16px !important; }
-    .hm-badge, .hm-risk { display: inline-block; font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em; padding: 4px 11px; border-radius: 20px; border: 1px solid transparent; white-space: nowrap; }
-    .hm-badge-included { background: #eef7f0; color: #1a7d3c; border-color: #cdebd3; }
-    .hm-badge-excluded { background: var(--white); color: var(--text-secondary); border-color: var(--border); }
-    .hm-badge-conditional { background: #fdf4ec; color: #a85d00; border-color: #f3ddc1; }
-    .hm-risk-low { background: var(--secondary-faint); color: var(--primary); border-color: rgba(50,153,194,0.25); text-transform: uppercase; }
-    .hm-risk-medium { background: #fdf6e3; color: #92620a; border-color: #f1e2b0; text-transform: uppercase; }
-    .hm-risk-high { background: #fdf3f2; color: #c0392b; border-color: rgba(192,57,43,0.25); text-transform: uppercase; }
-    @media (max-width: 700px) { .hm-filter-row { flex-direction: column; align-items: flex-start; } }
-    .heatmap-bar { width: 100%; height: 14px; background: var(--border); border-radius: 7px; overflow: hidden; margin: 10px 0; }
-    .heatmap-fill { height: 100%; transition: width 0.3s ease; }
-    .ctc-toggle { display: flex; background: var(--background-light); border-radius: var(--radius); padding: 4px; margin-bottom: 20px; }
-    .ctc-toggle-btn { flex: 1; text-align: center; padding: 10px 12px; font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; color: var(--text-secondary); background: transparent; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
-    .ctc-toggle-btn.active { background: var(--white); color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .ctc-summary { background: var(--secondary-light); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px; font-size: 14px; color: var(--primary); font-weight: 600; }
-    .calc-card-head { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--primary); margin-bottom: 4px; }
-    .calc-card-sub { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
-    .calc-hint { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-    .calc-switch-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; background: var(--background-light); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 20px; }
-    .calc-switch-text strong { display: block; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--primary); margin-bottom: 3px; }
-    .calc-switch-text span { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
-    .calc-switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; margin-top: 2px; }
-    .calc-switch input { opacity: 0; width: 0; height: 0; }
-    .calc-switch-slider { position: absolute; cursor: pointer; inset: 0; background: #cbd5e1; border-radius: 24px; transition: 0.25s; }
-    .calc-switch-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.25s; }
-    .calc-switch input:checked + .calc-switch-slider { background: var(--primary); }
-    .calc-switch input:checked + .calc-switch-slider:before { transform: translateX(20px); }
-    .calc-switch input:disabled + .calc-switch-slider { opacity: 0.45; cursor: not-allowed; }
-    .calc-notes { background: var(--white); border: 1px solid var(--border); border-left: 3px solid var(--secondary); border-radius: var(--radius); padding: 20px; margin-top: 20px; }
-    .calc-notes h4 { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); margin-bottom: 12px; }
-    .calc-notes ul { margin: 0; padding-left: 18px; }
-    .calc-notes li { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; }
-    .calc-notes li:last-child { margin-bottom: 0; }
-    .calc-alert { border: 1px solid rgba(192,57,43,0.35); background: #fdf3f2; border-radius: var(--radius); padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; }
-    .calc-alert-icon { font-size: 16px; line-height: 1.3; }
-    .calc-alert h5 { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: #c0392b; margin-bottom: 4px; }
-    .calc-alert p { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.65; margin: 0; }
-    .opt-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
-    .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-    .opt-card { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; background: var(--white); transition: border-color .15s ease, box-shadow .15s ease; }
-    .opt-card:hover { border-color: var(--secondary); }
-    .opt-card.on { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,74,110,0.13); }
-    .opt-card input[type=radio] { margin: 3px 0 0; width: 15px; height: 15px; flex-shrink: 0; accent-color: var(--primary); }
-    .opt-card strong { display: block; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; color: var(--primary); line-height: 1.35; }
-    .opt-card em { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-    @media (max-width: 520px) { .opt-grid { grid-template-columns: 1fr; } }
-    .wage-table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; font-size: 13px; }
-    .wage-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); padding: 0 6px 8px; border-bottom: 1px solid var(--border); }
-    .wage-table td { padding: 5px 6px; vertical-align: middle; }
-    .wage-table input, .wage-table select { width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-primary); background: var(--white); }
-    .wage-table input:focus, .wage-table select:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(50,153,194,0.11); }
-    .wage-table .row-del { background: none; border: none; color: var(--text-secondary); font-size: 17px; cursor: pointer; line-height: 1; padding: 4px 2px; }
-    .wage-table .row-del:hover { color: #c0392b; }
-    .cat-inc  { background: #eef7f0 !important; }
-    .cat-e50  { background: #fdf4ec !important; }
-    .cat-enot { background: #f2f2f5 !important; }
-    .epf-sumgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-    .epf-sumcard { background: var(--background-light); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
-    .epf-sumcard.wide { grid-column: 1 / -1; }
-    .epf-sumcard span { display: block; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
-    .epf-sumcard strong { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700; color: var(--primary); letter-spacing: -0.01em; }
-    .epf-group-head { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-secondary); margin: 22px 0 8px; }
-    .epf-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border); }
-    .epf-line:last-child { border-bottom: none; }
-    .epf-line strong { font-weight: 600; white-space: nowrap; }
-    .epf-line.credit { border-bottom: none; border-top: 2px solid var(--secondary); margin-top: 6px; padding-top: 12px; font-size: 15px; color: var(--primary); font-weight: 700; }
-    .epf-src { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-top: 20px; }
-    .epf-src h5 { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
-    .epf-src p { font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; margin: 0; }
-    @media (max-width: 520px) { .epf-sumgrid { grid-template-columns: 1fr; } }
-    .calc-sub-row { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0 4px 16px; font-size: 13px; color: var(--text-secondary); }
-    @media (max-width: 900px) { .calc-grid { grid-template-columns: 1fr; } }
-  </style>
+  <link rel="stylesheet" href="css/calculators.css?v=1" />
 </head>
 <body>
 <div id="navbar-placeholder"></div>
@@ -160,7 +51,8 @@
   <div class="container">
     <div class="tag">Payroll Calculator</div>
     <h2 class="section-title">CTC &harr; Take-Home</h2>
-    <p class="section-sub" style="margin-bottom:28px">Work in either direction &mdash; know your CTC and want the take-home, or know your desired take-home and want the CTC to offer. Breaks down Basic, HRA, allowances, statutory deductions and employer cost by state &mdash; the same structure LEAP uses for client payroll.</p>
+    <p class="section-sub" style="margin-bottom:8px">Work in either direction: know your CTC and want the take-home, or know your desired take-home and want the CTC to offer. Breaks down Basic, HRA, allowances, statutory deductions and employer cost by state, the same structure LEAP uses for client payroll.</p>
+    <p style="margin-bottom:28px"><a href="ctc-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
     <div class="calc-grid">
       <div class="calc-card">
         <div class="ctc-toggle">
@@ -414,7 +306,8 @@
   <div class="container">
     <div class="tag">Statutory Payout</div>
     <h2 class="section-title">Gratuity Calculator</h2>
-    <p class="section-sub" style="margin-bottom:28px">Compute gratuity under the Payment of Gratuity Act, 1972 and the Code on Social Security, 2020. Supports permanent and fixed-term employees. Results are indicative; verify against the wage definition applicable to your establishment.</p>
+    <p class="section-sub" style="margin-bottom:8px">Compute gratuity under the Payment of Gratuity Act, 1972 and the Code on Social Security, 2020. Supports permanent and fixed-term employees. Results are indicative; verify against the wage definition applicable to your establishment.</p>
+    <p style="margin-bottom:28px"><a href="gratuity-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
     <div class="calc-grid">
       <div class="calc-card">
         <div class="calc-card-head">Inputs</div>
@@ -625,7 +518,8 @@
   <div class="container">
     <div class="tag">Reckoner</div>
     <h2 class="section-title">Allowance Heatmap: Code on Wages s.2(y) Reckoner</h2>
-    <p class="section-sub" style="margin-bottom:28px">Classify common payroll components against Section 2(y) of the Code on Wages, 2019. Each row shows the verdict, the statutory clause it rests on, and an audit-risk flag to guide review of the 50% wages floor.</p>
+    <p class="section-sub" style="margin-bottom:8px">Classify common payroll components against Section 2(y) of the Code on Wages, 2019. Each row shows the verdict, the statutory clause it rests on, and an audit-risk flag to guide review of the 50% wages floor.</p>
+    <p style="margin-bottom:28px"><a href="wage-code-calculator.html" style="color:var(--secondary);font-weight:600;font-size:13px">Open this as its own page, to bookmark or share &rarr;</a></p>
 
     <div class="hm-info">
       <span class="hm-info-icon">ℹ️</span>
@@ -731,7 +625,7 @@
 
 <div id="footer-placeholder"></div>
 <div id="whatsapp-placeholder"></div>
-<script src="js/components.js?v=6"></script>
+<script src="js/components.js?v=7"></script>
 <script src="js/main.js?v=6"></script>
 <script src="js/pt-data.js?v=1"></script>
 <script src="js/tools.js?v=15"></script>

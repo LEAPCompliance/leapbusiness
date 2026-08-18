@@ -59,18 +59,18 @@ function renderNavbar(activePage) {
             <a href="tools.html" ${activePage==='tools'?'class="active"':''}>Tools</a>
             <div class="dropdown-menu dropdown-wide">
               <div class="dropdown-heading">Payroll Calculators</div>
-              <a href="tools.html#ctc-takehome">CTC ↔ Take-Home</a>
+              <a href="ctc-calculator.html">CTC ↔ Take-Home</a>
               <a href="tools.html#epf-split">EPF Split</a>
               <a href="tools.html#esic-split">ESIC Split</a>
               <a href="tools.html#pt">Professional Tax</a>
               <div class="dropdown-divider"></div>
               <div class="dropdown-heading">Statutory Payouts</div>
-              <a href="tools.html#gratuity">Gratuity</a>
+              <a href="gratuity-calculator.html">Gratuity</a>
               <a href="tools.html#bonus">Statutory Bonus</a>
               <a href="tools.html#maternity">Maternity Benefit</a>
               <div class="dropdown-divider"></div>
               <div class="dropdown-heading">Reckoners</div>
-              <a href="tools.html#allowance-heatmap">Allowance Heatmap</a>
+              <a href="wage-code-calculator.html">Allowance Heatmap</a>
             </div>
           </li>
           <li class="nav-dropdown">
@@ -132,16 +132,16 @@ function renderNavbar(activePage) {
         <summary>Tools</summary>
         <div class="mobile-accordion-body">
           <div class="mobile-accordion-heading">Payroll Calculators</div>
-          <a href="tools.html#ctc-takehome">CTC ↔ Take-Home</a>
+          <a href="ctc-calculator.html">CTC ↔ Take-Home</a>
           <a href="tools.html#epf-split">EPF Split</a>
           <a href="tools.html#esic-split">ESIC Split</a>
           <a href="tools.html#pt">Professional Tax</a>
           <div class="mobile-accordion-heading">Statutory Payouts</div>
-          <a href="tools.html#gratuity">Gratuity</a>
+          <a href="gratuity-calculator.html">Gratuity</a>
           <a href="tools.html#bonus">Statutory Bonus</a>
           <a href="tools.html#maternity">Maternity Benefit</a>
           <div class="mobile-accordion-heading">Reckoners</div>
-          <a href="tools.html#allowance-heatmap">Allowance Heatmap</a>
+          <a href="wage-code-calculator.html">Allowance Heatmap</a>
         </div>
       </details>
 
