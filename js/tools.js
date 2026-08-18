@@ -192,9 +192,9 @@ function calcEpfSplit() {
   const eps         = Math.round(epsBase * 0.0833);
   const employerEPF = Math.max(employer12 - eps, 0);
   const edli        = Math.round(cappedWage * 0.005);
-  const adminRaw    = base * 0.005;
-  const adminMinApplied = adminRaw < 500;
-  const admin       = Math.max(Math.round(adminRaw), 500);
+  /* Plain 0.5% of EPF wages. The ₹500 monthly minimum is an establishment-level
+     floor on total EPF wages, taken as already met, so it is not applied here. */
+  const admin = Math.round(base * 0.005);
 
   const employerTotal = employerEPF + eps + edli + admin;
   const outflow       = employee + employerTotal;
@@ -214,7 +214,7 @@ function calcEpfSplit() {
     <div class="epf-line"><span>A/c 1: EPF (3.67% balance)</span><strong>${fmtINR(employerEPF)}</strong></div>
     <div class="epf-line"><span>A/c 10: EPS (8.33% of ${fmtINR(epsBase)})</span><strong>${fmtINR(eps)}</strong></div>
     <div class="epf-line"><span>A/c 21: EDLI (0.5%, capped at ${fmtINR(cappedWage)})</span><strong>${fmtINR(edli)}</strong></div>
-    <div class="epf-line"><span>A/c 2: EPF admin (0.5%, min ₹500)</span><strong>${fmtINR(admin)}</strong></div>
+    <div class="epf-line"><span>A/c 2: EPF admin (0.5%)</span><strong>${fmtINR(admin)}</strong></div>
 
     <div class="epf-group-head">Credited in the employee&rsquo;s name</div>
     <div class="epf-line"><span>A/c 1 EPF (employee ${fmtINR(employee)} + employer ${fmtINR(employerEPF)})</span><strong>${fmtINR(employee + employerEPF)}</strong></div>
@@ -224,7 +224,7 @@ function calcEpfSplit() {
     <p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">
       EDLI (A/c 21) and admin charges (A/c 2) are employer overheads paid to EPFO. They are <strong>not</strong> credited to the employee&rsquo;s PF account.
     </p>
-    ${adminMinApplied ? '<p style="font-family:\'Inter\',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:6px">Admin charges shown as the ₹500 monthly minimum. This minimum applies per establishment on total EPF wages, not per employee, so the per-employee figure will be lower once you have more members.</p>' : ''}
+    <p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:6px">Admin charges are shown as a straight 0.5% of this employee&rsquo;s EPF wages. The ₹500 monthly minimum (₹75 for non-functional establishments) applies to the establishment&rsquo;s total EPF wages rather than per employee, and is taken as already met.</p>
     ${iw ? '<p style="font-family:\'Inter\',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:6px"><strong>International worker:</strong> EPS is computed on full PF wages with no ceiling, so the employer share is also computed on full wages.</p>' : ''}
 
     <div class="epf-src">
