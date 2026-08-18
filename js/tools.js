@@ -294,8 +294,9 @@ function addEsicRow(name, amount, cat) {
 }
 
 function buildEsicRows() {
-  document.getElementById('esic-rows').innerHTML =
-    ESIC_DEFAULT_ROWS.map(r => esicRowHtml(r[0], r[1], r[2])).join('');
+  const body = document.getElementById('esic-rows');
+  if (!body) return;
+  body.innerHTML = ESIC_DEFAULT_ROWS.map(r => esicRowHtml(r[0], r[1], r[2])).join('');
 }
 
 function onEsicPwd() {
@@ -562,6 +563,7 @@ function onGratRegime() {
 }
 
 function onGratCause() {
+  if (!document.getElementById('gr-c-resign-card')) return;
   gratPaint('gr-cause', {
     resign: 'gr-c-resign-card', retire: 'gr-c-retire-card',
     death: 'gr-c-death-card',  disable: 'gr-c-disable-card'

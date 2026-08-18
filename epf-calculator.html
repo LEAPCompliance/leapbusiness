@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EPF Calculator India | PF Calculator, Employee &amp; Employer Split | LEAP</title>
+  <meta name="description" content="Free EPF calculator for India. Split monthly PF contribution into employee share, employer EPF, EPS and EDLI, with ceiling and international worker options. By LEAP Business Solutions." />
+  <meta name="keywords" content="epf calculator, pf calculator, provident fund calculator, epf employer contribution calculator, eps calculator, edli calculator" />
+  <meta property="og:title" content="EPF Calculator India | LEAP" />
+  <meta property="og:description" content="Split monthly PF into employee share, employer EPF, EPS and EDLI. Ceiling and international worker options built in. Free and instant." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.leapbusiness.in/epf-calculator.html" />
+  <link rel="canonical" href="https://www.leapbusiness.in/epf-calculator.html" />
+  <link rel="icon" href="assets/favicon.png?v=2" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/style.css?v=13" />
+  <link rel="stylesheet" href="css/calculators.css?v=1" />
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
+    {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://www.leapbusiness.in/tools.html"},
+    {"@type": "ListItem", "position": 3, "name": "EPF Calculator", "item": "https://www.leapbusiness.in/epf-calculator.html"}
+  ]}
+  </script>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <a href="tools.html">Tools</a> <span>›</span> <span>EPF Calculator</span></div>
+      <h1 class="page-hero-title">EPF Calculator</h1>
+      <p class="page-hero-desc">Free, instant split of monthly EPF into employee, employer EPS/EPF, EDLI and admin charges.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<section style="background:var(--secondary-faint);border-bottom:1px solid var(--border);padding:16px 0">
+  <div class="container" style="font-size:14px;color:var(--text-secondary);text-align:center">
+    ⚠️ This calculator gives an indicative estimate for general awareness, based on standard statutory rates as of July 2026. It is not a substitute for professional advice; <a href="contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> for figures specific to your business.
+  </div>
+</section>
+
+<section id="epf-split" class="section-pad">
+  <div class="container">
+    <div class="tag">Payroll Calculator</div>
+    <h2 class="section-title">EPF Calculator</h2>
+    <p class="section-sub" style="margin-bottom:28px">Split monthly EPF contributions into employee share, employer EPS and EPF shares, EDLI and administrative charges under the Employees&rsquo; Provident Funds and Miscellaneous Provisions Act, 1952.</p>
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="calc-card-head">Inputs</div>
+        <p class="calc-card-sub">Enter PF wages and choose ceiling treatment.</p>
+
+        <div class="form-group">
+          <label>PF wages (monthly) <span style="font-weight:400;color:var(--text-secondary)">(basic + DA + retaining allowance)</span></label>
+          <input type="number" id="epf-wages" value="25000" min="0" oninput="calcEpfSplit()" />
+        </div>
+
+        <div class="calc-switch-row">
+          <div class="calc-switch-text">
+            <strong>Restrict employer share to ceiling</strong>
+            <span>Standard practice for domestic workers. Disable to compute on full PF wages.</span>
+          </div>
+          <label class="calc-switch">
+            <input type="checkbox" id="epf-restrict" checked onchange="calcEpfSplit()" />
+            <span class="calc-switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>EPF wage ceiling (₹/month)</label>
+          <input type="number" id="epf-ceiling" value="15000" min="0" oninput="calcEpfSplit()" />
+          <p class="calc-hint">Editable to reflect future EPFO notifications (currently ₹15,000).</p>
+        </div>
+
+        <div class="calc-switch-row">
+          <div class="calc-switch-text">
+            <strong>International worker</strong>
+            <span>EPS contribution computed on full PF wages (no ceiling) for international workers.</span>
+          </div>
+          <label class="calc-switch">
+            <input type="checkbox" id="epf-iw" onchange="calcEpfSplit()" />
+            <span class="calc-switch-slider"></span>
+          </label>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcEpfSplit()">Calculate</button>
+          <button type="button" class="btn btn-outline-dark" onclick="resetEpfSplit()">↺ Reset</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="calc-card-head" style="margin-bottom:4px">Result</div>
+        <p class="calc-card-sub" style="margin-bottom:16px">Monthly contributions across heads.</p>
+        <div id="epf-result"></div>
+
+        <div class="calc-notes">
+          <h4>Method and assumptions</h4>
+          <ul>
+            <li>Employer&rsquo;s 12% is split as EPS 8.33% (on wages capped at ₹15,000 for domestic workers) and EPF 3.67% (balance). Where the employer voluntarily contributes on PF wages above the ceiling, the excess flows entirely into EPF.</li>
+            <li>International workers&rsquo; EPS contribution is computed on full gross wages without the ceiling, per the EPFO circular dated 01.10.2008.</li>
+            <li>EDLI is always capped at ₹15,000. EPF admin charges are shown at a straight 0.5% of EPF wages; the ₹500 monthly minimum per establishment (₹75 for non-functional establishments) is taken as already met at establishment level.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--border)">
+      <div style="font-size:13px;color:var(--text-secondary);letter-spacing:0.5px;font-weight:700;margin-bottom:10px">MORE FREE CALCULATORS</div>
+      <div class="related-calcs">
+        <a href="esic-calculator.html" class="jump-pill">ESIC Calculator</a>
+        <a href="professional-tax-calculator.html" class="jump-pill">Professional Tax</a>
+        <a href="ctc-calculator.html" class="jump-pill">CTC ↔ Take-Home</a>
+        <a href="gratuity-calculator.html" class="jump-pill">Gratuity Calculator</a>
+        <a href="bonus-calculator.html" class="jump-pill">Statutory Bonus</a>
+        <a href="maternity-benefit-calculator.html" class="jump-pill">Maternity Benefit</a>
+        <a href="wage-code-calculator.html" class="jump-pill">New Wage Code Calculator</a>
+        <a href="tools.html" class="jump-pill">See all calculators →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-pad audit-cta">
+  <div class="container">
+    <div class="audit-inner">
+      <div class="fade-up">
+        <div class="tag">Need Exact Figures?</div>
+        <h2 class="audit-title">This is an estimate. Let's get it exactly right for your business.</h2>
+        <p class="audit-desc">Book a free 30-minute compliance review and we'll walk through your actual payroll structure, Labour Code readiness, and statutory obligations.</p>
+      </div>
+      <div class="audit-box fade-up delay-2">
+        <div class="audit-free-tag">✦ 100% Free ✦</div>
+        <div class="audit-time">Book a Call</div>
+        <div class="audit-sub">Our expert will call you within the hour</div>
+        <a href="tel:+917977213501" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px">📞 +91 79772 13501</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<div id="whatsapp-placeholder"></div>
+<script src="js/components.js?v=8"></script>
+<script src="js/main.js?v=6"></script>
+<script src="js/tools.js?v=16"></script>
+<script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
+</body>
+</html>
