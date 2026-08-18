@@ -55,6 +55,8 @@
     .hm-risk-medium { background: #fdf6e3; color: #92620a; border-color: #f1e2b0; text-transform: uppercase; }
     .hm-risk-high { background: #fdf3f2; color: #c0392b; border-color: rgba(192,57,43,0.25); text-transform: uppercase; }
     @media (max-width: 700px) { .hm-filter-row { flex-direction: column; align-items: flex-start; } }
+    .heatmap-bar { width: 100%; height: 14px; background: var(--border); border-radius: 7px; overflow: hidden; margin: 10px 0; }
+    .heatmap-fill { height: 100%; transition: width 0.3s ease; }
     .ctc-toggle { display: flex; background: var(--background-light); border-radius: var(--radius); padding: 4px; margin-bottom: 20px; }
     .ctc-toggle-btn { flex: 1; text-align: center; padding: 10px 12px; font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; color: var(--text-secondary); background: transparent; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
     .ctc-toggle-btn.active { background: var(--white); color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
@@ -662,12 +664,46 @@
       </div>
     </div>
 
-    <div class="epf-src" style="margin-top:24px">
+    <div id="wf-calc" style="margin-top:44px">
+      <h3 class="calc-card-head" style="font-size:22px;margin-bottom:6px">Test your salary structure</h3>
+      <p class="calc-card-sub" style="margin-bottom:24px">Add your own components, using the classification above as a guide, and check whether the structure meets the 50% wages floor used for PF, gratuity and bonus purposes.</p>
+
+      <div class="calc-grid">
+        <div class="calc-card">
+          <div class="calc-card-head">Salary components</div>
+          <p class="calc-card-sub">Type a component name (suggestions come from the 40 rows above) and choose how it is treated. Conditional heads need your own judgement based on documentation; the treatment is not locked.</p>
+
+          <div style="overflow-x:auto">
+            <table class="wage-table">
+              <thead>
+                <tr><th style="min-width:170px">Component</th><th style="width:110px">Amount (₹)</th><th style="min-width:210px">Treatment</th><th style="width:34px"></th></tr>
+              </thead>
+              <tbody id="wf-rows"></tbody>
+            </table>
+          </div>
+          <datalist id="wf-component-list"></datalist>
+          <button type="button" class="btn btn-outline-dark" style="margin-top:14px;padding:8px 16px;font-size:13px" onclick="addWfRow('', 0, 'inc')">+ Add component</button>
+
+          <div style="display:flex;gap:12px;margin-top:20px">
+            <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcWageFloor()">Calculate</button>
+            <button type="button" class="btn btn-outline-dark" onclick="resetWf()">↺ Reset</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="calc-card-head" style="margin-bottom:4px">Result</div>
+          <p class="calc-card-sub" style="margin-bottom:16px">Wages after the 50% rule add-back, if any.</p>
+          <div id="wf-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="epf-src" style="margin-top:32px">
       <h5>Source provisions</h5>
       <p>
         Section 2(y), Code on Wages, 2019 (definition of "wages") with proviso and explanation.<br>
         The 50% rule: where excluded heads exceed one-half of the total remuneration, the excess is added back to wages.<br>
-        Use the <a href="#ctc-takehome" style="color:var(--secondary);font-weight:600">CTC calculator</a> to test wage-floor compliance for a specific salary stack.<br>
+        Use the calculator above to test wage-floor compliance for a specific salary stack.<br>
         This reckoner is illustrative; verdicts must be tested against the actual salary letter and component definitions.
       </p>
     </div>
@@ -698,7 +734,7 @@
 <script src="js/components.js?v=6"></script>
 <script src="js/main.js?v=6"></script>
 <script src="js/pt-data.js?v=1"></script>
-<script src="js/tools.js?v=14"></script>
+<script src="js/tools.js?v=15"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

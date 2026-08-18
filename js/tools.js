@@ -834,47 +834,50 @@ function calcMaternity() {
 }
 
 /* ---------- 8. Allowance Heatmap: Code on Wages s.2(y) reckoner ---------- */
+/* wfCat maps each row to how it enters the 50% floor test used by the calculator below:
+   'inc' = counted as wages, 'e50' = excluded but counted in the 50% test sum,
+   'enot' = excluded and kept out of the 50% test sum entirely (episodic/termination payments). */
 const HEATMAP_DATA = [
-  { name: 'Basic salary', verdict: 'included', clause: 's.2(y)(i)', risk: 'low', note: 'Express inclusion. Forms the floor for the 50% rule under the proviso.' },
-  { name: 'Dearness allowance', verdict: 'included', clause: 's.2(y) main', risk: 'low', note: 'Inclusive head; not in the exclusion list.' },
-  { name: 'Retaining allowance', verdict: 'included', clause: 's.2(y) main', risk: 'low', note: 'Inclusive head; payable to keep the employee on rolls during off-season.' },
-  { name: 'Statutory bonus', verdict: 'excluded', clause: 's.2(y)(a)', risk: 'low', note: 'Bonus payable under any law including the Payment of Bonus Act.' },
-  { name: 'Value of house accommodation', verdict: 'excluded', clause: 's.2(y)(b)', risk: 'low', note: 'Value of any house accommodation, light, water, medical attendance or other amenity.' },
-  { name: "Employer's PF contribution", verdict: 'excluded', clause: 's.2(y)(c)', risk: 'low', note: 'Employer’s contribution to pension or PF and interest accrued thereon.' },
-  { name: 'Conveyance allowance / travel concession', verdict: 'excluded', clause: 's.2(y)(d)', risk: 'low', note: 'Conveyance allowance or value of travelling concession.' },
-  { name: 'Special expenses sum (nature of employment)', verdict: 'excluded', clause: 's.2(y)(e)', risk: 'medium', note: 'Sum paid to defray special expenses entailed by the nature of employment. Test of genuineness.' },
-  { name: 'House rent allowance', verdict: 'excluded', clause: 's.2(y)(f)', risk: 'low', note: 'HRA is expressly excluded.' },
-  { name: 'Overtime allowance', verdict: 'excluded', clause: 's.2(y)(g)', risk: 'low', note: 'Remuneration for overtime work.' },
-  { name: 'Commission payable to employee', verdict: 'excluded', clause: 's.2(y)(h)', risk: 'low', note: 'Any commission payable to the employee.' },
-  { name: 'Gratuity payable on termination', verdict: 'excluded', clause: 's.2(y)(i)', risk: 'low', note: 'Gratuity payable on termination of employment.' },
-  { name: 'Retrenchment compensation / other retiral benefit / ex-gratia on termination', verdict: 'excluded', clause: 's.2(y)(j)', risk: 'low', note: 'Any retrenchment compensation, other retiral benefit or ex-gratia on termination.' },
-  { name: 'Performance / variable pay (annual)', verdict: 'conditional', clause: 's.2(y) main + proviso', risk: 'medium', note: 'Inclusive unless characterised as commission (s.2(y)(h)). Conservative position: include for 50% test if linked to wages, exclude only if pure commission.' },
-  { name: 'Production / incentive bonus (monthly)', verdict: 'conditional', clause: 's.2(y) main', risk: 'high', note: 'Likely included if regular and forms part of pay; statutory bonus alone is excluded. Misclassification risks 50% proviso failure.' },
-  { name: 'Shift allowance', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'Not in the express exclusions. Treat as inclusive unless directly compensating overtime, in which case s.2(y)(g) applies.' },
-  { name: 'Night-shift allowance', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'Same treatment as shift allowance; exclude only the overtime element.' },
-  { name: 'Education allowance', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'Not expressly excluded. Treat as inclusive for the 50% test unless structured as reimbursement against bills.' },
-  { name: 'Medical allowance (fixed, no bills)', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'If paid as a fixed cash component without bills, treated as wages. Reimbursement against bills falls under s.2(y)(b) amenity.' },
-  { name: 'City compensatory allowance', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'No express exclusion; defaults to inclusion.' },
-  { name: 'Telephone / internet reimbursement (against bills)', verdict: 'excluded', clause: 's.2(y)(e) read with s.2(y)(b)', risk: 'medium', note: 'If paid against bills as a special expense, excluded. Fixed cash allowance leans towards inclusion.' },
-  { name: 'Fuel reimbursement (against bills)', verdict: 'excluded', clause: 's.2(y)(d)', risk: 'medium', note: 'Falls within conveyance / travel exclusion if structured as reimbursement.' },
-  { name: 'Books and periodicals reimbursement', verdict: 'excluded', clause: 's.2(y)(e)', risk: 'low', note: 'Special expense reimbursement against bills.' },
-  { name: 'Driver salary reimbursement', verdict: 'excluded', clause: 's.2(y)(d)', risk: 'medium', note: 'Conveyance-linked benefit; structure with bills and policy.' },
-  { name: "Children's education reimbursement (against bills)", verdict: 'excluded', clause: 's.2(y)(e)', risk: 'low', note: 'Special expense if supported by school bills.' },
-  { name: 'Hostel reimbursement (against bills)', verdict: 'excluded', clause: 's.2(y)(e)', risk: 'low', note: 'Special expense if supported by bills.' },
-  { name: 'Leave travel allowance / concession', verdict: 'excluded', clause: 's.2(y)(d)', risk: 'low', note: 'Travelling concession is expressly excluded.' },
-  { name: 'Meal vouchers / canteen subsidy', verdict: 'excluded', clause: 's.2(y)(b)', risk: 'medium', note: 'Value of amenity. Cash meal allowance defaults to inclusion.' },
-  { name: 'Mobile handset reimbursement', verdict: 'excluded', clause: 's.2(y)(e)', risk: 'medium', note: 'Special expense if reimbursed against invoice.' },
-  { name: 'Company-provided car (perk)', verdict: 'excluded', clause: 's.2(y)(b)', risk: 'low', note: 'Value of amenity.' },
-  { name: 'Employer-provided housing (perk)', verdict: 'excluded', clause: 's.2(y)(b)', risk: 'low', note: 'Value of house accommodation.' },
-  { name: 'Insurance premium paid by employer', verdict: 'excluded', clause: 's.2(y)(c)/(b)', risk: 'medium', note: 'If part of group cover and not in cash, treated as amenity.' },
-  { name: 'NPS employer contribution', verdict: 'excluded', clause: 's.2(y)(c)', risk: 'low', note: "Employer's contribution to pension scheme." },
-  { name: 'Stock-based compensation (ESOP / RSU / SAR)', verdict: 'excluded', clause: 's.2(y) main (not wages)', risk: 'medium', note: "Not 'remuneration' in cash within Section 2(y); historically treated outside wages. Documented exclusion preferable." },
-  { name: 'Joining bonus / sign-on bonus', verdict: 'conditional', clause: 's.2(y) main', risk: 'high', note: "Lump-sum at hire; arguably outside 'periodically payable wages'. Conservative position: track separately, exclude from 50% with reasons." },
-  { name: 'Notice-pay recovery / payout', verdict: 'excluded', clause: 's.2(y)(j)', risk: 'low', note: 'Termination-linked payment, excluded under retiral / ex-gratia clause.' },
-  { name: 'Leave encashment on separation', verdict: 'excluded', clause: 's.2(y)(j)', risk: 'low', note: 'Treated as retiral benefit on separation.' },
-  { name: 'Leave encashment during service', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'If routinely encashed mid-service, leans towards inclusion.' },
-  { name: 'Provident Fund employee contribution', verdict: 'included', clause: 'deducted from wages', risk: 'low', note: "Employee's own contribution is a deduction from wages; the underlying component remains wages." },
-  { name: 'Professional Tax deduction', verdict: 'included', clause: 'deducted from wages', risk: 'low', note: 'Statutory deduction; the gross component remains wages.' }
+  { name: 'Basic salary', verdict: 'included', clause: 's.2(y)(i)', risk: 'low', note: 'Express inclusion. Forms the floor for the 50% rule under the proviso.', wfCat: 'inc' },
+  { name: 'Dearness allowance', verdict: 'included', clause: 's.2(y) main', risk: 'low', note: 'Inclusive head; not in the exclusion list.', wfCat: 'inc' },
+  { name: 'Retaining allowance', verdict: 'included', clause: 's.2(y) main', risk: 'low', note: 'Inclusive head; payable to keep the employee on rolls during off-season.', wfCat: 'inc' },
+  { name: 'Statutory bonus', verdict: 'excluded', clause: 's.2(y)(a)', risk: 'low', note: 'Bonus payable under any law including the Payment of Bonus Act.', wfCat: 'e50' },
+  { name: 'Value of house accommodation', verdict: 'excluded', clause: 's.2(y)(b)', risk: 'low', note: 'Value of any house accommodation, light, water, medical attendance or other amenity.', wfCat: 'e50' },
+  { name: "Employer's PF contribution", verdict: 'excluded', clause: 's.2(y)(c)', risk: 'low', note: 'Employer’s contribution to pension or PF and interest accrued thereon.', wfCat: 'e50' },
+  { name: 'Conveyance allowance / travel concession', verdict: 'excluded', clause: 's.2(y)(d)', risk: 'low', note: 'Conveyance allowance or value of travelling concession.', wfCat: 'e50' },
+  { name: 'Special expenses sum (nature of employment)', verdict: 'excluded', clause: 's.2(y)(e)', risk: 'medium', note: 'Sum paid to defray special expenses entailed by the nature of employment. Test of genuineness.', wfCat: 'e50' },
+  { name: 'House rent allowance', verdict: 'excluded', clause: 's.2(y)(f)', risk: 'low', note: 'HRA is expressly excluded.', wfCat: 'e50' },
+  { name: 'Overtime allowance', verdict: 'excluded', clause: 's.2(y)(g)', risk: 'low', note: 'Remuneration for overtime work.', wfCat: 'e50' },
+  { name: 'Commission payable to employee', verdict: 'excluded', clause: 's.2(y)(h)', risk: 'low', note: 'Any commission payable to the employee.', wfCat: 'e50' },
+  { name: 'Gratuity payable on termination', verdict: 'excluded', clause: 's.2(y)(i)', risk: 'low', note: 'Gratuity payable on termination of employment.', wfCat: 'enot' },
+  { name: 'Retrenchment compensation / other retiral benefit / ex-gratia on termination', verdict: 'excluded', clause: 's.2(y)(j)', risk: 'low', note: 'Any retrenchment compensation, other retiral benefit or ex-gratia on termination.', wfCat: 'enot' },
+  { name: 'Performance / variable pay (annual)', verdict: 'conditional', clause: 's.2(y) main + proviso', risk: 'medium', note: 'Inclusive unless characterised as commission (s.2(y)(h)). Conservative position: include for 50% test if linked to wages, exclude only if pure commission.', wfCat: 'inc' },
+  { name: 'Production / incentive bonus (monthly)', verdict: 'conditional', clause: 's.2(y) main', risk: 'high', note: 'Likely included if regular and forms part of pay; statutory bonus alone is excluded. Misclassification risks 50% proviso failure.', wfCat: 'inc' },
+  { name: 'Shift allowance', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'Not in the express exclusions. Treat as inclusive unless directly compensating overtime, in which case s.2(y)(g) applies.', wfCat: 'inc' },
+  { name: 'Night-shift allowance', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'Same treatment as shift allowance; exclude only the overtime element.', wfCat: 'inc' },
+  { name: 'Education allowance', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'Not expressly excluded. Treat as inclusive for the 50% test unless structured as reimbursement against bills.', wfCat: 'inc' },
+  { name: 'Medical allowance (fixed, no bills)', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'If paid as a fixed cash component without bills, treated as wages. Reimbursement against bills falls under s.2(y)(b) amenity.', wfCat: 'inc' },
+  { name: 'City compensatory allowance', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'No express exclusion; defaults to inclusion.', wfCat: 'inc' },
+  { name: 'Telephone / internet reimbursement (against bills)', verdict: 'excluded', clause: 's.2(y)(e) read with s.2(y)(b)', risk: 'medium', note: 'If paid against bills as a special expense, excluded. Fixed cash allowance leans towards inclusion.', wfCat: 'e50' },
+  { name: 'Fuel reimbursement (against bills)', verdict: 'excluded', clause: 's.2(y)(d)', risk: 'medium', note: 'Falls within conveyance / travel exclusion if structured as reimbursement.', wfCat: 'e50' },
+  { name: 'Books and periodicals reimbursement', verdict: 'excluded', clause: 's.2(y)(e)', risk: 'low', note: 'Special expense reimbursement against bills.', wfCat: 'e50' },
+  { name: 'Driver salary reimbursement', verdict: 'excluded', clause: 's.2(y)(d)', risk: 'medium', note: 'Conveyance-linked benefit; structure with bills and policy.', wfCat: 'e50' },
+  { name: "Children's education reimbursement (against bills)", verdict: 'excluded', clause: 's.2(y)(e)', risk: 'low', note: 'Special expense if supported by school bills.', wfCat: 'e50' },
+  { name: 'Hostel reimbursement (against bills)', verdict: 'excluded', clause: 's.2(y)(e)', risk: 'low', note: 'Special expense if supported by bills.', wfCat: 'e50' },
+  { name: 'Leave travel allowance / concession', verdict: 'excluded', clause: 's.2(y)(d)', risk: 'low', note: 'Travelling concession is expressly excluded.', wfCat: 'e50' },
+  { name: 'Meal vouchers / canteen subsidy', verdict: 'excluded', clause: 's.2(y)(b)', risk: 'medium', note: 'Value of amenity. Cash meal allowance defaults to inclusion.', wfCat: 'e50' },
+  { name: 'Mobile handset reimbursement', verdict: 'excluded', clause: 's.2(y)(e)', risk: 'medium', note: 'Special expense if reimbursed against invoice.', wfCat: 'e50' },
+  { name: 'Company-provided car (perk)', verdict: 'excluded', clause: 's.2(y)(b)', risk: 'low', note: 'Value of amenity.', wfCat: 'e50' },
+  { name: 'Employer-provided housing (perk)', verdict: 'excluded', clause: 's.2(y)(b)', risk: 'low', note: 'Value of house accommodation.', wfCat: 'e50' },
+  { name: 'Insurance premium paid by employer', verdict: 'excluded', clause: 's.2(y)(c)/(b)', risk: 'medium', note: 'If part of group cover and not in cash, treated as amenity.', wfCat: 'e50' },
+  { name: 'NPS employer contribution', verdict: 'excluded', clause: 's.2(y)(c)', risk: 'low', note: "Employer's contribution to pension scheme.", wfCat: 'e50' },
+  { name: 'Stock-based compensation (ESOP / RSU / SAR)', verdict: 'excluded', clause: 's.2(y) main (not wages)', risk: 'medium', note: "Not 'remuneration' in cash within Section 2(y); historically treated outside wages. Documented exclusion preferable.", wfCat: 'enot' },
+  { name: 'Joining bonus / sign-on bonus', verdict: 'conditional', clause: 's.2(y) main', risk: 'high', note: "Lump-sum at hire; arguably outside 'periodically payable wages'. Conservative position: track separately, exclude from 50% with reasons.", wfCat: 'enot' },
+  { name: 'Notice-pay recovery / payout', verdict: 'excluded', clause: 's.2(y)(j)', risk: 'low', note: 'Termination-linked payment, excluded under retiral / ex-gratia clause.', wfCat: 'enot' },
+  { name: 'Leave encashment on separation', verdict: 'excluded', clause: 's.2(y)(j)', risk: 'low', note: 'Treated as retiral benefit on separation.', wfCat: 'enot' },
+  { name: 'Leave encashment during service', verdict: 'conditional', clause: 's.2(y) main', risk: 'medium', note: 'If routinely encashed mid-service, leans towards inclusion.', wfCat: 'inc' },
+  { name: 'Provident Fund employee contribution', verdict: 'included', clause: 'deducted from wages', risk: 'low', note: "Employee's own contribution is a deduction from wages; the underlying component remains wages.", wfCat: 'inc' },
+  { name: 'Professional Tax deduction', verdict: 'included', clause: 'deducted from wages', risk: 'low', note: 'Statutory deduction; the gross component remains wages.', wfCat: 'inc' }
 ];
 
 let hmFilter = 'all';
@@ -918,12 +921,131 @@ function calcHeatmap() {
   renderHeatmap();
 }
 
+/* ---------- 8b. Wage Floor Calculator (50% test over user-entered components) ---------- */
+const WF_CATS = {
+  inc:  'Included in wages',
+  e50:  'Excluded (counts toward 50% test)',
+  enot: 'Excluded (not in 50% test)'
+};
+
+const WF_DEFAULT_ROWS = [
+  ['Basic salary', 0, 'inc'],
+  ['Dearness allowance', 0, 'inc'],
+  ['Retaining allowance', 0, 'inc'],
+  ['House rent allowance', 0, 'e50'],
+  ['Conveyance allowance / travel concession', 0, 'e50'],
+  ['Special expenses sum (nature of employment)', 0, 'e50'],
+  ['Overtime allowance', 0, 'e50'],
+  ['Statutory bonus', 0, 'e50'],
+  ['Commission payable to employee', 0, 'e50'],
+  ["Employer's PF contribution", 0, 'e50'],
+  ['Gratuity payable on termination', 0, 'enot'],
+  ['Retrenchment compensation / other retiral benefit / ex-gratia on termination', 0, 'enot']
+];
+
+function wfRowHtml(name, amount, cat) {
+  const opts = Object.keys(WF_CATS)
+    .map(k => `<option value="${k}"${k === cat ? ' selected' : ''}>${WF_CATS[k]}</option>`).join('');
+  return `<tr>
+    <td><input type="text" list="wf-component-list" value="${name.replace(/"/g,'&quot;')}" oninput="wfOnComponentInput(this)" /></td>
+    <td><input type="number" class="wf-amt" value="${amount}" min="0" oninput="calcWageFloor()" /></td>
+    <td><select class="wf-cat cat-${cat}" onchange="this.className='wf-cat cat-'+this.value;calcWageFloor()">${opts}</select></td>
+    <td><button type="button" class="row-del" title="Remove" onclick="this.closest('tr').remove();calcWageFloor()">×</button></td>
+  </tr>`;
+}
+
+function wfOnComponentInput(input) {
+  const match = HEATMAP_DATA.find(r => r.name.toLowerCase() === input.value.trim().toLowerCase());
+  if (match) {
+    const sel = input.closest('tr').querySelector('.wf-cat');
+    sel.value = match.wfCat;
+    sel.className = 'wf-cat cat-' + match.wfCat;
+  }
+  calcWageFloor();
+}
+
+function addWfRow(name, amount, cat) {
+  document.getElementById('wf-rows').insertAdjacentHTML('beforeend', wfRowHtml(name, amount, cat));
+  calcWageFloor();
+}
+
+function buildWfRows() {
+  const list = document.getElementById('wf-component-list');
+  if (list) list.innerHTML = HEATMAP_DATA.map(r => `<option value="${r.name.replace(/"/g,'&quot;')}"></option>`).join('');
+  const body = document.getElementById('wf-rows');
+  if (!body) return;
+  body.innerHTML = WF_DEFAULT_ROWS.map(r => wfRowHtml(r[0], r[1], r[2])).join('');
+}
+
+function resetWf() {
+  buildWfRows();
+  calcWageFloor();
+}
+
+function calcWageFloor() {
+  const tbody = document.getElementById('wf-rows');
+  const el = document.getElementById('wf-result');
+  if (!tbody || !el) return;
+
+  let TR = 0, E50 = 0, ENOT = 0, INC = 0;
+  [...tbody.querySelectorAll('tr')].forEach(tr => {
+    const amt = parseFloat(tr.querySelector('.wf-amt').value) || 0;
+    const cat = tr.querySelector('.wf-cat').value;
+    TR += amt;
+    if (cat === 'e50') E50 += amt;
+    else if (cat === 'enot') ENOT += amt;
+    else INC += amt;
+  });
+
+  if (TR <= 0) {
+    el.innerHTML = '<p style="font-size:14px;color:var(--text-secondary);margin:0">Enter at least one component amount to see the result.</p>';
+    return;
+  }
+
+  const cap = 0.5 * TR;
+  const excess = Math.max(0, E50 - cap);
+  const wages = TR - ENOT - Math.min(E50, cap);
+  const wagePct = (wages / TR) * 100;
+  const e50Pct = (E50 / TR) * 100;
+  const compliant = excess === 0;
+
+  el.innerHTML = `
+    <div class="epf-sumgrid">
+      <div class="epf-sumcard"><span>Wages for PF / gratuity / bonus</span><strong>${fmtINR(wages)}</strong></div>
+      <div class="epf-sumcard"><span>Meets 50% floor?</span><strong style="color:${compliant ? '#1a7d3c' : '#c0392b'}">${compliant ? 'Yes' : 'No'}</strong></div>
+    </div>
+    <div class="heatmap-bar"><div class="heatmap-fill" style="width:${Math.min(wagePct,100)}%;background:${compliant ? '#1a7d3c' : '#c0392b'}"></div></div>
+
+    <div class="epf-group-head">The 50% test</div>
+    <div class="epf-line"><span>Total remuneration (TR)</span><strong>${fmtINR(TR)}</strong></div>
+    <div class="epf-line"><span>Excluded heads counted in the test</span><strong>${fmtINR(E50)} <span style="font-weight:400;color:var(--text-secondary)">(${e50Pct.toFixed(1)}%)</span></strong></div>
+    <div class="epf-line"><span>50% of TR (the cap)</span><strong>${fmtINR(cap)}</strong></div>
+    <div class="epf-line"><span>Excess to add back to wages</span><strong style="color:${excess > 0 ? '#c0392b' : 'inherit'}">${fmtINR(excess)}</strong></div>
+
+    <div class="epf-group-head">Wage build-up</div>
+    <div class="epf-line"><span>Components already included</span><strong>${fmtINR(INC)}</strong></div>
+    <div class="epf-line"><span>Add back: excess over the cap</span><strong>${fmtINR(excess)}</strong></div>
+    <div class="epf-line"><span>Excluded, kept out of the test entirely</span><strong>${fmtINR(ENOT)}</strong></div>
+    <div class="epf-line credit"><span>Wages for PF / gratuity / bonus</span><strong>${fmtINR(wages)}</strong></div>
+
+    ${!compliant ? `
+    <div class="epf-src" style="border-left:3px solid #c0392b">
+      <h5>50% floor breached</h5>
+      <p>Excluded heads are ${e50Pct.toFixed(1)}% of total remuneration, above the 50% limit. ${fmtINR(excess)} has been added back into wages, which raises PF, gratuity and bonus liability. Restructuring Basic upward removes this add-back.</p>
+    </div>` : `
+    <div class="epf-src" style="border-left:3px solid #1a7d3c">
+      <h5>Structure meets the 50% floor</h5>
+      <p>Excluded heads are ${e50Pct.toFixed(1)}% of total remuneration, within the 50% limit, so nothing is added back to wages.</p>
+    </div>`}
+  `;
+}
+
 /* Each calculator is independent: run them in isolation so a failure in one
    (for example a stale cached script meeting freshly deployed markup) cannot
    stop the others from initialising. */
 document.addEventListener('DOMContentLoaded', () => {
   [calcTakeHome, calcEpfSplit, buildEsicRows, calcEsicSplit, onPtStateChange,
-   onGratRegime, onGratCause, calcBonus, calcMaternity, calcHeatmap]
+   onGratRegime, onGratCause, calcBonus, calcMaternity, calcHeatmap, buildWfRows, calcWageFloor]
     .forEach(fn => {
       try { fn(); }
       catch (err) { console.warn('Calculator init skipped:', fn.name, err); }
