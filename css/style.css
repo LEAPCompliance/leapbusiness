@@ -728,6 +728,7 @@ footer { background: var(--primary); color: rgba(255,255,255,0.68); padding: 64p
   .trust-inner { gap: 20px; }
   .trust-divider { display: none; }
   .footer-bottom { flex-direction: column; text-align: center; }
+  .hero-stats { flex-wrap: wrap; row-gap: 20px; }
 }
 
 /* ── RESPONSIVE GRID UTILITIES (mobile audit) ── */
