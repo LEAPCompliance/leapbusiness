@@ -8,6 +8,15 @@ function fmtINR(n) {
   return '₹' + Math.round(n).toLocaleString('en-IN');
 }
 
+/* Fires a GA4 event when someone actually runs a calculator, so engagement per
+   tool is visible in GA4 (not just pageviews). No-ops until the GA4 base
+   snippet is installed, so this is safe to ship ahead of that. */
+function trackCalcClick(toolName) {
+  if (typeof gtag === 'function') {
+    gtag('event', 'calculate_click', { tool_name: toolName });
+  }
+}
+
 /* ---------- 1. CTC <-> Take-Home ---------- */
 let ctcDirection = 'ctc'; // 'ctc' = CTC -> Take-Home, 'th' = Take-Home -> CTC
 

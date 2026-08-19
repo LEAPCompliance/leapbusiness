@@ -51,8 +51,8 @@
     <div class="calc-grid">
       <div class="calc-card">
         <div class="ctc-toggle">
-          <button type="button" class="ctc-toggle-btn active" id="ctc-dir-ctc" onclick="setCtcDirection('ctc')">CTC &rarr; Take-Home</button>
-          <button type="button" class="ctc-toggle-btn" id="ctc-dir-th" onclick="setCtcDirection('th')">Take-Home &rarr; CTC</button>
+          <button type="button" class="ctc-toggle-btn active" id="ctc-dir-ctc" onclick="setCtcDirection('ctc');trackCalcClick('ctc')">CTC &rarr; Take-Home</button>
+          <button type="button" class="ctc-toggle-btn" id="ctc-dir-th" onclick="setCtcDirection('th');trackCalcClick('ctc')">Take-Home &rarr; CTC</button>
         </div>
         <div class="form-group"><label id="ctc-amount-label">Monthly CTC (&#8377;)</label><input type="number" id="ctc-amount" value="50000" oninput="calcTakeHome()" /></div>
         <div class="form-group"><label>State (for Professional Tax &amp; LWF)</label>
@@ -121,7 +121,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=10"></script>
 <script src="/js/main.js?v=6"></script>
-<script src="/js/tools.js?v=16"></script>
+<script src="/js/tools.js?v=17"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

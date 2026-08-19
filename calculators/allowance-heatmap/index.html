@@ -107,7 +107,7 @@
           <button type="button" class="btn btn-outline-dark" style="margin-top:14px;padding:8px 16px;font-size:13px" onclick="addWfRow('', 0, 'inc')">+ Add component</button>
 
           <div style="display:flex;gap:12px;margin-top:20px">
-            <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcWageFloor()">Calculate</button>
+            <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcWageFloor();trackCalcClick('allowance-heatmap')">Calculate</button>
             <button type="button" class="btn btn-outline-dark" onclick="resetWf()">↺ Reset</button>
           </div>
         </div>
@@ -169,7 +169,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=10"></script>
 <script src="/js/main.js?v=6"></script>
-<script src="/js/tools.js?v=16"></script>
+<script src="/js/tools.js?v=17"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
