@@ -9,7 +9,7 @@
   <url><loc>https://www.leapbusiness.in/contact.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.leapbusiness.in/blog.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.leapbusiness.in/knowledge.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.leapbusiness.in/tools.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.leapbusiness.in/tools/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.leapbusiness.in/calculators/gratuity/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.leapbusiness.in/calculators/ctc/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.leapbusiness.in/calculators/allowance-heatmap/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>

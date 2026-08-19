@@ -56,7 +56,7 @@ function renderNavbar(activePage) {
             </div>
           </li>
           <li class="nav-dropdown">
-            <a href="/tools.html" ${activePage==='tools'?'class="active"':''}>Tools</a>
+            <a href="/tools/" ${activePage==='tools'?'class="active"':''}>Tools</a>
             <div class="dropdown-menu dropdown-wide">
               <div class="dropdown-heading">Payroll Calculators</div>
               <a href="/calculators/ctc/">CTC ↔ Take-Home</a>
@@ -223,7 +223,7 @@ function renderFooter() {
           <a href="/blog.html">Resources &amp; Blog</a>
           <a href="/faq.html">FAQs</a>
           <a href="/contact.html">Contact Us</a>
-          <a href="/tools.html">Tools &amp; Calculators</a>
+          <a href="/tools/">Tools &amp; Calculators</a>
           <a href="/labour-codes.html">Labour Codes 2026</a>
         </div>
 
