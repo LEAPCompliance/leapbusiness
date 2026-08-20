@@ -62,18 +62,18 @@
 
         <div class="form-group">
           <label>Monthly salary or wage <span style="font-weight:400;color:var(--text-secondary)">(Section 2(21))</span></label>
-          <input type="number" id="bonus-salary" value="21000" min="0" oninput="calcBonus()" />
+          <input type="number" id="bonus-salary" value="21000" min="0" />
         </div>
 
         <div class="form-group">
           <label>Scheduled minimum wage (monthly, optional)</label>
-          <input type="number" id="bonus-minwage" value="11000" min="0" oninput="calcBonus()" />
+          <input type="number" id="bonus-minwage" value="11000" min="0" />
           <p class="calc-hint">Leave blank if minimum wage does not exceed ₹7,000.</p>
         </div>
 
         <div class="form-group">
           <label>Days worked in accounting year</label>
-          <input type="number" id="bonus-days" value="365" min="0" max="365" oninput="calcBonus()" />
+          <input type="number" id="bonus-days" value="365" min="0" max="365" />
           <p class="calc-hint">Use 365 for a full year. Minimum 30 days required (Section 8).</p>
         </div>
 
@@ -82,7 +82,7 @@
             <label style="margin-bottom:0">Bonus rate: <span id="bonus-pct-label">8.33%</span></label>
             <span style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text-secondary)">8.33% to 20%</span>
           </div>
-          <input type="range" id="bonus-pct" min="8.33" max="20" step="0.01" value="8.33" oninput="calcBonus()" style="width:100%;margin-top:10px;accent-color:var(--primary)" />
+          <input type="range" id="bonus-pct" min="8.33" max="20" step="0.01" value="8.33" oninput="bonusPaintRate()" style="width:100%;margin-top:10px;accent-color:var(--primary)" />
           <p class="calc-hint">Rate set by allocable surplus under Sections 10 and 11. Default 8.33% is the statutory minimum.</p>
         </div>
 
@@ -95,7 +95,7 @@
       <div>
         <div class="calc-card-head" style="margin-bottom:4px">Result</div>
         <p class="calc-card-sub" style="margin-bottom:16px">Annual statutory bonus payable.</p>
-        <div id="bonus-result"></div>
+        <div id="bonus-result"><p style="font-size:14px;color:var(--text-secondary);margin:0">Fill in the details and click Calculate to see your result.</p></div>
 
         <div class="calc-notes">
           <h4>Method and assumptions</h4>
@@ -147,7 +147,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=10"></script>
 <script src="/js/main.js?v=6"></script>
-<script src="/js/tools.js?v=17"></script>
+<script src="/js/tools.js?v=18"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

@@ -58,12 +58,12 @@
     <div class="calc-grid">
       <div class="calc-card">
         <div class="ctc-toggle">
-          <button type="button" class="ctc-toggle-btn active" id="ctc-dir-ctc" onclick="setCtcDirection('ctc');trackCalcClick('ctc')">CTC &rarr; Take-Home</button>
-          <button type="button" class="ctc-toggle-btn" id="ctc-dir-th" onclick="setCtcDirection('th');trackCalcClick('ctc')">Take-Home &rarr; CTC</button>
+          <button type="button" class="ctc-toggle-btn active" id="ctc-dir-ctc" onclick="setCtcDirection('ctc')">CTC &rarr; Take-Home</button>
+          <button type="button" class="ctc-toggle-btn" id="ctc-dir-th" onclick="setCtcDirection('th')">Take-Home &rarr; CTC</button>
         </div>
-        <div class="form-group"><label id="ctc-amount-label">Monthly CTC (&#8377;)</label><input type="number" id="ctc-amount" value="50000" oninput="calcTakeHome()" /></div>
+        <div class="form-group"><label id="ctc-amount-label">Monthly CTC (&#8377;)</label><input type="number" id="ctc-amount" value="50000" /></div>
         <div class="form-group"><label>State (for Professional Tax &amp; LWF)</label>
-          <select id="ctc-state" onchange="calcTakeHome()">
+          <select id="ctc-state">
             <option value="MH">Maharashtra</option>
             <option value="KA">Karnataka</option>
             <option value="GJ">Gujarat</option>
@@ -74,18 +74,22 @@
             <option value="MP">Madhya Pradesh</option>
           </select>
         </div>
-        <div class="form-group"><label>Gender (for Professional Tax, where applicable)</label><select id="ctc-gender" onchange="calcTakeHome()"><option value="Male">Male</option><option value="Female">Female</option></select></div>
+        <div class="form-group"><label>Gender (for Professional Tax, where applicable)</label><select id="ctc-gender"><option value="Male">Male</option><option value="Female">Female</option></select></div>
         <div class="grid-2" style="gap:16px">
-          <div class="form-group"><label>Basic + DA (% of Gross)</label><input type="number" id="ctc-basicpct" value="50" min="1" max="100" oninput="calcTakeHome()" /></div>
-          <div class="form-group"><label>HRA (% of Basic)</label><input type="number" id="ctc-hrapct" value="50" min="0" max="100" oninput="calcTakeHome()" /></div>
+          <div class="form-group"><label>Basic + DA (% of Gross)</label><input type="number" id="ctc-basicpct" value="50" min="1" max="100" /></div>
+          <div class="form-group"><label>HRA (% of Basic)</label><input type="number" id="ctc-hrapct" value="50" min="0" max="100" /></div>
         </div>
-        <div class="form-group"><label>Communication Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-comm" value="0" oninput="calcTakeHome()" /></div>
-        <div class="form-group"><label>Conveyance / Fuel Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-conv" value="0" oninput="calcTakeHome()" /></div>
+        <div class="form-group"><label>Communication Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-comm" value="0" /></div>
+        <div class="form-group"><label>Conveyance / Fuel Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-conv" value="0" /></div>
         <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">Special Allowance is the balancing figure. Basic + DA must also meet the statutory minimum wage floor for the employee's skill category; not checked separately here.</p>
+        <div style="display:flex;gap:12px;margin-top:20px">
+          <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcTakeHome();trackCalcClick('ctc')">Calculate</button>
+          <button type="button" class="btn btn-outline-dark" onclick="resetCtc()">↺ Reset</button>
+        </div>
       </div>
       <div>
         <div class="ctc-summary" id="ctc-summary"></div>
-        <div class="calc-result" id="th-result"></div>
+        <div class="calc-result" id="th-result"><p style="font-size:14px;color:var(--text-secondary);margin:0">Fill in the details and click Calculate to see your result.</p></div>
       </div>
     </div>
 
@@ -128,7 +132,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=10"></script>
 <script src="/js/main.js?v=6"></script>
-<script src="/js/tools.js?v=17"></script>
+<script src="/js/tools.js?v=18"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

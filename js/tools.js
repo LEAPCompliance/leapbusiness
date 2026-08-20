@@ -17,6 +17,12 @@ function trackCalcClick(toolName) {
   }
 }
 
+/* Every calculator's result panel starts (and returns, on Reset) to this
+   placeholder. Results only ever get written by the Calculate button itself,
+   never by typing, toggling, resetting or page load, so every rendered
+   result corresponds to exactly one tracked calculate_click event. */
+const CALC_PLACEHOLDER = '<p style="font-size:14px;color:var(--text-secondary);margin:0">Fill in the details and click Calculate to see your result.</p>';
+
 /* ---------- 1. CTC <-> Take-Home ---------- */
 let ctcDirection = 'ctc'; // 'ctc' = CTC -> Take-Home, 'th' = Take-Home -> CTC
 
@@ -66,7 +72,19 @@ function setCtcDirection(dir) {
   document.getElementById('ctc-dir-ctc').classList.toggle('active', dir === 'ctc');
   document.getElementById('ctc-dir-th').classList.toggle('active', dir === 'th');
   document.getElementById('ctc-amount-label').textContent = dir === 'ctc' ? 'Monthly CTC (₹)' : 'Monthly Take-Home (₹)';
-  calcTakeHome();
+}
+
+function resetCtc() {
+  setCtcDirection('ctc');
+  document.getElementById('ctc-amount').value = 50000;
+  document.getElementById('ctc-state').value = 'MH';
+  document.getElementById('ctc-gender').value = 'Male';
+  document.getElementById('ctc-basicpct').value = 50;
+  document.getElementById('ctc-hrapct').value = 50;
+  document.getElementById('ctc-comm').value = 0;
+  document.getElementById('ctc-conv').value = 0;
+  document.getElementById('ctc-summary').innerHTML = '';
+  document.getElementById('th-result').innerHTML = CALC_PLACEHOLDER;
 }
 
 function ctcForward(gross, p) {
@@ -174,6 +192,17 @@ function calcTakeHome() {
 }
 
 /* ---------- 2. EPF Split ---------- */
+/* International workers have no wage ceiling, so the restrict option does not
+   apply and is disabled to prevent EPS exceeding the employer's 12%. This runs
+   on the checkbox's own onchange (not gated behind Calculate) since it is a
+   form-validity constraint, not a result. */
+function epfPaintIW() {
+  const iwBox = document.getElementById('epf-iw');
+  const restrictBox = document.getElementById('epf-restrict');
+  if (!iwBox || !restrictBox) return;
+  restrictBox.disabled = iwBox.checked;
+}
+
 function calcEpfSplit() {
   if (!document.getElementById('epf-wages')) return;
   const wages   = parseFloat(document.getElementById('epf-wages').value) || 0;
@@ -181,9 +210,7 @@ function calcEpfSplit() {
   const iw      = document.getElementById('epf-iw').checked;
   const restrictBox = document.getElementById('epf-restrict');
 
-  /* International workers have no wage ceiling, so the restrict option does not
-     apply and is disabled to prevent EPS exceeding the employer's 12%. */
-  restrictBox.disabled = iw;
+  epfPaintIW();
   const restrict = iw ? false : restrictBox.checked;
 
   const el = document.getElementById('epf-result');
@@ -253,7 +280,8 @@ function resetEpfSplit() {
   document.getElementById('epf-ceiling').value = 15000;
   document.getElementById('epf-restrict').checked = true;
   document.getElementById('epf-iw').checked       = false;
-  calcEpfSplit();
+  epfPaintIW();
+  document.getElementById('epf-result').innerHTML = CALC_PLACEHOLDER;
 }
 
 /* ---------- 3. ESIC wage base under the Code on Wages 50% rule ---------- */
@@ -290,16 +318,15 @@ function esicRowHtml(name, amount, cat) {
   const opts = Object.keys(ESIC_CATS)
     .map(k => `<option value="${k}"${k === cat ? ' selected' : ''}>${ESIC_CATS[k]}</option>`).join('');
   return `<tr>
-    <td><input type="text" value="${name.replace(/"/g,'&quot;')}" oninput="calcEsicSplit()" /></td>
-    <td><input type="number" class="esic-amt" value="${amount}" min="0" oninput="calcEsicSplit()" /></td>
-    <td><select class="esic-cat cat-${cat}" onchange="this.className='esic-cat cat-'+this.value;calcEsicSplit()">${opts}</select></td>
-    <td><button type="button" class="row-del" title="Remove" onclick="this.closest('tr').remove();calcEsicSplit()">×</button></td>
+    <td><input type="text" value="${name.replace(/"/g,'&quot;')}" /></td>
+    <td><input type="number" class="esic-amt" value="${amount}" min="0" /></td>
+    <td><select class="esic-cat cat-${cat}" onchange="this.className='esic-cat cat-'+this.value">${opts}</select></td>
+    <td><button type="button" class="row-del" title="Remove" onclick="this.closest('tr').remove()">×</button></td>
   </tr>`;
 }
 
 function addEsicRow(name, amount, cat) {
   document.getElementById('esic-rows').insertAdjacentHTML('beforeend', esicRowHtml(name, amount, cat));
-  calcEsicSplit();
 }
 
 function buildEsicRows() {
@@ -311,7 +338,6 @@ function buildEsicRows() {
 function onEsicPwd() {
   document.getElementById('esic-ceiling').value =
     document.getElementById('esic-pwd').checked ? 25000 : 21000;
-  calcEsicSplit();
 }
 
 function resetEsic() {
@@ -320,7 +346,7 @@ function resetEsic() {
   document.getElementById('esic-ee').value = 0.75;
   document.getElementById('esic-er').value = 3.25;
   document.getElementById('esic-pwd').checked = false;
-  calcEsicSplit();
+  document.getElementById('esic-result').innerHTML = CALC_PLACEHOLDER;
 }
 
 function calcEsicSplit() {
@@ -459,7 +485,6 @@ function onPtStateChange() {
   const st = PT_DATA[stateName];
   const femaleRow = document.getElementById('pt-female-row');
   femaleRow.style.display = (st && st.applicable && st.calc.gender) ? 'flex' : 'none';
-  calcPT();
 }
 
 function calcPT() {
@@ -544,6 +569,7 @@ function resetPT() {
   document.getElementById('pt-gross').value = 25000;
   document.getElementById('pt-female').checked = false;
   onPtStateChange();
+  document.getElementById('pt-result').innerHTML = CALC_PLACEHOLDER;
 }
 
 /* ---------- 5. Gratuity ---------- */
@@ -568,7 +594,6 @@ function onGratRegime() {
   /* The fixed-term rule only changes once the Code is in force. */
   document.getElementById('gr-ft-desc').textContent =
     gratSel('gr-regime') === 'code' ? 'Pro-rata after 1 year' : '5-year threshold under 1972 Act';
-  calcGratuity();
 }
 
 function onGratCause() {
@@ -577,7 +602,6 @@ function onGratCause() {
     resign: 'gr-c-resign-card', retire: 'gr-c-retire-card',
     death: 'gr-c-death-card',  disable: 'gr-c-disable-card'
   });
-  calcGratuity();
 }
 
 function resetGratuity() {
@@ -588,6 +612,7 @@ function resetGratuity() {
   document.getElementById('grat-years').value = 7;
   document.getElementById('grat-months').value = 3;
   onGratRegime(); onGratCause();
+  document.getElementById('grat-result').innerHTML = CALC_PLACEHOLDER;
 }
 
 function gratSource(regime, type, proRata) {
@@ -673,12 +698,24 @@ const BONUS_ELIG_CEILING = 21000;   /* Section 2(13) */
 const BONUS_CALC_FLOOR   = 7000;    /* proviso to Section 12 */
 const BONUS_MIN_DAYS     = 30;      /* Section 8 */
 
+/* Keeps the "8.33%" label next to the slider in sync as you drag it - this is
+   just reflecting the slider's own value, not a calculated result, so it stays
+   live rather than waiting for Calculate. */
+function bonusPaintRate() {
+  const slider = document.getElementById('bonus-pct');
+  const label = document.getElementById('bonus-pct-label');
+  if (!slider || !label) return;
+  const rate = parseFloat(slider.value) || 8.33;
+  label.textContent = rate.toFixed(2).replace(/\.?0+$/,'') + '%';
+}
+
 function resetBonus() {
   document.getElementById('bonus-salary').value  = 21000;
   document.getElementById('bonus-minwage').value = 11000;
   document.getElementById('bonus-days').value    = 365;
   document.getElementById('bonus-pct').value     = 8.33;
-  calcBonus();
+  bonusPaintRate();
+  document.getElementById('bonus-result').innerHTML = CALC_PLACEHOLDER;
 }
 
 function bonusAlert(title, msg) {
@@ -694,7 +731,7 @@ function calcBonus() {
   const el = document.getElementById('bonus-result');
   if (!el) return;
 
-  document.getElementById('bonus-pct-label').textContent = rate.toFixed(2).replace(/\.?0+$/,'') + '%';
+  bonusPaintRate();
 
   if (salary <= 0) {
     el.innerHTML = '<p style="font-size:14px;color:var(--text-secondary);margin:0">Enter a monthly salary to compute the bonus.</p>';
@@ -785,7 +822,7 @@ function resetMaternity() {
   document.getElementById('mat-days').value     = 240;
   document.getElementById('mat-scenario').value = 'first2';
   document.getElementById('mat-prepaid').checked = false;
-  calcMaternity();
+  document.getElementById('mat-result').innerHTML = CALC_PLACEHOLDER;
 }
 
 function calcMaternity() {
@@ -959,12 +996,15 @@ function wfRowHtml(name, amount, cat) {
     .map(k => `<option value="${k}"${k === cat ? ' selected' : ''}>${WF_CATS[k]}</option>`).join('');
   return `<tr>
     <td><input type="text" list="wf-component-list" value="${name.replace(/"/g,'&quot;')}" oninput="wfOnComponentInput(this)" /></td>
-    <td><input type="number" class="wf-amt" value="${amount}" min="0" oninput="calcWageFloor()" /></td>
-    <td><select class="wf-cat cat-${cat}" onchange="this.className='wf-cat cat-'+this.value;calcWageFloor()">${opts}</select></td>
-    <td><button type="button" class="row-del" title="Remove" onclick="this.closest('tr').remove();calcWageFloor()">×</button></td>
+    <td><input type="number" class="wf-amt" value="${amount}" min="0" /></td>
+    <td><select class="wf-cat cat-${cat}" onchange="this.className='wf-cat cat-'+this.value">${opts}</select></td>
+    <td><button type="button" class="row-del" title="Remove" onclick="this.closest('tr').remove()">×</button></td>
   </tr>`;
 }
 
+/* Auto-fills the treatment dropdown when the typed name matches a known
+   reckoner component. Purely a data-entry helper, not a result, so it stays
+   live rather than waiting for Calculate. */
 function wfOnComponentInput(input) {
   const match = HEATMAP_DATA.find(r => r.name.toLowerCase() === input.value.trim().toLowerCase());
   if (match) {
@@ -972,12 +1012,10 @@ function wfOnComponentInput(input) {
     sel.value = match.wfCat;
     sel.className = 'wf-cat cat-' + match.wfCat;
   }
-  calcWageFloor();
 }
 
 function addWfRow(name, amount, cat) {
   document.getElementById('wf-rows').insertAdjacentHTML('beforeend', wfRowHtml(name, amount, cat));
-  calcWageFloor();
 }
 
 function buildWfRows() {
@@ -990,7 +1028,8 @@ function buildWfRows() {
 
 function resetWf() {
   buildWfRows();
-  calcWageFloor();
+  const el = document.getElementById('wf-result');
+  if (el) el.innerHTML = CALC_PLACEHOLDER;
 }
 
 function calcWageFloor() {
@@ -1053,10 +1092,18 @@ function calcWageFloor() {
 
 /* Each calculator is independent: run them in isolation so a failure in one
    (for example a stale cached script meeting freshly deployed markup) cannot
-   stop the others from initialising. */
+   stop the others from initialising.
+
+   Only setup/paint functions run on load: building table rows, painting the
+   initially-selected regime/type/cause cards, showing or hiding the female-PT
+   row. None of these compute or render a result - results only ever appear
+   from the Calculate button itself (see CALC_PLACEHOLDER), so every result a
+   visitor sees corresponds to exactly one tracked calculate_click event. The
+   reckoner table's own search/filter (calcHeatmap/renderHeatmap) is a browse
+   feature rather than a calculation, so it stays live as before. */
 document.addEventListener('DOMContentLoaded', () => {
-  [calcTakeHome, calcEpfSplit, buildEsicRows, calcEsicSplit, onPtStateChange,
-   onGratRegime, onGratCause, calcBonus, calcMaternity, calcHeatmap, buildWfRows, calcWageFloor]
+  [epfPaintIW, buildEsicRows, onPtStateChange, onGratRegime, onGratCause,
+   bonusPaintRate, calcHeatmap, buildWfRows]
     .forEach(fn => {
       try { fn(); }
       catch (err) { console.warn('Calculator init skipped:', fn.name, err); }

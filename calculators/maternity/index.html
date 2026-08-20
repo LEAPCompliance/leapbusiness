@@ -62,19 +62,19 @@
 
         <div class="form-group">
           <label>Monthly wage (₹)</label>
-          <input type="number" id="mat-wage" value="25000" min="0" oninput="calcMaternity()" />
+          <input type="number" id="mat-wage" value="25000" min="0" />
           <p class="calc-hint">Average gross monthly wage in the three calendar months before the date of notice.</p>
         </div>
 
         <div class="form-group">
           <label>Days actually worked in last 12 months</label>
-          <input type="number" id="mat-days" value="240" min="0" max="366" oninput="calcMaternity()" />
+          <input type="number" id="mat-days" value="240" min="0" max="366" />
           <p class="calc-hint">Minimum 80 days required in the 12 months preceding expected delivery (Section 5(2)).</p>
         </div>
 
         <div class="form-group">
           <label>Scenario</label>
-          <select id="mat-scenario" onchange="calcMaternity()">
+          <select id="mat-scenario">
             <option value="first2">First or second surviving child (26 weeks)</option>
             <option value="third">Third or more surviving children (12 weeks)</option>
             <option value="adopt">Commissioning or adopting mother (12 weeks)</option>
@@ -88,7 +88,7 @@
             <span>If yes, Section 8 medical bonus does not apply.</span>
           </div>
           <label class="calc-switch">
-            <input type="checkbox" id="mat-prepaid" onchange="calcMaternity()" />
+            <input type="checkbox" id="mat-prepaid" />
             <span class="calc-switch-slider"></span>
           </label>
         </div>
@@ -102,7 +102,7 @@
       <div>
         <div class="calc-card-head" style="margin-bottom:4px">Result</div>
         <p class="calc-card-sub" style="margin-bottom:16px">Paid leave and cash benefit.</p>
-        <div id="mat-result"></div>
+        <div id="mat-result"><p style="font-size:14px;color:var(--text-secondary);margin:0">Fill in the details and click Calculate to see your result.</p></div>
 
         <div class="calc-notes">
           <h4>Method and assumptions</h4>
@@ -156,7 +156,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=10"></script>
 <script src="/js/main.js?v=6"></script>
-<script src="/js/tools.js?v=17"></script>
+<script src="/js/tools.js?v=18"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
