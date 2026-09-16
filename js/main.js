@@ -88,6 +88,9 @@ function initContactForm() {
       const result = await response.json();
 
       if (result.success) {
+        if (typeof gtag === 'function') {
+          gtag('event', 'generate_lead', { form_name: 'contact_form' });
+        }
         showToast('✅ Thank you! We\'ll call you within 1 hour.');
         form.reset();
       } else {
