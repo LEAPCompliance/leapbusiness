@@ -169,6 +169,20 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove('show'), 4000);
 }
 
+/* ── WhatsApp / call click tracking (event delegation catches every
+   tel: and wa.me link site-wide, including ones injected by components.js) ── */
+function initContactClickTracking() {
+  document.addEventListener('click', e => {
+    const link = e.target.closest('a[href^="tel:"], a[href*="wa.me"]');
+    if (!link || typeof gtag !== 'function') return;
+    const eventName = link.href.includes('wa.me') ? 'whatsapp_click' : 'phone_click';
+    gtag('event', eventName, {
+      link_url: link.href,
+      page_path: window.location.pathname
+    });
+  });
+}
+
 /* ── Boot all modules on DOMContentLoaded ── */
 document.addEventListener('DOMContentLoaded', () => {
   initFAQ();
@@ -177,4 +191,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initNewsletterForm();
   initNavDropdowns();
+  initContactClickTracking();
 });
