@@ -183,6 +183,54 @@ function initContactClickTracking() {
   });
 }
 
+/* ── Gazette Notifications list + filters ── */
+function initNotifications() {
+  const container = document.getElementById('notifications-list');
+  if (!container || typeof NOTIFICATIONS === 'undefined') return;
+
+  const tagFilter = document.getElementById('notif-tag-filter');
+  const regionFilter = document.getElementById('notif-region-filter');
+
+  function formatDate(iso) {
+    if (!iso) return null;
+    return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function populateFilters() {
+    [...new Set(NOTIFICATIONS.map(n => n.tag))].forEach(t => {
+      tagFilter.insertAdjacentHTML('beforeend', `<option value="${t}">${t}</option>`);
+    });
+    [...new Set(NOTIFICATIONS.map(n => n.region))].forEach(r => {
+      regionFilter.insertAdjacentHTML('beforeend', `<option value="${r}">${r}</option>`);
+    });
+  }
+
+  function render() {
+    const tagVal = tagFilter.value;
+    const regionVal = regionFilter.value;
+    const filtered = NOTIFICATIONS.filter(n =>
+      (tagVal === 'all' || n.tag === tagVal) && (regionVal === 'all' || n.region === regionVal)
+    );
+    container.innerHTML = filtered.length ? filtered.map(n => `
+      <div style="border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:20px;background:#fff">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+          <span style="background:var(--secondary-faint);color:var(--primary);font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;font-family:'Inter',sans-serif">${n.region}</span>
+          <span style="font-size:12px;color:var(--text-secondary);font-family:'Inter',sans-serif">Released: ${formatDate(n.releasedDate)}${n.effectiveDate ? ` · Effective: ${formatDate(n.effectiveDate)}` : ''}</span>
+        </div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--primary);margin-bottom:8px;font-family:'Inter',sans-serif">${n.tag}</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--primary);margin-bottom:10px">${n.title}</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--text-secondary);margin-bottom:16px;font-family:'Inter',sans-serif">${n.excerpt}</p>
+        <a href="${n.link}" class="btn btn-primary" style="font-size:14px;padding:9px 18px">${n.linkLabel} →</a>
+      </div>
+    `).join('') : '<p style="text-align:center;color:var(--text-secondary);padding:40px 0;font-family:\'Inter\',sans-serif">No notifications match this filter yet.</p>';
+  }
+
+  populateFilters();
+  tagFilter.addEventListener('change', render);
+  regionFilter.addEventListener('change', render);
+  render();
+}
+
 /* ── Boot all modules on DOMContentLoaded ── */
 document.addEventListener('DOMContentLoaded', () => {
   initFAQ();
@@ -192,4 +240,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initNewsletterForm();
   initNavDropdowns();
   initContactClickTracking();
+  initNotifications();
 });

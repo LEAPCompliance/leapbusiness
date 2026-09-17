@@ -31,7 +31,7 @@ function renderNavbar(activePage) {
             <div class="dropdown-menu dropdown-mega">
               <div>
                 <div class="dropdown-heading">Reference Hubs</div>
-                <a href="/coming-soon.html?item=Downloads">Downloads</a>
+                <a href="/notifications/">Gazette Notifications</a>
                 <a href="/coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
                 <a href="/registrations.html">Registrations</a>
                 <a href="/knowledge.html">Knowledge Hub</a>
@@ -108,7 +108,7 @@ function renderNavbar(activePage) {
         <summary>Resources</summary>
         <div class="mobile-accordion-body">
           <div class="mobile-accordion-heading">Reference Hubs</div>
-          <a href="/coming-soon.html?item=Downloads">Downloads</a>
+          <a href="/notifications/">Gazette Notifications</a>
           <a href="/coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
           <a href="/registrations.html">Registrations</a>
           <a href="/knowledge.html">Knowledge Hub</a>
