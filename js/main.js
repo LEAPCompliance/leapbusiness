@@ -220,7 +220,10 @@ function initNotifications() {
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--primary);margin-bottom:8px;font-family:'Inter',sans-serif">${n.tag}</div>
         <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--primary);margin-bottom:10px">${n.title}</h3>
         <p style="font-size:14px;line-height:1.7;color:var(--text-secondary);margin-bottom:16px;font-family:'Inter',sans-serif">${n.excerpt}</p>
-        <a href="${n.link}" class="btn btn-primary" style="font-size:14px;padding:9px 18px">${n.linkLabel} →</a>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="${n.link}" class="btn btn-primary" style="font-size:14px;padding:9px 18px">${n.linkLabel} →</a>
+          ${n.downloadUrl ? `<a href="${n.downloadUrl}" class="btn" style="font-size:14px;padding:9px 18px" download>Download ⬇</a>` : ''}
+        </div>
       </div>
     `).join('') : '<p style="text-align:center;color:var(--text-secondary);padding:40px 0;font-family:\'Inter\',sans-serif">No notifications match this filter yet.</p>';
   }

@@ -13,6 +13,7 @@ const NOTIFICATIONS = [
     excerpt: "Union Cabinet approved raising the EPFO wage ceiling for mandatory coverage from ₹15,000 to ₹25,000 per month. Over 51 lakh additional employees are expected to come under mandatory PF, Pension, and EDLI coverage once formally notified.",
     link: "/blog/epfo-2026/",
     linkLabel: "Read Full Update",
+    downloadUrl: "/assets/notifications/epfo-wage-ceiling-25000-2026.pdf",
     source: "PIB Delhi, Ministry of Labour & Employment"
   }
 ];
