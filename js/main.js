@@ -222,7 +222,9 @@ function initNotifications() {
         <p style="font-size:14px;line-height:1.7;color:var(--text-secondary);margin-bottom:16px;font-family:'Inter',sans-serif">${n.excerpt}</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <a href="${n.link}" class="btn btn-primary" style="font-size:14px;padding:9px 18px">${n.linkLabel} →</a>
-          ${n.downloadUrl ? `<a href="${n.downloadUrl}" class="btn" style="font-size:14px;padding:9px 18px" download>Download ⬇</a>` : ''}
+          ${(n.downloads || (n.downloadUrl ? [{ url: n.downloadUrl, label: 'Download' }] : [])).map(d =>
+            `<a href="${d.url}" class="btn" style="font-size:14px;padding:9px 18px" download>${d.label} ⬇</a>`
+          ).join('')}
         </div>
       </div>
     `).join('') : '<p style="text-align:center;color:var(--text-secondary);padding:40px 0;font-family:\'Inter\',sans-serif">No notifications match this filter yet.</p>';
