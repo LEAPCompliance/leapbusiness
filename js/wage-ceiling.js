@@ -579,6 +579,36 @@
     paintProgress();
   }
 
+  /* ---------- Share ---------- */
+  function shareUrl() {
+    var c = document.querySelector('link[rel="canonical"]');
+    return c && c.href ? c.href : location.href.split('#')[0];
+  }
+  function flashShare(msg) {
+    var l = $('wc-share-label');
+    if (!l) return;
+    var orig = l.getAttribute('data-orig') || l.textContent;
+    l.setAttribute('data-orig', orig);
+    l.textContent = msg;
+    setTimeout(function () { l.textContent = orig; }, 2200);
+  }
+  function share() {
+    var url = shareUrl();
+    var title = 'EPF Wage Ceiling 2026 - Impact Calculator | LEAP';
+    var text = 'EPF wage ceiling is now ₹25,000 from 17 September 2026. Free calculator, coverage check and team budget impact by LEAP:';
+    track('epf-wage-ceiling', 'share');
+    if (navigator.share) {
+      navigator.share({ title: title, text: text, url: url }).catch(function () { /* cancelled */ });
+      return;
+    }
+    var done = function () { flashShare('Link copied'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, function () { window.prompt('Copy this link:', url); });
+    } else {
+      window.prompt('Copy this link:', url);
+    }
+  }
+
   /* ---------- Wire-up ---------- */
   function init() {
     if (!$('wc-segments')) return;
@@ -609,7 +639,7 @@
     calcContribution: calcContribution, resetContribution: resetContribution,
     calcCoverage: calcCoverage, resetCoverage: resetCoverage, useWages: useWages,
     calcTeam: calcTeam, resetTeam: resetTeam, addTeamRow: addTeamRow,
-    printTool: printTool, resetChecklist: resetChecklist
+    printTool: printTool, resetChecklist: resetChecklist, share: share
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

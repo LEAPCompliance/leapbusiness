@@ -203,3 +203,10 @@ li.done .wc-check span { color: var(--text-secondary); text-decoration: line-thr
   body[class*="wc-printing-"] * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body[class*="wc-printing-"] .wc-cmp-row, body[class*="wc-printing-"] .wc-bucket, body[class*="wc-printing-"] .wc-status { break-inside: avoid; }
 }
+
+/* ---------- Share button ---------- */
+.wc-share { margin-top: 20px; }
+.wc-share-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--white); background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.55); border-radius: 10px; padding: 10px 18px; cursor: pointer; transition: background .15s ease; }
+.wc-share-btn:hover { background: rgba(255,255,255,0.24); }
+.wc-share-btn:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+@media print { .wc-share { display: none !important; } }
