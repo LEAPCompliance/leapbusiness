@@ -552,7 +552,7 @@
     bulkResult = null;
     $('wc-bulk-result').innerHTML = PLACEHOLDER;
     $('wc-bulk-tools').hidden = true;
-    bulkMessage('<p style="margin:0"><strong>' + esc(fileName) + '</strong> loaded: ' + rows.length.toLocaleString('en-IN') + ' rows, ' + heads.length + ' pay heads found.' + esc(note) + ' Nothing has left your device.</p>', false);
+    bulkMessage('<p style="margin:0"><strong>' + esc(fileName) + '</strong> loaded: ' + rows.length.toLocaleString('en-IN') + ' rows, ' + heads.length + ' pay heads found.' + esc(note) + ' Your file stays on your device.</p>', false);
     renderBulkSetup();
   }
 
@@ -634,6 +634,7 @@
 
   function calcBulk() {
     var out = $('wc-bulk-result');
+    $('wc-lead').hidden = true;
     if (!bulk) {
       out.innerHTML = '<div class="calc-alert"><span class="calc-alert-icon">⚠</span><div><h5>Add a salary file first</h5><p>Upload a file or paste rows from Excel, then calculate.</p></div></div>';
       $('wc-bulk-tools').hidden = true;
@@ -652,10 +653,9 @@
     };
     var data = readBulkRecords();
     var res = bulkCompute(data.recs, cfg);
-    bulkResult = { res: res, cfg: cfg };
-    out.innerHTML = renderBulk(res, cfg, data.warnCols);
-    $('wc-bulk-tools').hidden = false;
+    bulkResult = { res: res, cfg: cfg, html: renderBulk(res, cfg, data.warnCols) };
     track('epf-wage-ceiling-bulk');
+    if (hasLead()) showBulkResult(); else showLeadGate();
   }
 
   function renderBulk(res, cfg, warnCols) {
@@ -767,12 +767,14 @@
     $('wc-bulk-settings').hidden = true; $('wc-bulk-tools').hidden = true;
     $('wc-bulk-msg').innerHTML = '';
     $('wc-bulk-result').innerHTML = PLACEHOLDER;
+    $('wc-lead').hidden = true;
   }
 
-  function clearBulkResult() { $('wc-bulk-result').innerHTML = PLACEHOLDER; $('wc-bulk-tools').hidden = true; }
+  function clearBulkResult() { $('wc-bulk-result').innerHTML = PLACEHOLDER; $('wc-bulk-tools').hidden = true; $('wc-lead').hidden = true; }
 
   function initBulk() {
     if (!$('wc-bulk-file')) return;
+    $('wc-lead-form').addEventListener('submit', submitLead);
     $('wc-bulk-file').addEventListener('change', function (e) { handleFile(e.target.files[0]); });
     var zone = $('wc-drop');
     ['dragenter', 'dragover'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('over'); }); });
@@ -812,6 +814,71 @@
         clearBulkResult();
       });
     });
+  }
+
+  /* ---------- Lead capture before bulk results ---------- */
+  var LEAD_KEY = 'leap-bulk-pf-lead-v1';
+  var LEAD_ENDPOINT = 'https://api.web3forms.com/submit';
+
+  function hasLead() {
+    try { return !!localStorage.getItem(LEAD_KEY); } catch (e) { return false; }
+  }
+  function saveLead() {
+    try { localStorage.setItem(LEAD_KEY, String(Date.now())); } catch (e) { /* storage blocked, ask again next time */ }
+  }
+
+  function showBulkResult() {
+    $('wc-lead').hidden = true;
+    $('wc-bulk-result').innerHTML = bulkResult.html;
+    $('wc-bulk-tools').hidden = false;
+  }
+
+  function showLeadGate() {
+    $('wc-bulk-tools').hidden = true;
+    $('wc-bulk-result').innerHTML = '<p class="wc-lead" style="margin:0">Your calculation for ' + bulkResult.res.rows.length.toLocaleString('en-IN') + ' employee' + (bulkResult.res.rows.length === 1 ? '' : 's') + ' is ready.</p>';
+    $('wc-lead-count').textContent = bulkResult.res.rows.length.toLocaleString('en-IN') + ' employee' + (bulkResult.res.rows.length === 1 ? '' : 's');
+    $('wc-lead-error').textContent = '';
+    $('wc-lead').hidden = false;
+    var first = $('wc-lead-name');
+    if (first && first.scrollIntoView) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); first.focus({ preventScroll: true }); }
+  }
+
+  function submitLead(e) {
+    e.preventDefault();
+    var form = e.target, err = $('wc-lead-error'), btn = $('wc-lead-submit');
+    if (form.elements.botcheck && form.elements.botcheck.checked) return;   /* bots only */
+    var name = form.elements.name.value.trim(), company = form.elements.company.value.trim();
+    var phone = form.elements.phone.value.trim(), email = form.elements.email.value.trim();
+    var digits = phone.replace(/\D/g, '');
+    if (!name || !company) { err.textContent = 'Please enter your name and company.'; return; }
+    if (digits.length < 10 || digits.length > 13) { err.textContent = 'Please enter a valid phone or WhatsApp number.'; return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'That email address does not look right.'; return; }
+    if (!form.elements.consent.checked) { err.textContent = 'Please tick the consent box so we can contact you.'; return; }
+    err.textContent = '';
+
+    var n = bulkResult ? bulkResult.res.rows.length : 0;
+    var fd = new FormData(form);
+    fd.delete('consent');
+    fd.set('employees', String(n));
+    fd.set('message', 'Bulk PF calculator run. Employees in file: ' + n + '. Period: ' + (bulkResult ? bulkResult.cfg.period : '') +
+      '. Contact details only; the salary file itself is never sent.');
+    var label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Please wait...';
+
+    var finish = function (ok) {
+      btn.disabled = false; btn.textContent = label;
+      if (ok) {
+        saveLead();
+        if (typeof root.gtag === 'function') root.gtag('event', 'generate_lead', { form_name: 'bulk_pf_calculator', tool_name: 'epf-wage-ceiling-bulk' });
+        if (typeof root.showToast === 'function') root.showToast('Thank you. We will be in touch shortly.');
+      }
+      /* If the request failed, show the results anyway: our fault, not theirs. */
+      if (bulkResult) showBulkResult();
+    };
+    fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { finish(!!(j && j.success)); })
+      .catch(function () { finish(false); });
   }
 
   /* ---------- Share ---------- */
