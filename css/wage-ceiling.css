@@ -162,7 +162,7 @@ li.done .wc-check span { color: var(--text-secondary); text-decoration: line-thr
 .wc-src a { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--primary); }
 
 .wc-band { padding-top: 56px; padding-bottom: 56px; }
-.wc-band.alt { background: var(--background-light); }
+.wc-band.alt, .wc-alt { background: var(--background-light); }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 720px) {
@@ -192,8 +192,8 @@ li.done .wc-check span { color: var(--text-secondary); text-decoration: line-thr
   body[class*="wc-printing-"] .wc-print-meta { font-family: 'Inter', sans-serif; font-size: 11px; color: #555; margin: 0; }
 
   /* Show only the panel being printed, and only its result column */
-  body.wc-printing-contribution #wc-sec-coverage, body.wc-printing-contribution #wc-sec-team,
-  body.wc-printing-team #wc-sec-contribution, body.wc-printing-team #wc-sec-coverage { display: none !important; }
+  body.wc-printing-contribution #wc-sec-bulk, body.wc-printing-contribution #wc-sec-coverage, body.wc-printing-contribution #wc-sec-team,
+  body.wc-printing-team #wc-sec-contribution, body.wc-printing-team #wc-sec-bulk, body.wc-printing-team #wc-sec-coverage { display: none !important; }
   body.wc-printing-contribution #wc-contribution-input, body.wc-printing-team #wc-team-input { display: none !important; }
   body.wc-printing-contribution #wc-contribution .calc-grid, body.wc-printing-team .wc-team-grid { display: block; }
   body[class*="wc-printing-"] .wc-print-bar, body[class*="wc-printing-"] .wc-tool-head, body[class*="wc-printing-"] .wc-jump { display: none !important; }
@@ -210,3 +210,37 @@ li.done .wc-check span { color: var(--text-secondary); text-decoration: line-thr
 .wc-share-btn:hover { background: rgba(255,255,255,0.24); }
 .wc-share-btn:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
 @media print { .wc-share { display: none !important; } }
+
+/* ---------- Bulk salary file ---------- */
+.wc-bulk-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 28px; }
+.wc-bulk-card > *, .wc-bulk-out { min-width: 0; }
+.wc-step-title { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--primary); margin: 26px 0 12px; }
+.wc-step-title.first { margin-top: 0; }
+.wc-upload-row { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 760px) { .wc-upload-row { grid-template-columns: 1fr; } }
+.wc-drop { position: relative; display: flex; flex-direction: column; gap: 6px; align-items: center; justify-content: center; text-align: center; min-height: 132px; padding: 20px; border: 2px dashed var(--secondary); border-radius: var(--radius-lg); background: var(--secondary-faint); cursor: pointer; transition: background .15s ease, border-color .15s ease; }
+.wc-drop:hover, .wc-drop.over { background: #e3f2f9; border-color: var(--primary); }
+.wc-drop strong { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--primary); }
+.wc-drop span { font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+.wc-drop input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.wc-drop:focus-within { outline: 2px solid var(--secondary); outline-offset: 2px; }
+.wc-upload-side { display: flex; flex-direction: column; gap: 12px; }
+.wc-upload-side .btn { justify-content: center; }
+.wc-paste summary { cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--primary); }
+.wc-paste textarea { width: 100%; margin: 10px 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; resize: vertical; }
+.wc-paste textarea:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(50,153,194,.11); }
+.wc-map-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 14px; }
+@media (max-width: 720px) { .wc-map-grid { grid-template-columns: 1fr; } }
+.wc-rule-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+@media (max-width: 720px) { .wc-rule-grid { grid-template-columns: 1fr; } }
+.wc-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.wc-headchip { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-secondary); background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 7px 14px; cursor: pointer; }
+.wc-headchip:hover { border-color: var(--secondary); }
+.wc-headchip.on { color: var(--white); background: var(--primary); border-color: var(--primary); }
+.wc-headchip.on.out { background: #a4372b; border-color: #a4372b; }
+.wc-settings-row { max-width: 360px; }
+.wc-bulk-table { min-width: 900px; }
+.wc-bulk-table td { white-space: nowrap; }
+.wc-bulk-table td.wc-flagcell { white-space: normal; min-width: 240px; font-size: 12px; color: var(--text-secondary); }
+.wc-bulk-table tr.is-skipped td { color: var(--text-secondary); background: var(--background-light); }
+@media (max-width: 720px) { .wc-bulk-card { padding: 20px 16px; } }

@@ -163,11 +163,96 @@
     return { headcount: 0, employee: 0, employer: 0, sepEmployee: 0, sepEmployer: 0 };
   }
 
+  /* ---------------------------------------------------------------
+     BULK: one PF calculation per row of a salary file.
+     rec = { code, name, gross (number or null), heads: {name: amount},
+             d1, d2 (days in the split month, null = full), member, pension }
+     cfg = { period: 'old' | 'split' | 'new', pfBasis: 'cap' | 'actual',
+             mode: 'sum' | 'grossless', incl: [head names], excl: [head names],
+             overheads: bool, warn50: bool }
+     PF wage is either the sum of the ticked heads (mode 'sum') or the
+     gross less the ticked heads (mode 'grossless').
+     --------------------------------------------------------------- */
+  function bulkCompute(records, cfg) {
+    var incl = cfg.incl || [], excl = cfg.excl || [];
+    var rows = [];
+    var totals = { pfWage: 0, contribWage: 0, employee: 0, employer12: 0, eps: 0, epf: 0, edli: 0, admin: 0, total: 0 };
+    var counts = { processed: 0, skipped: 0, flagged: 0 };
+
+    records.forEach(function (rec) {
+      var flags = [], headsSum = 0, name;
+      for (name in rec.heads) if (Object.prototype.hasOwnProperty.call(rec.heads, name)) headsSum += rec.heads[name];
+      var hasGross = rec.gross !== null && rec.gross !== undefined && !isNaN(rec.gross);
+      var gross = hasGross ? rec.gross : headsSum;
+
+      var pfWage = 0;
+      if (cfg.mode === 'grossless') {
+        var out = 0;
+        excl.forEach(function (h) { out += rec.heads[h] || 0; });
+        pfWage = gross - out;
+      } else {
+        incl.forEach(function (h) { pfWage += rec.heads[h] || 0; });
+      }
+      if (pfWage < 0) { flags.push('PF wage is negative'); pfWage = 0; }
+      pfWage = Math.round(pfWage);
+
+      if (hasGross && Math.abs(headsSum - gross) > 1) {
+        flags.push('Heads in the file add up to ' + Math.round(headsSum) + ', Gross is ' + Math.round(gross) + ' (a pay head may be missing)');
+      }
+      if (cfg.warn50 && gross > 0 && pfWage < gross * 0.5 - 0.5) {
+        flags.push('50% check: PF wage is ' + Math.round(pfWage / gross * 100) + '% of gross. If the heads left out are all listed exclusions under s.2(88), wages would be at least ' + Math.round(gross * 0.5));
+      }
+
+      var row = { code: rec.code, name: rec.name, gross: Math.round(gross), pfWage: pfWage, contribWage: 0,
+                  employee: 0, employer12: 0, eps: 0, epf: 0, edli: 0, admin: 0, total: 0,
+                  flags: flags, skipped: false };
+
+      if (rec.member === false) {
+        row.skipped = true; flags.unshift('Not a PF member, skipped');
+      } else if (pfWage <= 0) {
+        row.skipped = true; flags.unshift('PF wage is zero, skipped');
+      } else {
+        var epsMode = rec.pension === false ? 'none' : 'cap';
+        if (rec.pension === false) flags.push('Pension not applicable, whole 12% goes to EPF');
+        var segs;
+        if (cfg.period === 'split') {
+          var d1 = rec.d1 === null || rec.d1 === undefined ? DAYS_BEFORE : rec.d1;
+          var d2 = rec.d2 === null || rec.d2 === undefined ? DAYS_AFTER : rec.d2;
+          if (d1 < 0 || d1 > DAYS_BEFORE || d2 < 0 || d2 > DAYS_AFTER) flags.push('Days outside 0 to ' + DAYS_BEFORE + ' and 0 to ' + DAYS_AFTER + ', adjusted');
+          d1 = Math.max(0, Math.min(DAYS_BEFORE, Math.round(d1)));
+          d2 = Math.max(0, Math.min(DAYS_AFTER, Math.round(d2)));
+          segs = septemberSegments(d1, d2, { pf: cfg.pfBasis, eps: epsMode }, { pf: cfg.pfBasis, eps: epsMode });
+        } else {
+          segs = [{ ceiling: cfg.period === 'old' ? OLD_CEILING : NEW_CEILING, days: null, pf: cfg.pfBasis, eps: epsMode }];
+        }
+        var r = contribute(pfWage, segs, { overheads: cfg.overheads });
+        if (r.pfTotal <= 0) {
+          row.skipped = true; flags.unshift('No days to count, skipped');
+        } else {
+          row.contribWage = r.pfTotal; row.employee = r.employee; row.employer12 = r.employer12;
+          row.eps = r.eps; row.epf = r.epf; row.edli = r.includeOverheads ? r.edli : 0;
+          row.admin = r.includeOverheads ? r.admin : 0; row.total = r.grandTotal;
+        }
+      }
+
+      if (row.skipped) counts.skipped++; else {
+        counts.processed++;
+        totals.pfWage += row.pfWage; totals.contribWage += row.contribWage; totals.employee += row.employee;
+        totals.employer12 += row.employer12; totals.eps += row.eps; totals.epf += row.epf;
+        totals.edli += row.edli; totals.admin += row.admin; totals.total += row.total;
+      }
+      if (flags.length) counts.flagged++;
+      rows.push(row);
+    });
+    return { rows: rows, totals: totals, counts: counts };
+  }
+
   var engine = {
     OLD_CEILING: OLD_CEILING, NEW_CEILING: NEW_CEILING,
     DAYS_BEFORE: DAYS_BEFORE, DAYS_AFTER: DAYS_AFTER, MONTH_DAYS: MONTH_DAYS,
     contribute: contribute, fullMonth: fullMonth, septemberSegments: septemberSegments,
-    coverageBand: coverageBand, memberDelta: memberDelta, teamImpact: teamImpact
+    coverageBand: coverageBand, memberDelta: memberDelta, teamImpact: teamImpact,
+    bulkCompute: bulkCompute
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = engine; return; }
@@ -579,6 +664,382 @@
     paintProgress();
   }
 
+  /* ---------- Tool 2: bulk salary file ---------- */
+  var BULK_MAX_ROWS = 20000;
+  var BULK_SHOW_ROWS = 200;
+  var XLSX_SRC = '/js/vendor/xlsx.full.min.js?v=1';
+  var bulk = null;          /* { headers, rows, map, heads, mode, incl, excl, fileName } */
+  var bulkResult = null;
+
+  var TEMPLATE_HEADERS = ['Emp Code', 'Name', 'Basic+DA', 'HRA', 'Bonus', 'Medical Allowance', 'Special Allowance', 'Gross Salary',
+    'Days 1-16 Sep (max 16)', 'Days 17-30 Sep (max 14)', 'PF Member (Y/N)', 'Pension (Y/N)'];
+  var TEMPLATE_ROWS = [
+    ['E001', 'Sample Employee 1', 12000, 6000, 1000, 1250, 4750, 25000, 16, 14, 'Y', 'Y'],
+    ['E002', 'Sample Employee 2', 20000, 10000, 1500, 1250, 7250, 40000, 16, 14, 'Y', 'Y'],
+    ['E003', 'Sample Employee 3', 18000, 9000, 1000, 1250, 5750, 35000, 0, 14, 'Y', 'Y']
+  ];
+
+  function norm(s) { return String(s === null || s === undefined ? '' : s).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  function toNum(v) {
+    if (typeof v === 'number') return v;
+    var s = String(v === null || v === undefined ? '' : v).replace(/[₹,\s]/g, '');
+    if (s === '') return NaN;
+    return /^-?\d+(\.\d+)?$/.test(s) ? parseFloat(s) : NaN;
+  }
+  function isBlank(v) { return v === null || v === undefined || String(v).trim() === ''; }
+  function yesNo(v) {
+    if (isBlank(v)) return true;
+    return !/^(n|no|0|false|nil|na|n\/a|not applicable)$/i.test(String(v).trim());
+  }
+
+  /* Header detection: index of the first untaken header that passes the test, else -1. */
+  function findCol(headers, taken, test) {
+    for (var i = 0; i < headers.length; i++) {
+      if (taken.indexOf(i) === -1 && test(norm(headers[i]))) return i;
+    }
+    return -1;
+  }
+  function detectColumns(headers) {
+    var taken = [], map = {};
+    function pick(key, test) { var i = findCol(headers, taken, test); map[key] = i; if (i > -1) taken.push(i); }
+    pick('code', function (h) { return /^(emp(loyee)?(code|id|no|number)|ecode|code|empid)$/.test(h); });
+    pick('name', function (h) { return /^(emp(loyee)?name|name|nameofemployee)$/.test(h); });
+    pick('gross', function (h) { return /^(gross|grosssalary|grosspay|grosswages|grossearnings|totalgross|totalearnings|grossmonthly)/.test(h); });
+    pick('d1', function (h) { return h.indexOf('days') > -1 && (h.indexOf('116') > -1 || h.indexOf('before') > -1); });
+    pick('d2', function (h) { return h.indexOf('days') > -1 && (h.indexOf('1730') > -1 || h.indexOf('after') > -1); });
+    pick('member', function (h) { return h.indexOf('member') > -1 || h.indexOf('pfapplicable') > -1; });
+    pick('pension', function (h) { return h.indexOf('pension') === 0 || h === 'eps' || h.indexOf('epsapplicable') === 0; });
+    return { map: map, taken: taken };
+  }
+
+  function isBasicHead(name) { var h = norm(name); return h.indexOf('basic') > -1 || h === 'da' || h.indexOf('dearness') > -1; }
+  function isHraHead(name) { var h = norm(name); return h === 'hra' || h.indexOf('houserent') > -1; }
+
+  function parseDelimited(text) {
+    text = text.replace(/^﻿/, '');
+    var first = text.split(/\r?\n/, 1)[0] || '';
+    var delim = first.indexOf('\t') > -1 ? '\t' : (first.split(';').length > first.split(',').length ? ';' : ',');
+    var rows = [], row = [], cell = '', q = false, i, c;
+    for (i = 0; i < text.length; i++) {
+      c = text.charAt(i);
+      if (q) {
+        if (c === '"') { if (text.charAt(i + 1) === '"') { cell += '"'; i++; } else q = false; }
+        else cell += c;
+      } else if (c === '"') q = true;
+      else if (c === delim) { row.push(cell); cell = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text.charAt(i + 1) === '\n') i++;
+        row.push(cell); rows.push(row); row = []; cell = '';
+      } else cell += c;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows;
+  }
+
+  function ensureXlsx() {
+    return new Promise(function (resolve, reject) {
+      if (root.XLSX) return resolve(root.XLSX);
+      var s = document.createElement('script');
+      s.src = XLSX_SRC;
+      s.onload = function () { root.XLSX ? resolve(root.XLSX) : reject(new Error('xlsx')); };
+      s.onerror = function () { reject(new Error('xlsx')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  function bulkMessage(html, isError) {
+    var el = $('wc-bulk-msg');
+    el.innerHTML = html ? '<div class="' + (isError ? 'calc-alert' : 'wc-callout') + '" style="margin-top:14px">' + html + '</div>' : '';
+  }
+
+  function loadBulkMatrix(matrix, fileName) {
+    matrix = matrix.filter(function (r) { return r.some(function (c) { return !isBlank(c); }); });
+    if (matrix.length < 2) { bulkMessage('<p style="margin:0">That file needs a header row and at least one employee row.</p>', true); return; }
+    /* header row = first row with two or more filled cells */
+    var h = 0;
+    while (h < matrix.length - 1 && matrix[h].filter(function (c) { return !isBlank(c); }).length < 2) h++;
+    var headers = matrix[h].map(function (c) { return String(c === null || c === undefined ? '' : c).trim(); });
+    var rows = matrix.slice(h + 1);
+    var note = '';
+    if (rows.length > BULK_MAX_ROWS) { rows = rows.slice(0, BULK_MAX_ROWS); note = ' Only the first ' + BULK_MAX_ROWS.toLocaleString('en-IN') + ' rows were read.'; }
+
+    var det = detectColumns(headers);
+    var heads = [];
+    headers.forEach(function (name, i) {
+      if (det.taken.indexOf(i) > -1 || isBlank(name)) return;
+      var filled = 0, numeric = 0;
+      rows.forEach(function (r) { if (!isBlank(r[i])) { filled++; if (!isNaN(toNum(r[i]))) numeric++; } });
+      if (filled > 0 && numeric / filled >= 0.5) heads.push({ name: name, idx: i });
+    });
+    if (!heads.length) { bulkMessage('<p style="margin:0">No amount columns were found. Check that the header row is the first filled row of the file.</p>', true); return; }
+
+    bulk = { headers: headers, rows: rows, map: det.map, heads: heads, mode: 'basic', incl: [], excl: [], fileName: fileName };
+    presetHeads();
+    bulkResult = null;
+    $('wc-bulk-result').innerHTML = PLACEHOLDER;
+    $('wc-bulk-tools').hidden = true;
+    bulkMessage('<p style="margin:0"><strong>' + esc(fileName) + '</strong> loaded: ' + rows.length.toLocaleString('en-IN') + ' rows, ' + heads.length + ' pay heads found.' + esc(note) + ' Nothing has left your device.</p>', false);
+    renderBulkSetup();
+  }
+
+  function presetHeads() {
+    bulk.incl = bulk.heads.filter(function (h) { return isBasicHead(h.name); }).map(function (h) { return h.name; });
+    bulk.excl = bulk.heads.filter(function (h) { return isHraHead(h.name); }).map(function (h) { return h.name; });
+  }
+
+  function colSelect(id, label, key) {
+    var opts = '<option value="-1">Not in my file</option>' + bulk.headers.map(function (h, i) {
+      return '<option value="' + i + '"' + (bulk.map[key] === i ? ' selected' : '') + '>' + esc(h || ('Column ' + (i + 1))) + '</option>';
+    }).join('');
+    return '<div class="form-group"><label for="' + id + '">' + label + '</label><select id="' + id + '" data-key="' + key + '">' + opts + '</select></div>';
+  }
+
+  function ruleCard(value, title, sub) {
+    return '<label class="opt-card' + (bulk.mode === value ? ' on' : '') + '"><input type="radio" name="wc-bulk-rule" value="' + value + '"' + (bulk.mode === value ? ' checked' : '') + ' /><span><strong>' + title + '</strong><em>' + sub + '</em></span></label>';
+  }
+
+  function renderBulkSetup() {
+    var also = [];
+    if (bulk.map.d1 > -1 || bulk.map.d2 > -1) also.push('days worked in September');
+    if (bulk.map.member > -1) also.push('PF member');
+    if (bulk.map.pension > -1) also.push('pension applicable');
+    var html =
+      '<div class="wc-step-title">Match your columns</div>' +
+      '<div class="wc-map-grid">' + colSelect('wc-map-code', 'Employee code', 'code') + colSelect('wc-map-name', 'Employee name', 'name') + colSelect('wc-map-gross', 'Gross salary', 'gross') + '</div>' +
+      (also.length ? '<p class="wc-lead">Also picked up from your file: ' + also.join(', ') + '.</p>' : '') +
+      '<div class="wc-step-title">Which pay counts as PF wage?</div>' +
+      '<div class="wc-rule-grid" id="wc-rule">' +
+        ruleCard('basic', 'Basic + DA only', 'Only the heads ticked below, starting with Basic and DA.') +
+        ruleCard('sum', 'Basic + DA + chosen allowances', 'Add allowances you treat as part of basic wages, such as those paid uniformly to all.') +
+        ruleCard('grossless', 'Gross minus HRA', 'Start from Gross and leave out HRA, plus any other heads you tick.') +
+      '</div>' +
+      '<div class="wc-step-title" id="wc-heads-title"></div><div class="wc-chips" id="wc-heads" role="group" aria-label="Pay heads"></div>' +
+      '<p class="wc-lead" id="wc-rule-note"></p>';
+    $('wc-bulk-setup').innerHTML = html;
+    $('wc-bulk-setup').hidden = false;
+    $('wc-bulk-settings').hidden = false;
+    paintRule();
+  }
+
+  function paintRule() {
+    document.querySelectorAll('#wc-rule .opt-card').forEach(function (c) { c.classList.toggle('on', c.querySelector('input').checked); });
+    var gl = bulk.mode === 'grossless';
+    var set = gl ? bulk.excl : bulk.incl;
+    $('wc-heads-title').textContent = gl ? 'Heads left out of PF wage' : 'Heads counted as PF wage';
+    $('wc-heads').innerHTML = bulk.heads.map(function (h) {
+      var on = set.indexOf(h.name) > -1;
+      return '<button type="button" class="wc-headchip' + (on ? ' on' : '') + (gl ? ' out' : '') + '" aria-pressed="' + on + '" data-head="' + esc(h.name) + '">' + (on ? (gl ? '− ' : '✓ ') : '+ ') + esc(h.name) + '</button>';
+    }).join('');
+    $('wc-rule-note').textContent = gl
+      ? 'PF wage = Gross' + (bulk.map.gross > -1 ? '' : ' (worked out as the sum of all heads, since no Gross column is chosen)') + ' minus the heads ticked here.'
+      : 'PF wage = the sum of the ticked heads. Clients differ here: some use Basic + DA only, others include allowances paid uniformly to every employee. Pick the option that matches the client’s practice.';
+  }
+
+  function readBulkRecords() {
+    var m = bulk.map, warnCols = {};
+    var recs = bulk.rows.map(function (r, n) {
+      var heads = {};
+      bulk.heads.forEach(function (h) {
+        var raw = r[h.idx], v = toNum(raw);
+        if (isNaN(v)) { v = 0; if (!isBlank(raw)) warnCols[h.name] = true; }
+        heads[h.name] = v;
+      });
+      var gross = null;
+      if (m.gross > -1 && !isBlank(r[m.gross])) { gross = toNum(r[m.gross]); if (isNaN(gross)) gross = null; }
+      var days = function (i) { if (i < 0 || isBlank(r[i])) return null; var d = toNum(r[i]); return isNaN(d) ? null : d; };
+      return {
+        code: m.code > -1 ? String(r[m.code] === undefined ? '' : r[m.code]).trim() : String(n + 1),
+        name: m.name > -1 ? String(r[m.name] === undefined ? '' : r[m.name]).trim() : '',
+        gross: gross, heads: heads, d1: days(m.d1), d2: days(m.d2),
+        member: m.member > -1 ? yesNo(r[m.member]) : true,
+        pension: m.pension > -1 ? yesNo(r[m.pension]) : true
+      };
+    });
+    return { recs: recs, warnCols: Object.keys(warnCols) };
+  }
+
+  function calcBulk() {
+    var out = $('wc-bulk-result');
+    if (!bulk) {
+      out.innerHTML = '<div class="calc-alert"><span class="calc-alert-icon">⚠</span><div><h5>Add a salary file first</h5><p>Upload a file or paste rows from Excel, then calculate.</p></div></div>';
+      $('wc-bulk-tools').hidden = true;
+      return;
+    }
+    if (bulk.mode !== 'grossless' && !bulk.incl.length) {
+      out.innerHTML = '<div class="calc-alert"><span class="calc-alert-icon">⚠</span><div><h5>Tick at least one head</h5><p>PF wage is the sum of the heads you tick, so choose at least one.</p></div></div>';
+      $('wc-bulk-tools').hidden = true;
+      return;
+    }
+    var cfg = {
+      period: document.querySelector('input[name="wc-bulk-period"]:checked').value,
+      pfBasis: $('wc-bulk-basis').value,
+      mode: bulk.mode === 'grossless' ? 'grossless' : 'sum', incl: bulk.incl, excl: bulk.excl,
+      overheads: $('wc-bulk-overheads').checked, warn50: $('wc-bulk-warn50').checked
+    };
+    var data = readBulkRecords();
+    var res = bulkCompute(data.recs, cfg);
+    bulkResult = { res: res, cfg: cfg };
+    out.innerHTML = renderBulk(res, cfg, data.warnCols);
+    $('wc-bulk-tools').hidden = false;
+    track('epf-wage-ceiling-bulk');
+  }
+
+  function renderBulk(res, cfg, warnCols) {
+    var t = res.totals, c = res.counts;
+    var per = { old: 'Before 17 September 2026 (₹15,000 ceiling)', split: 'September 2026 (changeover month)', 'new': 'October 2026 onwards (₹25,000 ceiling)' }[cfg.period];
+    var dash = function (r, v) { return r.skipped ? '-' : fmt(v); };
+    var body = res.rows.slice(0, BULK_SHOW_ROWS).map(function (r) {
+      return '<tr class="' + (r.skipped ? 'is-skipped' : '') + '"><td>' + esc(r.code) + '</td><td>' + esc(r.name) + '</td><td>' + fmt(r.gross) + '</td><td>' + fmt(r.pfWage) + '</td>' +
+        '<td>' + dash(r, r.contribWage) + '</td><td>' + dash(r, r.employee) + '</td><td>' + dash(r, r.employer12) + '</td><td>' + dash(r, r.eps) + '</td><td>' + dash(r, r.epf) + '</td>' +
+        (cfg.overheads ? '<td>' + dash(r, r.edli + r.admin) + '</td>' : '') +
+        '<td>' + dash(r, r.total) + '</td><td class="wc-flagcell">' + r.flags.map(esc).join('<br>') + '</td></tr>';
+    }).join('');
+    var warn = '';
+    if (warnCols.length) warn += '<li>Some cells in ' + warnCols.map(esc).join(', ') + ' were not numbers and were counted as zero.</li>';
+    var flagged = res.rows.filter(function (r) { return r.flags.length; }).length;
+    return '' +
+      '<div class="wc-hero-num"><span>Total for ' + c.processed.toLocaleString('en-IN') + ' employee' + (c.processed === 1 ? '' : 's') + ', employee plus employer' + (cfg.overheads ? ' plus overheads' : '') + '</span><strong>' + fmt(t.total) + '</strong><em>' + esc(per) + '</em></div>' +
+      '<div class="epf-sumgrid">' +
+      '<div class="epf-sumcard"><span>Employee PF</span><strong>' + fmt(t.employee) + '</strong></div>' +
+      '<div class="epf-sumcard"><span>Employer 12%</span><strong>' + fmt(t.employer12) + '</strong></div>' +
+      '<div class="epf-sumcard"><span>of which pension (EPS)</span><strong>' + fmt(t.eps) + '</strong></div>' +
+      '<div class="epf-sumcard"><span>of which provident fund (EPF)</span><strong>' + fmt(t.epf) + '</strong></div>' +
+      (cfg.overheads ? '<div class="epf-sumcard"><span>EDLI</span><strong>' + fmt(t.edli) + '</strong></div><div class="epf-sumcard"><span>Admin charges</span><strong>' + fmt(t.admin) + '</strong></div>' : '') +
+      '</div>' +
+      '<div class="epf-line"><span>Employees processed / skipped</span><strong>' + c.processed.toLocaleString('en-IN') + ' / ' + c.skipped.toLocaleString('en-IN') + '</strong></div>' +
+      '<div class="epf-line"><span>Rows with a note or warning</span><strong>' + flagged.toLocaleString('en-IN') + '</strong></div>' +
+      '<div class="epf-line"><span>Total PF wage, before the ceiling</span><strong>' + fmt(t.pfWage) + '</strong></div>' +
+      '<div class="epf-line"><span>Total contribution wage, after the ceiling</span><strong>' + fmt(t.contribWage) + '</strong></div>' +
+      '<div class="epf-group-head">Employee by employee' + (res.rows.length > BULK_SHOW_ROWS ? ' (first ' + BULK_SHOW_ROWS + ' of ' + res.rows.length.toLocaleString('en-IN') + ', download for all)' : '') + '</div>' +
+      '<div class="wc-scroll"><table class="wc-table wc-bulk-table"><thead><tr><th>Code</th><th>Name</th><th>Gross</th><th>PF wage</th><th>After ceiling</th><th>Employee</th><th>Employer 12%</th><th>EPS</th><th>EPF</th>' + (cfg.overheads ? '<th>EDLI + admin</th>' : '') + '<th>Total</th><th>Notes</th></tr></thead><tbody>' + body + '</tbody></table></div>' +
+      '<ul class="wc-notes">' + warn +
+      '<li>Each employee is rounded on their own and the totals are the sum of those rows, as in a contribution return.</li>' +
+      (cfg.period === 'split' ? '<li>The days columns in your file set each employee’s days in 1 to 16 and 17 to 30 September. Blank means the full period. The changeover method is the same straight-line approach as the single-employee calculator, so confirm it against EPFO guidance.</li>' : '') +
+      '<li>The tool calculates for every row in your file. It does not decide who must be enrolled or who is an excluded employee. Use the PF Member column to leave people out.</li></ul>';
+  }
+
+  function csvCell(v) {
+    var s = String(v === null || v === undefined ? '' : v);
+    if (/^[=+\-@\t\r]/.test(s) && isNaN(Number(s))) s = "'" + s;   /* stops spreadsheet formula injection */
+    return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  function downloadCsv(name, rows) {
+    var text = '﻿' + rows.map(function (r) { return r.map(csvCell).join(','); }).join('\r\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }));
+    a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+  function downloadTemplate() {
+    downloadCsv('leap-epf-salary-template.csv', [TEMPLATE_HEADERS].concat(TEMPLATE_ROWS));
+    track('epf-wage-ceiling-bulk', 'template_download');
+  }
+  function downloadBulk() {
+    if (!bulkResult) return;
+    var oh = bulkResult.cfg.overheads, t = bulkResult.res.totals;
+    var head = ['Emp Code', 'Name', 'Gross', 'PF wage', 'Contribution wage after ceiling', 'Employee PF', 'Employer 12%', 'Employer EPS', 'Employer EPF'];
+    if (oh) head.push('EDLI', 'Admin charges');
+    head.push('Total', 'Notes');
+    var rows = bulkResult.res.rows.map(function (r) {
+      var v = function (x) { return r.skipped ? '' : x; };
+      var a = [r.code, r.name, r.gross, r.pfWage, v(r.contribWage), v(r.employee), v(r.employer12), v(r.eps), v(r.epf)];
+      if (oh) a.push(v(r.edli), v(r.admin));
+      a.push(v(r.total), r.flags.join(' | '));
+      return a;
+    });
+    var tot = ['TOTAL', '', '', t.pfWage, t.contribWage, t.employee, t.employer12, t.eps, t.epf];
+    if (oh) tot.push(t.edli, t.admin);
+    tot.push(t.total, '');
+    downloadCsv('leap-epf-contribution-' + bulkResult.cfg.period + '.csv', [head].concat(rows, [tot]));
+    track('epf-wage-ceiling-bulk', 'download_results');
+  }
+
+  function handleFile(file) {
+    if (!file) return;
+    if (file.size > 15 * 1024 * 1024) { bulkMessage('<p style="margin:0">That file is over 15 MB. Remove unused columns or split it, then try again.</p>', true); return; }
+    var ext = (file.name.split('.').pop() || '').toLowerCase();
+    var reader = new FileReader();
+    if (ext === 'xlsx' || ext === 'xls' || ext === 'xlsm') {
+      bulkMessage('<p style="margin:0">Reading ' + esc(file.name) + '...</p>', false);
+      reader.onload = function () {
+        ensureXlsx().then(function (X) {
+          var wb = X.read(reader.result, { type: 'array' });
+          var ws = wb.Sheets[wb.SheetNames[0]];
+          loadBulkMatrix(X.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' }), file.name);
+        }).catch(function () {
+          bulkMessage('<p style="margin:0">Could not read that Excel file here. Save it as CSV and upload the CSV instead.</p>', true);
+        });
+      };
+      reader.readAsArrayBuffer(file);
+    } else if (ext === 'csv' || ext === 'tsv' || ext === 'txt') {
+      reader.onload = function () { loadBulkMatrix(parseDelimited(String(reader.result)), file.name); };
+      reader.readAsText(file);
+    } else {
+      bulkMessage('<p style="margin:0">Please upload an Excel (.xlsx, .xls) or CSV file.</p>', true);
+    }
+  }
+
+  function loadPasted() {
+    var text = $('wc-bulk-paste').value;
+    if (!text.trim()) { bulkMessage('<p style="margin:0">Paste your rows first, including the header row.</p>', true); return; }
+    loadBulkMatrix(parseDelimited(text), 'Pasted data');
+  }
+
+  function resetBulk() {
+    bulk = null; bulkResult = null;
+    $('wc-bulk-file').value = ''; $('wc-bulk-paste').value = '';
+    $('wc-bulk-setup').innerHTML = ''; $('wc-bulk-setup').hidden = true;
+    $('wc-bulk-settings').hidden = true; $('wc-bulk-tools').hidden = true;
+    $('wc-bulk-msg').innerHTML = '';
+    $('wc-bulk-result').innerHTML = PLACEHOLDER;
+  }
+
+  function clearBulkResult() { $('wc-bulk-result').innerHTML = PLACEHOLDER; $('wc-bulk-tools').hidden = true; }
+
+  function initBulk() {
+    if (!$('wc-bulk-file')) return;
+    $('wc-bulk-file').addEventListener('change', function (e) { handleFile(e.target.files[0]); });
+    var zone = $('wc-drop');
+    ['dragenter', 'dragover'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('over'); }); });
+    ['dragleave', 'drop'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove('over'); }); });
+    zone.addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+
+    var setup = $('wc-bulk-setup');
+    setup.addEventListener('change', function (e) {
+      var t = e.target;
+      if (t.matches('#wc-rule input')) {
+        var prev = bulk.mode; bulk.mode = t.value;
+        if (bulk.mode === 'basic' && prev !== 'basic') {
+          bulk.incl = bulk.heads.filter(function (h) { return isBasicHead(h.name); }).map(function (h) { return h.name; });
+        }
+        paintRule();
+      } else if (t.matches('select[data-key]')) {
+        bulk.map[t.getAttribute('data-key')] = parseInt(t.value, 10);
+        paintRule();
+      }
+      clearBulkResult();
+    });
+    setup.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.wc-headchip') : null;
+      if (!b) return;
+      var name = b.getAttribute('data-head');
+      var set = bulk.mode === 'grossless' ? bulk.excl : bulk.incl;
+      var i = set.indexOf(name);
+      if (i > -1) set.splice(i, 1); else set.push(name);
+      if (bulk.mode === 'basic') bulk.mode = 'sum';
+      document.querySelector('#wc-rule input[value="' + bulk.mode + '"]').checked = true;
+      paintRule();
+      clearBulkResult();
+    });
+    document.querySelectorAll('input[name="wc-bulk-period"]').forEach(function (r) {
+      r.addEventListener('change', function () {
+        document.querySelectorAll('#wc-bulk-periods .opt-card').forEach(function (c) { c.classList.toggle('on', c.querySelector('input').checked); });
+        clearBulkResult();
+      });
+    });
+  }
+
   /* ---------- Share ---------- */
   function shareUrl() {
     var c = document.querySelector('link[rel="canonical"]');
@@ -633,13 +1094,16 @@
     renderSegments();
     buildTeamRows();
     initChecklist();
+    initBulk();
   }
 
   root.WageCeilingUI = {
     calcContribution: calcContribution, resetContribution: resetContribution,
     calcCoverage: calcCoverage, resetCoverage: resetCoverage, useWages: useWages,
     calcTeam: calcTeam, resetTeam: resetTeam, addTeamRow: addTeamRow,
-    printTool: printTool, resetChecklist: resetChecklist, share: share
+    printTool: printTool, resetChecklist: resetChecklist, share: share,
+    calcBulk: calcBulk, resetBulk: resetBulk, loadPasted: loadPasted,
+    downloadTemplate: downloadTemplate, downloadBulk: downloadBulk
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
