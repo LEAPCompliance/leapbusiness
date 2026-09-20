@@ -61,6 +61,7 @@ function renderNavbar(activePage) {
               <div class="dropdown-heading">Payroll Calculators</div>
               <a href="/calculators/ctc/">CTC ↔ Take-Home</a>
               <a href="/calculators/epf/">EPF Split</a>
+              <a href="/calculators/epf-wage-ceiling/">EPF Wage Ceiling</a>
               <a href="/calculators/esic/">ESIC Split</a>
               <a href="/calculators/professional-tax/">Professional Tax</a>
               <div class="dropdown-divider"></div>
@@ -134,6 +135,7 @@ function renderNavbar(activePage) {
           <div class="mobile-accordion-heading">Payroll Calculators</div>
           <a href="/calculators/ctc/">CTC ↔ Take-Home</a>
           <a href="/calculators/epf/">EPF Split</a>
+          <a href="/calculators/epf-wage-ceiling/">EPF Wage Ceiling</a>
           <a href="/calculators/esic/">ESIC Split</a>
           <a href="/calculators/professional-tax/">Professional Tax</a>
           <div class="mobile-accordion-heading">Statutory Payouts</div>
