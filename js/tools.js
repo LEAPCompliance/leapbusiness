@@ -203,6 +203,18 @@ function epfPaintIW() {
   restrictBox.disabled = iwBox.checked;
 }
 
+/* The period picker sets the ceiling; hand-editing the ceiling flips the picker to Custom. */
+const EPF_CEILINGS = { 'new': 25000, 'old': 15000 };
+function epfOnPeriod() {
+  const p = document.getElementById('epf-period').value;
+  if (EPF_CEILINGS[p]) document.getElementById('epf-ceiling').value = EPF_CEILINGS[p];
+}
+function epfOnCeilingEdit() {
+  const c = parseFloat(document.getElementById('epf-ceiling').value) || 0;
+  const sel = document.getElementById('epf-period');
+  sel.value = c === EPF_CEILINGS['new'] ? 'new' : c === EPF_CEILINGS['old'] ? 'old' : 'custom';
+}
+
 function calcEpfSplit() {
   if (!document.getElementById('epf-wages')) return;
   const wages   = parseFloat(document.getElementById('epf-wages').value) || 0;
@@ -269,15 +281,22 @@ function calcEpfSplit() {
         EPF rate: Section 6, EPF &amp; MP Act, 1952.<br>
         EPS 8.33%: Para 3, Employees&rsquo; Pension Scheme, 1995.<br>
         EDLI 0.5%: Para 8A, EDLI Scheme, 1976.<br>
-        Wage ceiling ₹15,000: Notification GSR 609(E) dated 22.08.2014.
+        ${epfCeilingSource(ceiling)}
       </p>
     </div>
   `;
 }
 
+function epfCeilingSource(ceiling) {
+  if (ceiling === 25000) return 'Wage ceiling \u20b925,000: Gazette S.O. 5109(E) dated 17.09.2026 (Chapter III, Code on Social Security, 2020), superseding S.O. 2702(E) dated 29.05.2026.';
+  if (ceiling === 15000) return 'Wage ceiling \u20b915,000: Notification GSR 609(E) dated 22.08.2014, the ceiling before 17.09.2026.';
+  return 'Wage ceiling: the custom amount you entered. The notified ceiling is \u20b925,000 from 17.09.2026 (Gazette S.O. 5109(E)) and was \u20b915,000 before.';
+}
+
 function resetEpfSplit() {
   document.getElementById('epf-wages').value   = 25000;
-  document.getElementById('epf-ceiling').value = 15000;
+  document.getElementById('epf-ceiling').value = 25000;
+  document.getElementById('epf-period').value  = 'new';
   document.getElementById('epf-restrict').checked = true;
   document.getElementById('epf-iw').checked       = false;
   epfPaintIW();

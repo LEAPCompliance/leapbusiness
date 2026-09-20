@@ -11,10 +11,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EPF Calculator India | PF Calculator, Employee &amp; Employer Split | LEAP</title>
-  <meta name="description" content="Free EPF calculator for India. Split monthly PF contribution into employee share, employer EPF, EPS and EDLI, with ceiling and international worker options. By LEAP Business Solutions." />
+  <meta name="description" content="Free EPF calculator for India. Split monthly PF contribution into employee share, employer EPF, EPS and EDLI, updated for the new ₹25,000 wage ceiling effective 17 September 2026, with ceiling and international worker options. By LEAP Business Solutions." />
   <meta name="keywords" content="epf calculator, pf calculator, provident fund calculator, epf employer contribution calculator, eps calculator, edli calculator" />
   <meta property="og:title" content="EPF Calculator India | LEAP" />
-  <meta property="og:description" content="Split monthly PF into employee share, employer EPF, EPS and EDLI. Ceiling and international worker options built in. Free and instant." />
+  <meta property="og:description" content="Split monthly PF into employee share, employer EPF, EPS and EDLI at the new ₹25,000 wage ceiling. Ceiling and international worker options built in. Free and instant." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.leapbusiness.in/calculators/epf/" />
   <link rel="canonical" href="https://www.leapbusiness.in/calculators/epf/" />
@@ -38,7 +38,7 @@
     <div class="page-hero-content">
       <div class="breadcrumb"><a href="/index.html">Home</a> <span>›</span> <a href="/tools/">Tools</a> <span>›</span> <span>EPF Calculator</span></div>
       <h1 class="page-hero-title">EPF Calculator</h1>
-      <p class="page-hero-desc">Free, instant split of monthly EPF into employee, employer EPS/EPF, EDLI and admin charges.</p>
+      <p class="page-hero-desc">Free, instant split of monthly EPF into employee, employer EPS/EPF, EDLI and admin charges, updated for the ₹25,000 wage ceiling effective 17 September 2026.</p>
     </div>
   </div>
 </section>
@@ -46,7 +46,7 @@
 <!-- Disclaimer -->
 <section style="background:var(--secondary-faint);border-bottom:1px solid var(--border);padding:16px 0">
   <div class="container" style="font-size:14px;color:var(--text-secondary);text-align:center">
-    ⚠️ This calculator gives an indicative estimate for general awareness, based on standard statutory rates as of July 2026. It is not a substitute for professional advice; <a href="/contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> for figures specific to your business.
+    ⚠️ This calculator gives an indicative estimate for general awareness, based on the statutory rates and the wage ceiling notified up to 17 September 2026. It is not a substitute for professional advice; <a href="/contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> for figures specific to your business.
   </div>
 </section>
 
@@ -77,9 +77,18 @@
         </div>
 
         <div class="form-group">
-          <label>EPF wage ceiling (₹/month)</label>
-          <input type="number" id="epf-ceiling" value="15000" min="0" />
-          <p class="calc-hint">Editable to reflect future EPFO notifications (currently ₹15,000).</p>
+          <label for="epf-period">Wage period</label>
+          <select id="epf-period" onchange="epfOnPeriod()">
+            <option value="new" selected>From 17 September 2026 (₹25,000 ceiling)</option>
+            <option value="old">Before 17 September 2026 (₹15,000 ceiling)</option>
+            <option value="custom">Custom ceiling</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="epf-ceiling">EPF wage ceiling (₹/month)</label>
+          <input type="number" id="epf-ceiling" value="25000" min="0" oninput="epfOnCeilingEdit()" />
+          <p class="calc-hint">₹25,000 per month from 17 September 2026 (Gazette S.O. 5109(E)); ₹15,000 before that. Editable if EPFO notifies a further change. For September 2026, which runs on both ceilings, use the <a href="/calculators/epf-wage-ceiling/" style="color:var(--primary);font-weight:600">EPF Wage Ceiling 2026 - Impact Calculator</a>.</p>
         </div>
 
         <div class="calc-switch-row">
@@ -107,9 +116,9 @@
         <div class="calc-notes">
           <h4>Method and assumptions</h4>
           <ul>
-            <li>Employer&rsquo;s 12% is split as EPS 8.33% (on wages capped at ₹15,000 for domestic workers) and EPF 3.67% (balance). Where the employer voluntarily contributes on PF wages above the ceiling, the excess flows entirely into EPF.</li>
+            <li>Employer&rsquo;s 12% is split as EPS 8.33% (on wages capped at the ceiling for domestic workers: ₹25,000 from 17 September 2026, ₹15,000 before) and EPF 3.67% (balance). Where the employer voluntarily contributes on PF wages above the ceiling, the excess flows entirely into EPF.</li>
             <li>International workers&rsquo; EPS contribution is computed on full gross wages without the ceiling, per the EPFO circular dated 01.10.2008.</li>
-            <li>EDLI is always capped at ₹15,000. EPF admin charges are shown at a straight 0.5% of EPF wages; the ₹500 monthly minimum per establishment (₹75 for non-functional establishments) is taken as already met at establishment level.</li>
+            <li>EDLI is worked on wages capped at the ceiling, so it is 0.5% of up to ₹25,000 from 17 September 2026. EPF admin charges are shown at a straight 0.5% of EPF wages; the ₹500 monthly minimum per establishment (₹75 for non-functional establishments) is taken as already met at establishment level.</li>
           </ul>
         </div>
       </div>
@@ -155,7 +164,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=13"></script>
 <script src="/js/main.js?v=11"></script>
-<script src="/js/tools.js?v=18"></script>
+<script src="/js/tools.js?v=19"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
