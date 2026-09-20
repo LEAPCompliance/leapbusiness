@@ -32,7 +32,7 @@ section[id^="wc-"], div[id^="wc-sec"] { scroll-margin-top: 90px; }
 .wc-tl-scale span:nth-child(2) { border-left: 2px dashed var(--secondary); padding-left: 8px; }
 
 /* ---------- Tool panels ---------- */
-#wc-contribution .calc-grid > *, #wc-sec-coverage .calc-grid > *, .wc-team-grid > * { min-width: 0; }
+#wc-contribution .calc-grid > * { min-width: 0; }
 .wc-tool { margin-bottom: 8px; }
 .wc-tool-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 22px; }
 .wc-num { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 15px; }
@@ -72,9 +72,6 @@ section[id^="wc-"], div[id^="wc-sec"] { scroll-margin-top: 90px; }
 .wc-table tfoot td { font-weight: 700; color: var(--primary); border-bottom: none; }
 .wc-table td input, .wc-table td select { width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-primary); background: var(--white); }
 .wc-table td input:focus, .wc-table td select:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(50,153,194,.11); }
-#wc-team-input .wc-table { min-width: 620px; }
-.wc-table .row-del { background: none; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; line-height: 1; padding: 4px 6px; }
-.wc-table .row-del:hover { color: #c0392b; }
 
 .wc-split { display: flex; height: 14px; border-radius: 7px; overflow: hidden; margin: 12px 0 8px; background: var(--border); }
 .wc-split i.eps, .wc-legend i.eps { background: var(--primary); }
@@ -98,29 +95,9 @@ section[id^="wc-"], div[id^="wc-sec"] { scroll-margin-top: 90px; }
 .wc-notes li { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 8px; }
 .wc-notes li:last-child { margin-bottom: 0; }
 
-.wc-status { border-radius: var(--radius); padding: 18px 20px; border: 1px solid var(--border); margin-bottom: 4px; }
-.wc-status p { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.65; color: var(--text-primary); margin: 8px 0 0; }
-.wc-status-tag { display: inline-block; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-radius: 20px; padding: 4px 12px; }
-.wc-status.is-a { background: #f3f6f9; }
-.wc-status.is-a .wc-status-tag { background: #dfe6ed; color: #3d4f61; }
-.wc-status.is-b { background: #eaf6fb; border-color: rgba(50,153,194,.45); }
-.wc-status.is-b .wc-status-tag { background: var(--secondary); color: var(--white); }
-.wc-status.is-c { background: #fbf6e9; border-color: rgba(176,128,20,.35); }
-.wc-status.is-c .wc-status-tag { background: #b08014; color: var(--white); }
 .wc-callout { margin-top: 16px; padding: 14px 16px; border-radius: var(--radius); background: var(--secondary-faint); font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.65; color: var(--text-secondary); }
 .wc-callout a { color: var(--primary); font-weight: 600; }
-.wc-use-btn { margin-top: 16px; width: 100%; justify-content: center; }
 
-.wc-bucket { margin-bottom: 22px; }
-.wc-bucket h4 { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--primary); margin-bottom: 2px; }
-.wc-worst { background: #fbf6e9; border: 1px solid rgba(176,128,20,.35); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 8px; }
-.wc-worst span { display: block; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
-.wc-worst strong { font-family: 'Inter', sans-serif; font-size: 24px; color: var(--primary); }
-.wc-worst em { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; }
-.wc-team-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; }
-.wc-team-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: start; }
-@media (max-width: 960px) { .wc-team-grid { grid-template-columns: 1fr; gap: 28px; } }
-.wc-add-row { margin-top: 10px; }
 
 /* ---------- Print bar ---------- */
 .wc-print-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--border); }
@@ -170,7 +147,6 @@ li.done .wc-check span { color: var(--text-secondary); text-decoration: line-thr
   .wc-hero-num strong { font-size: 30px; }
   .wc-tl-old, .wc-tl-new { font-size: 11.5px; }
   .wc-tool-head { gap: 10px; }
-  .wc-team-card { padding: 20px 16px; }
   .wc-cmp-bar { grid-template-columns: 30px 1fr 66px; }
 }
 
@@ -192,10 +168,9 @@ li.done .wc-check span { color: var(--text-secondary); text-decoration: line-thr
   body[class*="wc-printing-"] .wc-print-meta { font-family: 'Inter', sans-serif; font-size: 11px; color: #555; margin: 0; }
 
   /* Show only the panel being printed, and only its result column */
-  body.wc-printing-contribution #wc-sec-bulk, body.wc-printing-contribution #wc-sec-coverage, body.wc-printing-contribution #wc-sec-team,
-  body.wc-printing-team #wc-sec-contribution, body.wc-printing-team #wc-sec-bulk, body.wc-printing-team #wc-sec-coverage { display: none !important; }
-  body.wc-printing-contribution #wc-contribution-input, body.wc-printing-team #wc-team-input { display: none !important; }
-  body.wc-printing-contribution #wc-contribution .calc-grid, body.wc-printing-team .wc-team-grid { display: block; }
+  body.wc-printing-contribution #wc-sec-bulk { display: none !important; }
+  body.wc-printing-contribution #wc-contribution-input { display: none !important; }
+  body.wc-printing-contribution #wc-contribution .calc-grid { display: block; }
   body[class*="wc-printing-"] .wc-print-bar, body[class*="wc-printing-"] .wc-tool-head, body[class*="wc-printing-"] .wc-jump { display: none !important; }
   body[class*="wc-printing-"] .section-pad { padding: 0 !important; }
   body[class*="wc-printing-"] .wc-hero-num { background: none; color: var(--primary); border: 2px solid var(--primary); }

@@ -89,80 +89,6 @@
     ];
   }
 
-  /* Coverage band by statutory PF wage. This classifies the wage only; it does not
-     decide enrolment, which depends on membership and excluded-employee rules. */
-  function coverageBand(wages) {
-    if (wages <= OLD_CEILING) return 'within-old';
-    if (wages <= NEW_CEILING) return 'newly-within';
-    return 'above';
-  }
-
-  /* Monthly change for an existing member contributing on the ceiling-capped wage. */
-  function memberDelta(wages) {
-    var oldBase = Math.min(wages, OLD_CEILING);
-    var newBase = Math.min(wages, NEW_CEILING);
-    var ee = pct(newBase, 12, 100) - pct(oldBase, 12, 100);
-    return { oldBase: oldBase, newBase: newBase, employee: ee, employer: ee };
-  }
-
-  /* Cost of one employee for one month at a given PF base (ceiling-capped). */
-  function perHead(pfBase, includeOverheads) {
-    var ee = pct(pfBase, 12, 100);
-    var ov = includeOverheads ? pct(pfBase, 5, 1000) + pct(pfBase, 5, 1000) : 0;
-    return { employee: ee, employer: ee + ov, ov: ov };
-  }
-
-  /* rows: [{ label, wage, count, status: 'member' | 'new' }]
-     'member' = already in PF, contributing on the ceiling-capped wage.
-     'new'    = not in PF today; what-if the employee were enrolled at the new ceiling. */
-  function teamImpact(rows, includeOverheads) {
-    var out = { rows: [], member: emptyBucket(), fresh: emptyBucket() };
-
-    rows.forEach(function (r) {
-      var w = r.wage, n = r.count;
-      var oldBase = Math.min(w, OLD_CEILING), newBase = Math.min(w, NEW_CEILING);
-      var isNew = r.status === 'new';
-
-      var was   = isNew ? { employee: 0, employer: 0 } : perHead(oldBase, includeOverheads);
-      var now   = perHead(newBase, includeOverheads);
-
-      /* September: 16 days at the old ceiling then 14 at the new. A person not in PF
-         today would only start from 17 September in this what-if. */
-      var sepBase = isNew ? rupees(newBase * DAYS_AFTER / MONTH_DAYS)
-                          : rupees(oldBase * DAYS_BEFORE / MONTH_DAYS) + rupees(newBase * DAYS_AFTER / MONTH_DAYS);
-      var sep = perHead(sepBase, includeOverheads);
-
-      var d = {
-        employee: now.employee - was.employee,
-        employer: now.employer - was.employer,
-        sepEmployee: sep.employee - was.employee,
-        sepEmployer: sep.employer - was.employer
-      };
-      var row = { label: r.label, wage: w, count: n, status: r.status, oldBase: oldBase, newBase: newBase,
-                  was: was, now: now, perHead: d, total: {
-                    employee: d.employee * n, employer: d.employer * n,
-                    sepEmployee: d.sepEmployee * n, sepEmployer: d.sepEmployer * n } };
-      out.rows.push(row);
-
-      var b = isNew ? out.fresh : out.member;
-      b.headcount += n;
-      b.employee += row.total.employee;      b.employer += row.total.employer;
-      b.sepEmployee += row.total.sepEmployee; b.sepEmployer += row.total.sepEmployer;
-    });
-
-    [out.member, out.fresh].forEach(function (b) {
-      /* Financial year 2026-27: September split month plus October to March. */
-      b.fyEmployee = b.sepEmployee + 6 * b.employee;
-      b.fyEmployer = b.sepEmployer + 6 * b.employer;
-      b.annualEmployee = 12 * b.employee;
-      b.annualEmployer = 12 * b.employer;
-    });
-    return out;
-  }
-  function emptyBucket() {
-    return { headcount: 0, employee: 0, employer: 0, sepEmployee: 0, sepEmployer: 0 };
-  }
-
   /* ---------------------------------------------------------------
      BULK: one PF calculation per row of a salary file.
      rec = { code, name, gross (number or null), heads: {name: amount},
@@ -251,7 +177,6 @@
     OLD_CEILING: OLD_CEILING, NEW_CEILING: NEW_CEILING,
     DAYS_BEFORE: DAYS_BEFORE, DAYS_AFTER: DAYS_AFTER, MONTH_DAYS: MONTH_DAYS,
     contribute: contribute, fullMonth: fullMonth, septemberSegments: septemberSegments,
-    coverageBand: coverageBand, memberDelta: memberDelta, teamImpact: teamImpact,
     bulkCompute: bulkCompute
   };
 
@@ -465,157 +390,6 @@
     document.querySelectorAll('#wc-period .opt-card').forEach(function (card) {
       card.classList.toggle('on', card.querySelector('input').checked);
     });
-  }
-
-  /* ---------- Tool 2: who is affected ---------- */
-  function calcCoverage() {
-    var out = $('wc-cov-result');
-    var wages = num('wc-cov-wages');
-    var member = $('wc-cov-member').value;
-    if (wages <= 0) {
-      out.innerHTML = '<div class="calc-alert"><span class="calc-alert-icon">⚠</span><div><h5>Enter the PF wages</h5><p>Add the employee\'s statutory PF wages per month, then check.</p></div></div>';
-      return;
-    }
-    var band = coverageBand(wages);
-    var d = memberDelta(wages);
-    var cls, title, lead, points = [];
-
-    if (band === 'within-old') {
-      cls = 'is-a'; title = 'Already within the earlier ceiling';
-      lead = 'PF wages of ' + fmt(wages) + ' were already at or below ' + fmt(OLD_CEILING) + ', so the coverage limit does not move for this employee.';
-      points.push('Contribution continues on actual PF wages. There is no change from the new ceiling.');
-      if (member === 'no') points.push('If this employee is not a PF member, that is a separate question. The ceiling change is not the reason, so check it against the EPF Scheme, 2026.');
-    } else if (band === 'newly-within') {
-      cls = 'is-b'; title = 'Newly within the ' + fmt(NEW_CEILING) + ' limit';
-      lead = 'PF wages of ' + fmt(wages) + ' were above the old ' + fmt(OLD_CEILING) + ' ceiling and sit within the new ' + fmt(NEW_CEILING) + ' ceiling from 17 September 2026.';
-      if (member === 'yes') {
-        points.push('Already a member: the default contribution base moves from ' + fmt(d.oldBase) + ' to ' + fmt(d.newBase) + '. Estimated change per month is ' + signed(d.employee) + ' for the employee and ' + signed(d.employer) + ' for the employer, before overheads.');
-      } else if (member === 'no') {
-        points.push('Not a member today: being newly within the limit does not mean automatic enrolment. Check the excluded-employee conditions, the date of joining and any transitional rule in the EPF Scheme, 2026 before you enrol anyone or start deductions.');
-      } else {
-        points.push('Confirm the employee\'s membership status first, using EPFO records. Then apply the matching line: a member\'s base rises with the ceiling, while a non-member needs an excluded-employee review before any enrolment.');
-      }
-      points.push('Do not recover arrears or begin deductions for previously excluded employees until the effective-date rules are confirmed.');
-    } else {
-      cls = 'is-c'; title = 'Above the new ceiling';
-      lead = 'PF wages of ' + fmt(wages) + ' are above ' + fmt(NEW_CEILING) + '.';
-      if (member === 'yes') {
-        points.push('Already a member: the default contribution base is capped at ' + fmt(NEW_CEILING) + ', up from ' + fmt(OLD_CEILING) + '. That is at most ' + signed(d.employee) + ' a month for the employee and ' + signed(d.employer) + ' for the employer, before overheads. Higher only if contributions are made on actual wages under a permitted arrangement.');
-      } else {
-        points.push('Earning above ' + fmt(NEW_CEILING) + ' does not, by itself, put an employee outside EPF. Membership depends on the employee\'s history and the excluded-employee conditions, so review it individually.');
-      }
-    }
-
-    out.innerHTML =
-      '<div class="wc-status ' + cls + '"><span class="wc-status-tag">' + esc(title) + '</span><p>' + esc(lead) + '</p></div>' +
-      '<ul class="wc-notes">' + points.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' +
-      '<div class="wc-callout"><strong>Use PF wages, not gross pay.</strong> Statutory wages under section 2(88) of the Code on Social Security include basic pay, dearness allowance and retaining allowance, with listed components subject to the 50% rule. <a href="/calculators/allowance-heatmap/">Test your salary structure</a> to see what counts.</div>' +
-      '<button type="button" class="btn btn-outline-dark wc-use-btn" onclick="WageCeilingUI.useWages(' + Math.round(wages) + ')">Use ' + fmt(wages) + ' in the contribution calculator</button>';
-    track('epf-wage-ceiling-coverage');
-  }
-
-  function resetCoverage() {
-    $('wc-cov-wages').value = 20000;
-    $('wc-cov-member').value = 'unsure';
-    $('wc-cov-result').innerHTML = PLACEHOLDER;
-  }
-
-  function useWages(w) {
-    $('wc-wages').value = w;
-    var el = $('wc-contribution');
-    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    var btn = document.querySelector('#wc-contribution .btn-primary');
-    if (btn) btn.focus({ preventScroll: true });
-  }
-
-  /* ---------- Tool 3: team budget impact ---------- */
-  var TEAM_SAMPLE = [
-    { label: 'Group A', wage: 18000, count: 20, status: 'member' },
-    { label: 'Group B', wage: 24000, count: 8,  status: 'member' },
-    { label: 'Group C', wage: 21000, count: 6,  status: 'new' }
-  ];
-
-  function teamRowHtml(r) {
-    return '<tr>' +
-      '<td><input type="text" class="wc-t-label" value="' + esc(r.label) + '" placeholder="Group name" aria-label="Group name" /></td>' +
-      '<td><input type="number" class="wc-t-wage" value="' + r.wage + '" min="0" inputmode="numeric" aria-label="Statutory PF wage" /></td>' +
-      '<td><input type="number" class="wc-t-count" value="' + r.count + '" min="0" inputmode="numeric" aria-label="Headcount" /></td>' +
-      '<td><select class="wc-t-status" aria-label="PF status"><option value="member"' + (r.status === 'member' ? ' selected' : '') + '>Existing PF member</option><option value="new"' + (r.status === 'new' ? ' selected' : '') + '>Not in PF today (what-if)</option></select></td>' +
-      '<td><button type="button" class="row-del" title="Remove group" onclick="this.closest(\'tr\').remove()">×</button></td></tr>';
-  }
-  function buildTeamRows() { $('wc-team-rows').innerHTML = TEAM_SAMPLE.map(teamRowHtml).join(''); }
-  function addTeamRow() { $('wc-team-rows').insertAdjacentHTML('beforeend', teamRowHtml({ label: '', wage: 0, count: 0, status: 'member' })); }
-
-  function readTeam() {
-    return Array.prototype.map.call($('wc-team-rows').querySelectorAll('tr'), function (tr) {
-      return {
-        label: tr.querySelector('.wc-t-label').value.trim() || 'Group',
-        wage: Math.max(0, parseFloat(tr.querySelector('.wc-t-wage').value) || 0),
-        count: Math.max(0, Math.round(parseFloat(tr.querySelector('.wc-t-count').value) || 0)),
-        status: tr.querySelector('.wc-t-status').value
-      };
-    }).filter(function (r) { return r.wage > 0 && r.count > 0; });
-  }
-
-  function calcTeam() {
-    var out = $('wc-team-result');
-    var rows = readTeam();
-    if (!rows.length) {
-      out.innerHTML = '<div class="calc-alert"><span class="calc-alert-icon">⚠</span><div><h5>Add at least one group</h5><p>Each group needs a PF wage and a headcount above zero.</p></div></div>';
-      $('wc-print-bar-3').hidden = true;
-      return;
-    }
-    var ov = $('wc-team-overheads').checked;
-    var t = teamImpact(rows, ov);
-    out.innerHTML = renderTeam(t, ov);
-    $('wc-print-bar-3').hidden = false;
-    track('epf-wage-ceiling-team');
-  }
-
-  function bucketCards(b, heading, sub) {
-    if (!b.headcount) return '';
-    return '<div class="wc-bucket"><h4>' + heading + '</h4><p class="wc-lead">' + sub(b.headcount + ' employee' + (b.headcount === 1 ? '' : 's')) + '</p>' +
-      '<div class="epf-sumgrid">' +
-      '<div class="epf-sumcard"><span>Extra employer cost per month, from October 2026</span><strong>' + fmt(b.employer) + '</strong></div>' +
-      '<div class="epf-sumcard"><span>Extra employee deductions per month</span><strong>' + fmt(b.employee) + '</strong></div>' +
-      '</div>' +
-      '<div class="epf-line"><span>September 2026 (split month, full attendance), employer</span><strong>' + fmt(b.sepEmployer) + '</strong></div>' +
-      '<div class="epf-line"><span>Financial year 2026-27 (September to March), employer</span><strong>' + fmt(b.fyEmployer) + '</strong></div>' +
-      '<div class="epf-line"><span>Twelve months at the new ceiling, employer</span><strong>' + fmt(b.annualEmployer) + '</strong></div>' +
-      '<div class="epf-line"><span>Twelve months at the new ceiling, employees</span><strong>' + fmt(b.annualEmployee) + '</strong></div></div>';
-  }
-
-  function renderTeam(t, ov) {
-    var table = t.rows.map(function (r) {
-      return '<tr><td>' + esc(r.label) + '</td><td>' + fmt(r.wage) + '</td><td>' + r.count + '</td>' +
-        '<td>' + (r.status === 'new' ? 'What-if new' : 'Existing') + '</td>' +
-        '<td>' + fmt(r.oldBase) + ' to ' + fmt(r.newBase) + '</td>' +
-        '<td>' + signed(r.perHead.employer) + '</td><td>' + signed(r.total.employer) + '</td></tr>';
-    }).join('');
-
-    var worst = t.member.employer + t.fresh.employer;
-    var worstFy = t.member.fyEmployer + t.fresh.fyEmployer;
-    var both = t.member.headcount && t.fresh.headcount;
-
-    return '' +
-      '<div class="wc-print-only wc-print-head">' + printHead('Team budget impact') + '</div>' +
-      bucketCards(t.member, 'Existing PF members', function (n) { return 'The higher ceiling applies to ' + n + '.'; }) +
-      bucketCards(t.fresh, 'Possible new enrolments (what-if)', function (n) { return 'The added cost if ' + n + ' turn out to need enrolment.'; }) +
-      (both ? '<div class="wc-worst"><span>Worst case, both groups, employer cost per month</span><strong>' + fmt(worst) + '</strong><em>' + fmt(worstFy) + ' for financial year 2026-27</em></div>' : '') +
-      '<div class="epf-group-head">Group by group</div>' +
-      '<div class="wc-scroll"><table class="wc-table"><thead><tr><th>Group</th><th>PF wage</th><th>Heads</th><th>Status</th><th>Base per head</th><th>Employer per head</th><th>Employer total</th></tr></thead><tbody>' + table + '</tbody></table></div>' +
-      '<ul class="wc-notes">' +
-      '<li>Existing members are assumed to have contributed on the ceiling-capped wage of ' + fmt(OLD_CEILING) + ', so their base rises to the lower of their wage and ' + fmt(NEW_CEILING) + '. Anyone already contributing on actual wages would see less change.</li>' +
-      '<li>The what-if group is a scenario, not a finding. Enrolment depends on excluded-employee status and the rules in the EPF Scheme, 2026.</li>' +
-      '<li>' + (ov ? 'Employer cost includes EDLI and admin charges of 0.5% each.' : 'Employer cost excludes EDLI and admin charges.') + ' September assumes 16 days at the old ceiling and 14 at the new.</li>' +
-      '<li>Part of the added cost may be recovered under the PMVBRY scheme, an incentive of up to ₹3,000 per employee per month on submitting Aadhaar and KYC details, for 2 years (non-manufacturing) or 4 years (manufacturing). It is not netted off here, and eligibility conditions apply.</li></ul>';
-  }
-
-  function resetTeam() {
-    buildTeamRows();
-    $('wc-team-overheads').checked = true;
-    $('wc-team-result').innerHTML = PLACEHOLDER;
-    $('wc-print-bar-3').hidden = true;
   }
 
   /* ---------- Printing ---------- */
@@ -1056,7 +830,7 @@
   function share() {
     var url = shareUrl();
     var title = 'EPF Wage Ceiling 2026 - Impact Calculator | LEAP';
-    var text = 'EPF wage ceiling is now ₹25,000 from 17 September 2026. Free calculator, coverage check and team budget impact by LEAP:';
+    var text = 'EPF wage ceiling is now ₹25,000 from 17 September 2026. Free calculator with bulk salary file upload, by LEAP:';
     track('epf-wage-ceiling', 'share');
     if (navigator.share) {
       navigator.share({ title: title, text: text, url: url }).catch(function () { /* cancelled */ });
@@ -1092,15 +866,12 @@
 
     paintPeriodCards();
     renderSegments();
-    buildTeamRows();
     initChecklist();
     initBulk();
   }
 
   root.WageCeilingUI = {
     calcContribution: calcContribution, resetContribution: resetContribution,
-    calcCoverage: calcCoverage, resetCoverage: resetCoverage, useWages: useWages,
-    calcTeam: calcTeam, resetTeam: resetTeam, addTeamRow: addTeamRow,
     printTool: printTool, resetChecklist: resetChecklist, share: share,
     calcBulk: calcBulk, resetBulk: resetBulk, loadPasted: loadPasted,
     downloadTemplate: downloadTemplate, downloadBulk: downloadBulk
