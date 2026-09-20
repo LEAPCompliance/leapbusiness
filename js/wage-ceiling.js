@@ -1,5 +1,5 @@
 /* ============================================
-   LEAP Business Solutions: EPF wage ceiling toolkit
+   LEAP Business Solutions: EPF wage ceiling impact calculator
    Powers /calculators/epf-wage-ceiling/
 
    Part 1 is a pure calculation engine (no DOM), so it can be tested in Node.
