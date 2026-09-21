@@ -1148,6 +1148,60 @@
     }
   }
 
+  /* ---------- Tool tabs: one panel at a time ---------- */
+  var TAB_PANEL = { contribution: 'wc-sec-contribution', bulk: 'wc-sec-bulk', excel: 'wc-excel' };
+  var TAB_ORDER = ['contribution', 'bulk', 'excel'];
+
+  function showTab(name, opts) {
+    opts = opts || {};
+    if (!TAB_PANEL[name]) return;
+    TAB_ORDER.forEach(function (n) {
+      var on = n === name, t = $('wc-tab-' + n), p = $(TAB_PANEL[n]);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      p.hidden = !on;
+    });
+    if (opts.focus) $('wc-tab-' + name).focus();
+    if (opts.scroll && $('wc-tabs').scrollIntoView) $('wc-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (opts.user) {
+      try { history.replaceState(null, '', '#' + TAB_PANEL[name]); } catch (e) { /* ignore */ }
+      track('epf-wage-ceiling-' + name, 'tab_view');
+    }
+  }
+
+  function tabFromHash() {
+    var id = (location.hash || '').replace('#', '');
+    for (var i = 0; i < TAB_ORDER.length; i++) if (TAB_PANEL[TAB_ORDER[i]] === id) return TAB_ORDER[i];
+    return null;
+  }
+
+  function initTabs() {
+    if (!$('wc-tabs')) return;
+    var list = document.querySelector('#wc-tabs [role="tablist"]');
+    list.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-tab]') : null;
+      if (b) showTab(b.getAttribute('data-tab'), { user: true });
+    });
+    list.addEventListener('keydown', function (e) {
+      var i = TAB_ORDER.indexOf(document.activeElement && document.activeElement.getAttribute('data-tab'));
+      if (i < 0) return;
+      var next = e.key === 'ArrowRight' ? (i + 1) % TAB_ORDER.length : e.key === 'ArrowLeft' ? (i + TAB_ORDER.length - 1) % TAB_ORDER.length : e.key === 'Home' ? 0 : e.key === 'End' ? TAB_ORDER.length - 1 : -1;
+      if (next > -1) { e.preventDefault(); showTab(TAB_ORDER[next], { focus: true, user: true }); }
+    });
+    /* Links elsewhere on the page that point at a tool open its tab first. */
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest ? e.target.closest('a[href^="#wc-"]') : null;
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      for (var i = 0; i < TAB_ORDER.length; i++) {
+        if (TAB_PANEL[TAB_ORDER[i]] === id) { e.preventDefault(); showTab(TAB_ORDER[i], { scroll: true, user: true }); return; }
+      }
+    });
+    window.addEventListener('hashchange', function () { var n = tabFromHash(); if (n) showTab(n, { scroll: true }); });
+    var first = tabFromHash();
+    if (first) showTab(first, { scroll: true });
+  }
+
   /* ---------- Wire-up ---------- */
   function init() {
     if (!$('wc-segments')) return;
@@ -1177,6 +1231,7 @@
     initChecklist();
     initBulk();
     initExcel();
+    initTabs();
   }
 
   root.WageCeilingUI = {

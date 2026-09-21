@@ -22,7 +22,7 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/style.css?v=14" />
   <link rel="stylesheet" href="/css/calculators.css?v=3" />
-  <link rel="stylesheet" href="/css/wage-ceiling.css?v=7" />
+  <link rel="stylesheet" href="/css/wage-ceiling.css?v=9" />
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
@@ -58,43 +58,29 @@
   </div>
 </section>
 
-<nav class="wc-jump" aria-label="On this page">
+<nav class="wc-tabs" id="wc-tabs" aria-label="Choose a tool">
   <div class="container">
-    <a href="#wc-sec-contribution">Contribution calculator</a>
-    <a href="#wc-sec-bulk">Bulk PF calculator</a>
-    <a href="#wc-excel">Excel download</a>
-    <a href="#wc-checklist">Payroll checklist</a>
-    <a href="#wc-faq">Questions</a>
-    <a href="#wc-sources">Sources</a>
+    <div class="wc-tablist" role="tablist">
+      <button type="button" role="tab" class="wc-tab" id="wc-tab-contribution" data-tab="contribution" aria-controls="wc-sec-contribution" aria-selected="true" tabindex="0">
+        <span class="wc-tab-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="12" y1="11" x2="12.01" y2="11"/><line x1="16" y1="11" x2="16.01" y2="11"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="12" y1="15" x2="12.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/></svg></span>
+        <span class="wc-tab-text"><span class="wc-tab-label">Contribution calculator</span><span class="wc-tab-sub">One employee, any period</span></span>
+      </button>
+      <button type="button" role="tab" class="wc-tab" id="wc-tab-bulk" data-tab="bulk" aria-controls="wc-sec-bulk" aria-selected="false" tabindex="-1">
+        <span class="wc-tab-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+        <span class="wc-tab-text"><span class="wc-tab-label">Bulk PF calculator</span><span class="wc-tab-sub">Upload a salary file</span></span>
+      </button>
+      <button type="button" role="tab" class="wc-tab" id="wc-tab-excel" data-tab="excel" aria-controls="wc-excel" aria-selected="false" tabindex="-1">
+        <span class="wc-tab-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+        <span class="wc-tab-text"><span class="wc-tab-label">Excel download</span><span class="wc-tab-sub">Free workbook with formulas</span></span>
+      </button>
+    </div>
   </div>
 </nav>
 
-<!-- What changed -->
-<section class="section-pad wc-band alt">
-  <div class="container">
-    <div class="wc-facts">
-      <div class="wc-fact"><span>New ceiling</span><strong>₹25,000 a month</strong><small>Up from ₹15,000, the level fixed in 2014.</small></div>
-      <div class="wc-fact"><span>Effective</span><strong>17 September 2026</strong><small>From the date the notification was published in the Gazette.</small></div>
-      <div class="wc-fact"><span>Notified by</span><strong>S.O. 5109(E)</strong><small>Replaces S.O. 2702(E) of 29 May 2026. Chapter III, Code on Social Security, 2020.</small></div>
-    </div>
-
-    <div class="wc-timeline">
-      <h3>September 2026 runs on two ceilings</h3>
-      <p>The change lands mid-month, so the same payroll month carries both limits.</p>
-      <div class="wc-tl-bar" role="img" aria-label="September 2026: 16 days at the 15,000 rupee ceiling, then 14 days at the 25,000 rupee ceiling">
-        <div class="wc-tl-old">16 days at ₹15,000</div>
-        <div class="wc-tl-new">14 days at ₹25,000</div>
-      </div>
-      <div class="wc-tl-scale"><span><b>1 Sep</b> to 16 Sep</span><span><b>17 Sep</b> to 30 Sep</span></div>
-    </div>
-  </div>
-</section>
-
 <!-- Tool 1: contribution calculator -->
-<section id="wc-sec-contribution" class="section-pad">
+<section id="wc-sec-contribution" class="section-pad" role="tabpanel" aria-labelledby="wc-tab-contribution">
   <div class="container" id="wc-contribution">
     <div class="wc-tool-head">
-      <div class="wc-num">1</div>
       <div>
         <h2>Contribution calculator</h2>
         <p>Pick the period, set the wage, and see the employee and employer amounts, including the pension and provident fund split.</p>
@@ -158,10 +144,9 @@
 </section>
 
 <!-- Tool 2: bulk salary file -->
-<section id="wc-sec-bulk" class="section-pad wc-band alt">
+<section id="wc-sec-bulk" class="section-pad wc-band" role="tabpanel" aria-labelledby="wc-tab-bulk" hidden>
   <div class="container">
     <div class="wc-tool-head">
-      <div class="wc-num">2</div>
       <div>
         <h2>Bulk PF calculator</h2>
         <p>Upload a salary file and get PF for every employee at once. The file itself is read in your browser and is never uploaded. Before showing the results we ask for your contact details, so we can follow up on your PF query.</p>
@@ -261,7 +246,7 @@
 </section>
 
 <!-- Excel download -->
-<section id="wc-excel" class="section-pad wc-band">
+<section id="wc-excel" class="section-pad wc-band" role="tabpanel" aria-labelledby="wc-tab-excel" hidden>
   <div class="container">
     <div class="wc-excel-grid">
       <div>
@@ -313,11 +298,31 @@
   </div>
 </section>
 
+<!-- What changed -->
+<section class="section-pad wc-band alt">
+  <div class="container">
+    <div class="wc-facts">
+      <div class="wc-fact"><span>New ceiling</span><strong>₹25,000 a month</strong><small>Up from ₹15,000, the level fixed in 2014.</small></div>
+      <div class="wc-fact"><span>Effective</span><strong>17 September 2026</strong><small>From the date the notification was published in the Gazette.</small></div>
+      <div class="wc-fact"><span>Notified by</span><strong>S.O. 5109(E)</strong><small>Replaces S.O. 2702(E) of 29 May 2026. Chapter III, Code on Social Security, 2020.</small></div>
+    </div>
+
+    <div class="wc-timeline">
+      <h3>September 2026 runs on two ceilings</h3>
+      <p>The change lands mid-month, so the same payroll month carries both limits.</p>
+      <div class="wc-tl-bar" role="img" aria-label="September 2026: 16 days at the 15,000 rupee ceiling, then 14 days at the 25,000 rupee ceiling">
+        <div class="wc-tl-old">16 days at ₹15,000</div>
+        <div class="wc-tl-new">14 days at ₹25,000</div>
+      </div>
+      <div class="wc-tl-scale"><span><b>1 Sep</b> to 16 Sep</span><span><b>17 Sep</b> to 30 Sep</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- Checklist -->
-<section id="wc-checklist" class="section-pad wc-band alt">
+<section id="wc-checklist" class="section-pad wc-band">
   <div class="container">
     <div class="wc-tool-head">
-      <div class="wc-num">3</div>
       <div>
         <h2>Payroll checklist</h2>
         <p>Twelve steps in three stages. Your ticks are saved in this browser only, so you can come back to them.</p>
@@ -352,7 +357,7 @@
 </section>
 
 <!-- FAQ -->
-<section id="wc-faq" class="section-pad wc-band">
+<section id="wc-faq" class="section-pad wc-band alt">
   <div class="container" style="max-width:860px">
     <div class="tag">Questions</div>
     <h2 class="section-title">Common questions about the new ceiling</h2>
@@ -375,7 +380,7 @@
 </section>
 
 <!-- Sources -->
-<section id="wc-sources" class="section-pad wc-band alt">
+<section id="wc-sources" class="section-pad wc-band">
   <div class="container">
     <div class="tag">Sources</div>
     <h2 class="section-title">Where the figures come from</h2>
@@ -446,7 +451,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=13"></script>
 <script src="/js/main.js?v=11"></script>
-<script src="/js/wage-ceiling.js?v=9"></script>
+<script src="/js/wage-ceiling.js?v=10"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
