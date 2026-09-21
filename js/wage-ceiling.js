@@ -693,22 +693,22 @@
       return '<td>' + dash(r, r.contribWage) + '</td><td>' + dash(r, r.epsWage) + '</td>';
     };
     var body = res.rows.slice(0, BULK_SHOW_ROWS).map(function (r) {
-      return '<tr class="' + (r.skipped ? 'is-skipped' : '') + '"><td>' + esc(r.code) + '</td><td>' + esc(r.name) + '</td><td>' + fmt(r.gross) + '</td><td>' + fmt(r.pfWage) + '</td>' +
+      return '<tr class="' + (r.skipped ? 'is-skipped' : '') + '"><td>' + esc(r.code) + '</td><td>' + esc(r.name) + '</td><td>' + fmt(r.gross) + '</td>' +
         wageCells(r) +
         L.accts.map(function (a) { return '<td>' + dash(r, r[a.key]) + '</td>'; }).join('') +
         '<td class="wc-flagcell">' + r.flags.map(esc).join('<br>') + '</td></tr>';
     }).join('');
 
     var sums = segSums(res.rows);
-    var head1 = '<tr><th colspan="4"></th>' +
+    var head1 = '<tr><th colspan="3"></th>' +
       (L.split
         ? '<th class="grp" colspan="2">1 to 16 Sep (' + fmt(OLD_CEILING) + ' ceiling)</th><th class="grp" colspan="2">17 to 30 Sep (' + fmt(NEW_CEILING) + ' ceiling)</th><th class="grp" colspan="2">Combined</th>'
         : '<th class="grp" colspan="2">After the ceiling</th>') +
       '<th class="grp" colspan="' + L.accts.length + '">Contribution by account</th><th></th></tr>';
-    var head2 = '<tr><th>Code</th><th>Name</th><th>Gross</th><th>PF wage before ceiling</th>' +
+    var head2 = '<tr><th>Code</th><th>Name</th><th>Gross</th>' +
       (L.split ? '<th>Days</th><th>PF wage</th><th>Days</th><th>PF wage</th><th>PF wage</th><th>Pension wage</th>' : '<th>PF wage</th><th>Pension wage</th>') +
       L.accts.map(function (a) { return '<th>' + a.label + '</th>'; }).join('') + '<th>Notes</th></tr>';
-    var foot = '<tr><td colspan="3">Total, ' + c.processed.toLocaleString('en-IN') + ' employee' + (c.processed === 1 ? '' : 's') + '</td><td>' + fmt(t.pfWage) + '</td>' +
+    var foot = '<tr><td colspan="3">Total, ' + c.processed.toLocaleString('en-IN') + ' employee' + (c.processed === 1 ? '' : 's') + '</td>' +
       (L.split ? '<td></td><td>' + fmt(sums[0].pf) + '</td><td></td><td>' + fmt(sums[1].pf) + '</td>' : '') +
       '<td>' + fmt(t.contribWage) + '</td><td>' + fmt(t.epsWage) + '</td>' +
       L.accts.map(function (a) { return '<td>' + fmt(t[a.key]) + '</td>'; }).join('') + '<td></td></tr>';
@@ -759,14 +759,14 @@
     if (!bulkResult) return;
     var cfg = bulkResult.cfg, t = bulkResult.res.totals, L = bulkLayout(cfg);
     var sums = segSums(bulkResult.res.rows);
-    var head = ['Emp Code', 'Name', 'Gross', 'PF wage before ceiling'];
+    var head = ['Emp Code', 'Name', 'Gross'];
     if (L.split) head.push('Days 1-16 Sep', 'PF wage 1-16 Sep (' + OLD_CEILING + ' ceiling)', 'Days 17-30 Sep', 'PF wage 17-30 Sep (' + NEW_CEILING + ' ceiling)', 'Combined PF wage', 'Pension wage');
     else head.push('PF wage after ceiling', 'Pension wage');
     L.accts.forEach(function (a) { head.push(a.label); });
     head.push('Notes');
     var rows = bulkResult.res.rows.map(function (r) {
       var v = function (x) { return r.skipped ? '' : x; };
-      var a = [r.code, r.name, r.gross, r.pfWage];
+      var a = [r.code, r.name, r.gross];
       if (L.split) {
         var s0 = r.segs[0], s1 = r.segs[1];
         a.push(s0 ? s0.days : '', s0 ? s0.pf : '', s1 ? s1.days : '', s1 ? s1.pf : '');
@@ -776,7 +776,7 @@
       a.push(r.flags.join(' | '));
       return a;
     });
-    var tot = ['TOTAL', '', '', t.pfWage];
+    var tot = ['TOTAL', '', ''];
     if (L.split) tot.push('', sums[0].pf, '', sums[1].pf);
     tot.push(t.contribWage, t.epsWage);
     L.accts.forEach(function (x) { tot.push(t[x.key]); });
