@@ -843,6 +843,19 @@
     if (first && first.scrollIntoView) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); first.focus({ preventScroll: true }); }
   }
 
+  /* Free and disposable mailbox providers. Matched on the domain name with any country ending
+     removed, so yahoo.co.in, outlook.in and hotmail.co.uk are all caught. */
+  var PERSONAL_MAIL = /^(gmail|googlemail|yahoo|ymail|rocketmail|hotmail|outlook|live|msn|aol|icloud|rediffmail|rediff|protonmail|proton|gmx|yandex|zoho|tutanota|fastmail|hushmail|mailinator|guerrillamail|yopmail|tempmail|temp-mail|10minutemail|sharklasers|trashmail|maildrop|getnada)$/;
+  var PERSONAL_EXACT = ['me.com', 'mac.com', 'pm.me', 'proton.me', 'mail.com', 'mail.ru', 'inbox.com', 'tuta.io'];
+  function isPersonalEmail(email) {
+    var domain = email.split('@').pop().toLowerCase();
+    if (PERSONAL_EXACT.indexOf(domain) > -1) return true;
+    var labels = domain.split('.');
+    /* strip country and generic endings: .com, .in, .co.in, .co.uk, .net */
+    while (labels.length > 1 && /^(com|net|org|in|co|uk|ac|us|au|ca|de|fr|nl|sg|ae)$/.test(labels[labels.length - 1])) labels.pop();
+    return labels.length === 1 && PERSONAL_MAIL.test(labels[0]);
+  }
+
   function submitLead(e) {
     e.preventDefault();
     var form = e.target, err = $('wc-lead-error'), btn = $('wc-lead-submit');
@@ -852,7 +865,8 @@
     var digits = phone.replace(/\D/g, '');
     if (!name || !company) { err.textContent = 'Please enter your name and company.'; return; }
     if (digits.length < 10 || digits.length > 13) { err.textContent = 'Please enter a valid phone or WhatsApp number.'; return; }
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'That email address does not look right.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter your company email address.'; return; }
+    if (isPersonalEmail(email)) { err.textContent = 'Please use your company email address. Gmail, Yahoo, Outlook and other personal addresses are not accepted.'; return; }
     if (!form.elements.consent.checked) { err.textContent = 'Please tick the consent box so we can contact you.'; return; }
     err.textContent = '';
 
