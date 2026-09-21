@@ -102,7 +102,7 @@
   function bulkCompute(records, cfg) {
     var incl = cfg.incl || [], excl = cfg.excl || [];
     var rows = [];
-    var totals = { pfWage: 0, contribWage: 0, employee: 0, employer12: 0, eps: 0, epf: 0, edli: 0, admin: 0, total: 0 };
+    var totals = { pfWage: 0, contribWage: 0, epsWage: 0, employee: 0, employer12: 0, eps: 0, epf: 0, edli: 0, admin: 0, total: 0 };
     var counts = { processed: 0, skipped: 0, flagged: 0 };
 
     records.forEach(function (rec) {
@@ -129,7 +129,7 @@
         flags.push('50% check: PF wage is ' + Math.round(pfWage / gross * 100) + '% of gross. If the heads left out are all listed exclusions under s.2(88), wages would be at least ' + Math.round(gross * 0.5));
       }
 
-      var row = { code: rec.code, name: rec.name, gross: Math.round(gross), pfWage: pfWage, contribWage: 0,
+      var row = { code: rec.code, name: rec.name, gross: Math.round(gross), pfWage: pfWage, contribWage: 0, epsWage: 0, segs: [],
                   employee: 0, employer12: 0, eps: 0, epf: 0, edli: 0, admin: 0, total: 0,
                   flags: flags, skipped: false };
 
@@ -155,7 +155,8 @@
         if (r.pfTotal <= 0) {
           row.skipped = true; flags.unshift('No days to count, skipped');
         } else {
-          row.contribWage = r.pfTotal; row.employee = r.employee; row.employer12 = r.employer12;
+          row.contribWage = r.pfTotal; row.epsWage = r.epsTotal; row.employee = r.employee; row.employer12 = r.employer12;
+          row.segs = r.rows.map(function (x) { return { ceiling: x.seg.ceiling, days: x.seg.days, pf: x.pf, eps: x.eps }; });
           row.eps = r.eps; row.epf = r.epf; row.edli = r.includeOverheads ? r.edli : 0;
           row.admin = r.includeOverheads ? r.admin : 0; row.total = r.grandTotal;
         }
@@ -163,7 +164,7 @@
 
       if (row.skipped) counts.skipped++; else {
         counts.processed++;
-        totals.pfWage += row.pfWage; totals.contribWage += row.contribWage; totals.employee += row.employee;
+        totals.pfWage += row.pfWage; totals.contribWage += row.contribWage; totals.epsWage += row.epsWage; totals.employee += row.employee;
         totals.employer12 += row.employer12; totals.eps += row.eps; totals.epf += row.epf;
         totals.edli += row.edli; totals.admin += row.admin; totals.total += row.total;
       }
@@ -658,16 +659,60 @@
     if (hasLead()) showBulkResult(); else showLeadGate();
   }
 
+  /* Column layout shared by the on-screen table and the CSV, so both always agree.
+     Split month: each half is shown first, then the combined wage the contribution is worked on. */
+  function bulkLayout(cfg) {
+    var split = cfg.period === 'split', oh = cfg.overheads;
+    var accts = [
+      { key: 'employee', label: 'Employee A/c 1 (12%)' },
+      { key: 'epf', label: 'Employer A/c 1 (3.67%)' }
+    ];
+    if (oh) accts.push({ key: 'admin', label: 'Employer A/c 2, admin (0.5%)' });
+    accts.push({ key: 'eps', label: 'Employer A/c 10, EPS (8.33%)' });
+    if (oh) accts.push({ key: 'edli', label: 'Employer A/c 21, EDLI (0.5%)' });
+    accts.push({ key: 'total', label: 'Total' });
+    return { split: split, accts: accts };
+  }
+
+  function segSums(rows) {
+    var sums = [{ pf: 0 }, { pf: 0 }];
+    rows.forEach(function (r) { if (!r.skipped) r.segs.forEach(function (sg, i) { sums[i].pf += sg.pf; }); });
+    return sums;
+  }
+
   function renderBulk(res, cfg, warnCols) {
-    var t = res.totals, c = res.counts;
-    var per = { old: 'Before 17 September 2026 (₹15,000 ceiling)', split: 'September 2026 (changeover month)', 'new': 'October 2026 onwards (₹25,000 ceiling)' }[cfg.period];
+    var t = res.totals, c = res.counts, L = bulkLayout(cfg);
+    var per = { old: 'Before 17 September 2026 (\u20B915,000 ceiling)', split: 'September 2026 (changeover month)', 'new': 'October 2026 onwards (\u20B925,000 ceiling)' }[cfg.period];
     var dash = function (r, v) { return r.skipped ? '-' : fmt(v); };
+    var wageCells = function (r) {
+      if (L.split) {
+        var s0 = r.segs[0], s1 = r.segs[1];
+        return '<td>' + (s0 ? s0.days : '-') + '</td><td>' + (s0 ? fmt(s0.pf) : '-') + '</td><td>' + (s1 ? s1.days : '-') + '</td><td>' + (s1 ? fmt(s1.pf) : '-') + '</td>' +
+          '<td>' + dash(r, r.contribWage) + '</td><td>' + dash(r, r.epsWage) + '</td>';
+      }
+      return '<td>' + dash(r, r.contribWage) + '</td><td>' + dash(r, r.epsWage) + '</td>';
+    };
     var body = res.rows.slice(0, BULK_SHOW_ROWS).map(function (r) {
       return '<tr class="' + (r.skipped ? 'is-skipped' : '') + '"><td>' + esc(r.code) + '</td><td>' + esc(r.name) + '</td><td>' + fmt(r.gross) + '</td><td>' + fmt(r.pfWage) + '</td>' +
-        '<td>' + dash(r, r.contribWage) + '</td><td>' + dash(r, r.employee) + '</td><td>' + dash(r, r.employer12) + '</td><td>' + dash(r, r.eps) + '</td><td>' + dash(r, r.epf) + '</td>' +
-        (cfg.overheads ? '<td>' + dash(r, r.edli + r.admin) + '</td>' : '') +
-        '<td>' + dash(r, r.total) + '</td><td class="wc-flagcell">' + r.flags.map(esc).join('<br>') + '</td></tr>';
+        wageCells(r) +
+        L.accts.map(function (a) { return '<td>' + dash(r, r[a.key]) + '</td>'; }).join('') +
+        '<td class="wc-flagcell">' + r.flags.map(esc).join('<br>') + '</td></tr>';
     }).join('');
+
+    var sums = segSums(res.rows);
+    var head1 = '<tr><th colspan="4"></th>' +
+      (L.split
+        ? '<th class="grp" colspan="2">1 to 16 Sep (' + fmt(OLD_CEILING) + ' ceiling)</th><th class="grp" colspan="2">17 to 30 Sep (' + fmt(NEW_CEILING) + ' ceiling)</th><th class="grp" colspan="2">Combined</th>'
+        : '<th class="grp" colspan="2">After the ceiling</th>') +
+      '<th class="grp" colspan="' + L.accts.length + '">Contribution by account</th><th></th></tr>';
+    var head2 = '<tr><th>Code</th><th>Name</th><th>Gross</th><th>PF wage before ceiling</th>' +
+      (L.split ? '<th>Days</th><th>PF wage</th><th>Days</th><th>PF wage</th><th>PF wage</th><th>Pension wage</th>' : '<th>PF wage</th><th>Pension wage</th>') +
+      L.accts.map(function (a) { return '<th>' + a.label + '</th>'; }).join('') + '<th>Notes</th></tr>';
+    var foot = '<tr><td colspan="3">Total, ' + c.processed.toLocaleString('en-IN') + ' employee' + (c.processed === 1 ? '' : 's') + '</td><td>' + fmt(t.pfWage) + '</td>' +
+      (L.split ? '<td></td><td>' + fmt(sums[0].pf) + '</td><td></td><td>' + fmt(sums[1].pf) + '</td>' : '') +
+      '<td>' + fmt(t.contribWage) + '</td><td>' + fmt(t.epsWage) + '</td>' +
+      L.accts.map(function (a) { return '<td>' + fmt(t[a.key]) + '</td>'; }).join('') + '<td></td></tr>';
+
     var warn = '';
     if (warnCols.length) warn += '<li>Some cells in ' + warnCols.map(esc).join(', ') + ' were not numbers and were counted as zero.</li>';
     var flagged = res.rows.filter(function (r) { return r.flags.length; }).length;
@@ -685,10 +730,11 @@
       '<div class="epf-line"><span>Total PF wage, before the ceiling</span><strong>' + fmt(t.pfWage) + '</strong></div>' +
       '<div class="epf-line"><span>Total contribution wage, after the ceiling</span><strong>' + fmt(t.contribWage) + '</strong></div>' +
       '<div class="epf-group-head">Employee by employee' + (res.rows.length > BULK_SHOW_ROWS ? ' (first ' + BULK_SHOW_ROWS + ' of ' + res.rows.length.toLocaleString('en-IN') + ', download for all)' : '') + '</div>' +
-      '<div class="wc-scroll"><table class="wc-table wc-bulk-table"><thead><tr><th>Code</th><th>Name</th><th>Gross</th><th>PF wage</th><th>After ceiling</th><th>Employee</th><th>Employer 12%</th><th>EPS</th><th>EPF</th>' + (cfg.overheads ? '<th>EDLI + admin</th>' : '') + '<th>Total</th><th>Notes</th></tr></thead><tbody>' + body + '</tbody></table></div>' +
+      '<div class="wc-scroll"><table class="wc-table wc-bulk-table"><thead>' + head1 + head2 + '</thead><tbody>' + body + '</tbody><tfoot>' + foot + '</tfoot></table></div>' +
       '<ul class="wc-notes">' + warn +
       '<li>Each employee is rounded on their own and the totals are the sum of those rows, as in a contribution return.</li>' +
-      (cfg.period === 'split' ? '<li>The days columns in your file set each employee’s days in 1 to 16 and 17 to 30 September. Blank means the full period. The changeover method is the same straight-line approach as the single-employee calculator, so confirm it against EPFO guidance.</li>' : '') +
+      (cfg.period === 'split' ? '<li>The changeover month is worked out in two halves. Each ceiling is spread over a ' + MONTH_DAYS + '-day month and multiplied by the days in that half, then the two halves are added into the combined PF wage that the contribution is worked on. The days columns in your file set each employee\u2019s days in 1 to 16 and 17 to 30 September, and blank means the full period. EPFO may prescribe its own method for this month, so confirm it against EPFO guidance.</li>' : '') +
+      '<li>Pension wage is the wage EPS is worked on. It equals the PF wage unless PF is on actual wages above the ceiling, or the employee is marked pension not applicable.</li>' +
       '<li>The tool calculates for every row in your file. It does not decide who must be enrolled or who is an excluded employee. Use the PF Member column to leave people out.</li></ul>';
   }
 
@@ -711,21 +757,31 @@
   }
   function downloadBulk() {
     if (!bulkResult) return;
-    var oh = bulkResult.cfg.overheads, t = bulkResult.res.totals;
-    var head = ['Emp Code', 'Name', 'Gross', 'PF wage', 'Contribution wage after ceiling', 'Employee PF', 'Employer 12%', 'Employer EPS', 'Employer EPF'];
-    if (oh) head.push('EDLI', 'Admin charges');
-    head.push('Total', 'Notes');
+    var cfg = bulkResult.cfg, t = bulkResult.res.totals, L = bulkLayout(cfg);
+    var sums = segSums(bulkResult.res.rows);
+    var head = ['Emp Code', 'Name', 'Gross', 'PF wage before ceiling'];
+    if (L.split) head.push('Days 1-16 Sep', 'PF wage 1-16 Sep (' + OLD_CEILING + ' ceiling)', 'Days 17-30 Sep', 'PF wage 17-30 Sep (' + NEW_CEILING + ' ceiling)', 'Combined PF wage', 'Pension wage');
+    else head.push('PF wage after ceiling', 'Pension wage');
+    L.accts.forEach(function (a) { head.push(a.label); });
+    head.push('Notes');
     var rows = bulkResult.res.rows.map(function (r) {
       var v = function (x) { return r.skipped ? '' : x; };
-      var a = [r.code, r.name, r.gross, r.pfWage, v(r.contribWage), v(r.employee), v(r.employer12), v(r.eps), v(r.epf)];
-      if (oh) a.push(v(r.edli), v(r.admin));
-      a.push(v(r.total), r.flags.join(' | '));
+      var a = [r.code, r.name, r.gross, r.pfWage];
+      if (L.split) {
+        var s0 = r.segs[0], s1 = r.segs[1];
+        a.push(s0 ? s0.days : '', s0 ? s0.pf : '', s1 ? s1.days : '', s1 ? s1.pf : '');
+      }
+      a.push(v(r.contribWage), v(r.epsWage));
+      L.accts.forEach(function (x) { a.push(v(r[x.key])); });
+      a.push(r.flags.join(' | '));
       return a;
     });
-    var tot = ['TOTAL', '', '', t.pfWage, t.contribWage, t.employee, t.employer12, t.eps, t.epf];
-    if (oh) tot.push(t.edli, t.admin);
-    tot.push(t.total, '');
-    downloadCsv('leap-epf-contribution-' + bulkResult.cfg.period + '.csv', [head].concat(rows, [tot]));
+    var tot = ['TOTAL', '', '', t.pfWage];
+    if (L.split) tot.push('', sums[0].pf, '', sums[1].pf);
+    tot.push(t.contribWage, t.epsWage);
+    L.accts.forEach(function (x) { tot.push(t[x.key]); });
+    tot.push('');
+    downloadCsv('leap-epf-contribution-' + cfg.period + '.csv', [head].concat(rows, [tot]));
     track('epf-wage-ceiling-bulk', 'download_results');
   }
 
