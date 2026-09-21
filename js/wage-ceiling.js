@@ -89,6 +89,20 @@
     ];
   }
 
+  /* September 2026 can be treated three ways. None is confirmed by the notification, so the
+     methods are offered side by side: split by days, whole month at the new ceiling, or whole
+     month at the earlier ceiling (new ceiling from October). */
+  function septemberSegmentsFor(method, daysBefore, daysAfter, before, after) {
+    if (method === 'whole25') return [{ ceiling: NEW_CEILING, days: null, pf: after.pf, eps: after.eps }];
+    if (method === 'whole15') return [{ ceiling: OLD_CEILING, days: null, pf: before.pf, eps: before.eps }];
+    return septemberSegments(daysBefore, daysAfter, before, after);
+  }
+  function wholeMonthCeiling(period, method) {
+    if (period === 'old') return OLD_CEILING;
+    if (period === 'new') return NEW_CEILING;
+    return method === 'whole25' ? NEW_CEILING : OLD_CEILING;
+  }
+
   /* ---------------------------------------------------------------
      BULK: one PF calculation per row of a salary file.
      rec = { code, name, gross (number or null), heads: {name: amount},
@@ -141,7 +155,7 @@
         var epsMode = rec.pension === false ? 'none' : 'cap';
         if (rec.pension === false) flags.push('Pension not applicable, whole 12% goes to EPF');
         var segs;
-        if (cfg.period === 'split') {
+        if (cfg.period === 'split' && (cfg.method || 'split') === 'split') {
           var d1 = rec.d1 === null || rec.d1 === undefined ? DAYS_BEFORE : rec.d1;
           var d2 = rec.d2 === null || rec.d2 === undefined ? DAYS_AFTER : rec.d2;
           if (d1 < 0 || d1 > DAYS_BEFORE || d2 < 0 || d2 > DAYS_AFTER) flags.push('Days outside 0 to ' + DAYS_BEFORE + ' and 0 to ' + DAYS_AFTER + ', adjusted');
@@ -149,7 +163,7 @@
           d2 = Math.max(0, Math.min(DAYS_AFTER, Math.round(d2)));
           segs = septemberSegments(d1, d2, { pf: cfg.pfBasis, eps: epsMode }, { pf: cfg.pfBasis, eps: epsMode });
         } else {
-          segs = [{ ceiling: cfg.period === 'old' ? OLD_CEILING : NEW_CEILING, days: null, pf: cfg.pfBasis, eps: epsMode }];
+          segs = [{ ceiling: wholeMonthCeiling(cfg.period, cfg.method), days: null, pf: cfg.pfBasis, eps: epsMode }];
         }
         var r = contribute(pfWage, segs, { overheads: cfg.overheads });
         if (r.pfTotal <= 0) {
@@ -178,7 +192,7 @@
     OLD_CEILING: OLD_CEILING, NEW_CEILING: NEW_CEILING,
     DAYS_BEFORE: DAYS_BEFORE, DAYS_AFTER: DAYS_AFTER, MONTH_DAYS: MONTH_DAYS,
     contribute: contribute, fullMonth: fullMonth, septemberSegments: septemberSegments,
-    bulkCompute: bulkCompute
+    septemberSegmentsFor: septemberSegmentsFor, bulkCompute: bulkCompute
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = engine; return; }
@@ -201,6 +215,24 @@
   var num = function (id) { return parseFloat(($(id) || {}).value) || 0; };
   var PLACEHOLDER = '<p class="wc-placeholder">Fill in the details and click Calculate to see your result.</p>';
 
+  var METHOD_SHORT = { split: 'split by days', whole25: 'whole month at \u20B925,000', whole15: 'whole month at \u20B915,000' };
+  var METHOD_ROW = { split: 'Split by days', whole25: 'Whole month at \u20B925,000', whole15: 'Whole month at \u20B915,000 (new ceiling from October)' };
+  function methodNote(method) {
+    if (method === 'whole25') return 'September is treated as one whole month at the \u20B925,000 ceiling, so the higher ceiling applies to all 30 days even though the notification took effect on 17 September. Days worked are not used. This is a simplification, so confirm the treatment with EPFO before filing.';
+    if (method === 'whole15') return 'September is treated as one whole month at the earlier \u20B915,000 ceiling, with the new ceiling starting from October. This is a simplification, because the notification took effect on 17 September, so confirm the treatment with EPFO before filing.';
+    return '';
+  }
+  var HOW = [
+    'PF wage in each slab: the lower of the wage and the ceiling, multiplied by days worked and divided by 30, rounded to whole rupees. On the actual basis the full wage is used instead of the lower figure.',
+    'Employee A/c 1: 12% of the combined PF wage.',
+    'Employer share: 12% of the combined PF wage. It is split into EPS and EPF.',
+    'Employer A/c 10, EPS: 8.33% of the pension wage, which is capped at the ceiling and never more than the employer 12%.',
+    'Employer A/c 1, EPF: the employer 12% minus EPS, which is the 3.67% balance.',
+    'Employer A/c 2, admin: 0.5% of the combined PF wage, with no \u20B9500 minimum applied per employee.',
+    'Employer A/c 21, EDLI: 0.5% of the wage capped at the ceiling.',
+    'Each line is rounded to whole rupees, and totals add the rounded lines.'
+  ];
+
   function track(toolName, eventName) {
     if (typeof root.gtag === 'function') {
       root.gtag('event', eventName || 'calculate_click', { tool_name: toolName });
@@ -209,10 +241,14 @@
 
   /* ---------- Tool 1: contribution calculator ---------- */
   var PERIODS = {
-    split: function () { return [
-      { label: 'Up to 16 September 2026', short: '1 to 16 Sep', ceiling: OLD_CEILING, max: DAYS_BEFORE, days: DAYS_BEFORE, pf: 'cap', eps: 'cap' },
-      { label: 'From 17 September 2026',  short: '17 to 30 Sep', ceiling: NEW_CEILING, max: DAYS_AFTER,  days: DAYS_AFTER,  pf: 'cap', eps: 'cap' }
-    ]; },
+    split: function () {
+      if (currentMethod === 'whole25') return [{ label: 'September 2026, whole month', short: 'Whole month', ceiling: NEW_CEILING, max: null, days: null, pf: 'cap', eps: 'cap' }];
+      if (currentMethod === 'whole15') return [{ label: 'September 2026, whole month', short: 'Whole month', ceiling: OLD_CEILING, max: null, days: null, pf: 'cap', eps: 'cap' }];
+      return [
+        { label: 'Up to 16 September 2026', short: '1 to 16 Sep', ceiling: OLD_CEILING, max: DAYS_BEFORE, days: DAYS_BEFORE, pf: 'cap', eps: 'cap' },
+        { label: 'From 17 September 2026',  short: '17 to 30 Sep', ceiling: NEW_CEILING, max: DAYS_AFTER,  days: DAYS_AFTER,  pf: 'cap', eps: 'cap' }
+      ];
+    },
     'new': function () { return [
       { label: 'October 2026 onwards', short: 'Full month', ceiling: NEW_CEILING, max: null, days: null, pf: 'cap', eps: 'cap' }
     ]; },
@@ -222,6 +258,8 @@
   };
   var PERIOD_TITLE = { split: 'September 2026 (changeover month)', 'new': 'October 2026 onwards, full month', old: 'Before 17 September 2026 (reference)' };
   var currentPeriod = 'split';
+  var currentMethod = 'split';
+  var lastDays = { d1: DAYS_BEFORE, d2: DAYS_AFTER };
 
   var PF_LABEL  = { cap: 'Ceiling-capped (standard)', actual: 'On actual wages (voluntary)' };
   var EPS_LABEL = { none: 'No pension share', cap: 'Ceiling-capped (standard)', actual: 'On actual wages (higher pension option)' };
@@ -244,7 +282,9 @@
     }).join('');
     $('wc-segments').innerHTML = html;
     var chips = $('wc-fullmonth');
-    if (chips) chips.hidden = currentPeriod !== 'split';
+    if (chips) chips.hidden = !(currentPeriod === 'split' && currentMethod === 'split');
+    var mw = $('wc-method-wrap');
+    if (mw) mw.hidden = currentPeriod !== 'split';
   }
 
   /* Pension on actual wages only makes sense when PF is on actual wages too. */
@@ -259,7 +299,7 @@
   function readSegments() {
     var base = PERIODS[currentPeriod]();
     var cards = document.querySelectorAll('#wc-segments .wc-seg');
-    return base.map(function (s, i) {
+    var out = base.map(function (s, i) {
       var card = cards[i];
       var days = null;
       if (s.max !== null) {
@@ -271,6 +311,35 @@
         eps: card.querySelector('[data-field="eps"]').value
       };
     });
+    if (currentPeriod === 'split' && currentMethod === 'split') lastDays = { d1: out[0].days, d2: out[1].days };
+    return out;
+  }
+
+  /* September under each of the three methods, for the same wages and basis. */
+  function septemberComparison(wages, segs, overheads) {
+    var before = { pf: segs[0].pf, eps: segs[0].eps };
+    var after = { pf: segs[segs.length - 1].pf, eps: segs[segs.length - 1].eps };
+    return {
+      selected: currentMethod, wages: wages, d1: lastDays.d1, d2: lastDays.d2,
+      rows: ['split', 'whole25', 'whole15'].map(function (m) {
+        return { method: m, r: contribute(wages, septemberSegmentsFor(m, lastDays.d1, lastDays.d2, before, after), { overheads: overheads }) };
+      })
+    };
+  }
+  function sepCmpHtml(c, oh) {
+    var tot = function (r) { return oh ? r.grandTotal : r.contribution; };
+    var sel = c.rows.filter(function (x) { return x.method === c.selected; })[0];
+    var body = c.rows.map(function (x) {
+      var r = x.r, isSel = x.method === c.selected;
+      return '<tr class="' + (isSel ? 'is-sel' : '') + '"><td>' + esc(METHOD_ROW[x.method]) + (isSel ? ' (selected)' : '') + '</td><td>' + fmt(r.pfTotal) + '</td><td>' + fmt(r.employee) + '</td><td>' + fmt(r.employer12) + '</td>' +
+        (oh ? '<td>' + fmt(r.overheads) + '</td>' : '') + '<td>' + fmt(tot(r)) + '</td><td>' + (isSel ? '-' : signed(tot(r) - tot(sel.r))) + '</td></tr>';
+    }).join('');
+    return '<div class="epf-group-head">September method comparison</div>' +
+      '<p class="wc-lead">Wages of ' + fmt(c.wages) + '. The split method uses ' + c.d1 + ' days before and ' + c.d2 + ' days after 17 September. None of the three is confirmed by the Gazette, the EPFO press release or the PIB release, so confirm with EPFO before you file.</p>' +
+      '<div class="wc-scroll"><table class="wc-table wc-mtable"><thead><tr><th>Method</th><th>PF wage</th><th>Employee</th><th>Employer 12%</th>' + (oh ? '<th>Overheads</th>' : '') + '<th>Total</th><th>Against selected</th></tr></thead><tbody>' + body + '</tbody></table></div>';
+  }
+  function periodTitle() {
+    return currentPeriod === 'split' ? 'September 2026, ' + METHOD_SHORT[currentMethod] : PERIOD_TITLE[currentPeriod];
   }
 
   function calcContribution() {
@@ -291,7 +360,8 @@
     var oldM = fullMonth(wages, OLD_CEILING, last.pf, last.eps, { overheads: overheads });
     var newM = fullMonth(wages, NEW_CEILING, last.pf, last.eps, { overheads: overheads });
 
-    out.innerHTML = renderContribution(wages, segs, res, oldM, newM, overheads);
+    var sepCmp = currentPeriod === 'split' ? septemberComparison(wages, segs, overheads) : null;
+    out.innerHTML = renderContribution(wages, segs, res, oldM, newM, overheads, sepCmp);
     $('wc-print-bar-1').hidden = false;
     track('epf-wage-ceiling');
   }
@@ -306,7 +376,7 @@
       '<div class="wc-cmp-bar"><small>New</small><div class="track"><div class="fill new" style="width:' + nw + '%"></div></div><b>' + fmt(newV) + '</b></div></div>';
   }
 
-  function renderContribution(wages, segs, r, oldM, newM, overheads) {
+  function renderContribution(wages, segs, r, oldM, newM, overheads, sepCmp) {
     var isSplit = segs.length > 1;
     var ledger = r.rows.map(function (row) {
       var s = row.seg;
@@ -329,6 +399,7 @@
       bar('Total monthly outflow', overheads ? oldM.grandTotal : oldM.contribution, overheads ? newM.grandTotal : newM.contribution, maxRow);
 
     var notes = [];
+    if (!isSplit && currentPeriod === 'split') notes.push(methodNote(currentMethod));
     if (isSplit) notes.push('The changeover month is worked out in two halves. Each ceiling is spread over a ' + MONTH_DAYS + '-day month and multiplied by the days worked in that half, then the two halves are added. EPFO may prescribe its own method for this month, so confirm against its operational guidance.');
     if (segs.some(function (s) { return s.pf === 'actual'; })) notes.push('PF on actual wages above the ceiling is a voluntary arrangement. It is shown here only because you selected it.');
     if (r.rows.some(function (x) { return x.seg.eps === 'none'; })) notes.push('With no pension share, the whole employer 12% goes to the provident fund account.');
@@ -338,7 +409,7 @@
     return '' +
       '<div class="wc-print-only wc-print-head">' + printHead('Contribution summary') + '</div>' +
       '<div class="wc-hero-num"><span>Total monthly contribution, employee plus employer</span><strong>' + fmt(r.contribution) + '</strong>' +
-      '<em>' + esc(PERIOD_TITLE[currentPeriod]) + '</em></div>' +
+      '<em>' + esc(periodTitle()) + '</em></div>' +
       '<div class="epf-sumgrid wc-sum3">' +
       '<div class="epf-sumcard"><span>Employee PF</span><strong>' + fmt(r.employee) + '</strong></div>' +
       '<div class="epf-sumcard"><span>Employer 12%</span><strong>' + fmt(r.employer12) + '</strong></div>' +
@@ -360,10 +431,13 @@
       overheadRows +
       '<div class="epf-line credit"><span>' + (overheads ? 'Total outflow including overheads' : 'Total employee plus employer') + '</span><strong>' + fmt(overheads ? r.grandTotal : r.contribution) + '</strong></div>' +
 
+      (sepCmp ? sepCmpHtml(sepCmp, overheads) : '') +
       '<div class="epf-group-head">Same employee, one full month under each ceiling</div>' +
       '<p class="wc-lead">Wages of ' + fmt(wages) + ', using the basis selected for ' + esc(segs[segs.length - 1].label.toLowerCase()) + '.</p>' +
       '<div class="wc-compare">' + cmp + '</div>' +
 
+      '<details class="wc-how"><summary>How each line is worked out</summary><ul>' + HOW.map(function (h) { return '<li>' + esc(h) + '</li>'; }).join('') + '</ul></details>' +
+      '<p class="wc-lead" style="margin-top:14px"><a href="#wc-excel">Get this working in Excel</a>, with formulas and notes for every line, or read the <a href="#wc-sources">sources</a>.</p>' +
       '<ul class="wc-notes">' + notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul>' +
       '<div class="epf-src"><h5>Source provisions</h5><p>Wage ceiling of ' + fmt(NEW_CEILING) + ' per month for Chapter III, Code on Social Security, 2020: Gazette S.O. 5109(E), 17 September 2026, issued under section 2(89), superseding S.O. 2702(E) of 29 May 2026.<br>' +
       'Split of the employer 12% into pension and provident fund follows the prevailing EPF and EPS scheme provisions; verify against the EPF Scheme, 2026 and EPFO circulars.</p></div>';
@@ -378,6 +452,8 @@
 
   function resetContribution() {
     currentPeriod = 'split';
+    currentMethod = 'split';
+    $('wc-method').value = 'split';
     document.querySelector('input[name="wc-period"][value="split"]').checked = true;
     paintPeriodCards();
     $('wc-wages').value = 30000;
@@ -648,13 +724,15 @@
     }
     var cfg = {
       period: document.querySelector('input[name="wc-bulk-period"]:checked').value,
-      pfBasis: $('wc-bulk-basis').value,
+      pfBasis: $('wc-bulk-basis').value, method: $('wc-bulk-method').value,
       mode: bulk.mode === 'grossless' ? 'grossless' : 'sum', incl: bulk.incl, excl: bulk.excl,
       overheads: $('wc-bulk-overheads').checked, warn50: $('wc-bulk-warn50').checked
     };
     var data = readBulkRecords();
     var res = bulkCompute(data.recs, cfg);
-    bulkResult = { res: res, cfg: cfg, html: renderBulk(res, cfg, data.warnCols) };
+    var cmp = null;
+    if (cfg.period === 'split') cmp = ['split', 'whole25', 'whole15'].map(function (m) { return { method: m, res: bulkCompute(data.recs, Object.assign({}, cfg, { method: m })) }; });
+    bulkResult = { res: res, cfg: cfg, html: renderBulk(res, cfg, data.warnCols, cmp) };
     track('epf-wage-ceiling-bulk');
     if (hasLead()) showBulkResult(); else showLeadGate();
   }
@@ -662,7 +740,7 @@
   /* Column layout shared by the on-screen table and the CSV, so both always agree.
      Split month: each half is shown first, then the combined wage the contribution is worked on. */
   function bulkLayout(cfg) {
-    var split = cfg.period === 'split', oh = cfg.overheads;
+    var split = cfg.period === 'split' && (cfg.method || 'split') === 'split', oh = cfg.overheads;
     var accts = [
       { key: 'employee', label: 'Employee A/c 1 (12%)' },
       { key: 'epf', label: 'Employer A/c 1 (3.67%)' }
@@ -680,9 +758,9 @@
     return sums;
   }
 
-  function renderBulk(res, cfg, warnCols) {
+  function renderBulk(res, cfg, warnCols, cmp) {
     var t = res.totals, c = res.counts, L = bulkLayout(cfg);
-    var per = { old: 'Before 17 September 2026 (\u20B915,000 ceiling)', split: 'September 2026 (changeover month)', 'new': 'October 2026 onwards (\u20B925,000 ceiling)' }[cfg.period];
+    var per = { old: 'Before 17 September 2026 (\u20B915,000 ceiling)', split: 'September 2026 (' + METHOD_SHORT[cfg.method || 'split'] + ')', 'new': 'October 2026 onwards (\u20B925,000 ceiling)' }[cfg.period];
     var dash = function (r, v) { return r.skipped ? '-' : fmt(v); };
     var wageCells = function (r) {
       if (L.split) {
@@ -729,13 +807,29 @@
       '<div class="epf-line"><span>Rows with a note or warning</span><strong>' + flagged.toLocaleString('en-IN') + '</strong></div>' +
       '<div class="epf-line"><span>Total PF wage, before the ceiling</span><strong>' + fmt(t.pfWage) + '</strong></div>' +
       '<div class="epf-line"><span>Total contribution wage, after the ceiling</span><strong>' + fmt(t.contribWage) + '</strong></div>' +
+      (cmp ? bulkCmpHtml(cmp, cfg) : '') +
       '<div class="epf-group-head">Employee by employee' + (res.rows.length > BULK_SHOW_ROWS ? ' (first ' + BULK_SHOW_ROWS + ' of ' + res.rows.length.toLocaleString('en-IN') + ', download for all)' : '') + '</div>' +
       '<div class="wc-scroll"><table class="wc-table wc-bulk-table"><thead>' + head1 + head2 + '</thead><tbody>' + body + '</tbody><tfoot>' + foot + '</tfoot></table></div>' +
       '<ul class="wc-notes">' + warn +
       '<li>Each employee is rounded on their own and the totals are the sum of those rows, as in a contribution return.</li>' +
-      (cfg.period === 'split' ? '<li>The changeover month is worked out in two halves. Each ceiling is spread over a ' + MONTH_DAYS + '-day month and multiplied by the days in that half, then the two halves are added into the combined PF wage that the contribution is worked on. The days columns in your file set each employee\u2019s days in 1 to 16 and 17 to 30 September, and blank means the full period. EPFO may prescribe its own method for this month, so confirm it against EPFO guidance.</li>' : '') +
+      (cfg.period === 'split' && !L.split ? '<li>' + esc(methodNote(cfg.method)) + '</li>' : '') +
+      (L.split ? '<li>The changeover month is worked out in two halves. Each ceiling is spread over a ' + MONTH_DAYS + '-day month and multiplied by the days in that half, then the two halves are added into the combined PF wage that the contribution is worked on. The days columns in your file set each employee\u2019s days in 1 to 16 and 17 to 30 September, and blank means the full period. EPFO may prescribe its own method for this month, so confirm it against EPFO guidance.</li>' : '') +
       '<li>Pension wage is the wage EPS is worked on. It equals the PF wage unless PF is on actual wages above the ceiling, or the employee is marked pension not applicable.</li>' +
       '<li>The tool calculates for every row in your file. It does not decide who must be enrolled or who is an excluded employee. Use the PF Member column to leave people out.</li></ul>';
+  }
+
+  function bulkCmpHtml(cmp, cfg) {
+    var oh = cfg.overheads, selKey = cfg.method || 'split';
+    var tot = function (r) { return oh ? r.totals.total : r.totals.employee + r.totals.employer12; };
+    var sel = cmp.filter(function (x) { return x.method === selKey; })[0];
+    var body = cmp.map(function (x) {
+      var t = x.res.totals, isSel = x.method === selKey;
+      return '<tr class="' + (isSel ? 'is-sel' : '') + '"><td>' + esc(METHOD_ROW[x.method]) + (isSel ? ' (selected)' : '') + '</td><td>' + fmt(t.employee) + '</td><td>' + fmt(t.employer12) + '</td>' +
+        (oh ? '<td>' + fmt(t.edli + t.admin) + '</td>' : '') + '<td>' + fmt(tot(x.res)) + '</td><td>' + (isSel ? '-' : signed(tot(x.res) - tot(sel.res))) + '</td></tr>';
+    }).join('');
+    return '<div class="epf-group-head">September method comparison, whole file</div>' +
+      '<p class="wc-lead">The same ' + sel.res.counts.processed.toLocaleString('en-IN') + ' employees under each of the three methods. None is confirmed by the Gazette, the EPFO press release or the PIB release, so confirm with EPFO before you file.</p>' +
+      '<div class="wc-scroll"><table class="wc-table wc-mtable"><thead><tr><th>Method</th><th>Employee A/c 1</th><th>Employer 12%</th>' + (oh ? '<th>EDLI + admin</th>' : '') + '<th>Total</th><th>Against selected</th></tr></thead><tbody>' + body + '</tbody></table></div>';
   }
 
   function csvCell(v) {
@@ -781,7 +875,7 @@
     tot.push(t.contribWage, t.epsWage);
     L.accts.forEach(function (x) { tot.push(t[x.key]); });
     tot.push('');
-    downloadCsv('leap-epf-contribution-' + cfg.period + '.csv', [head].concat(rows, [tot]));
+    downloadCsv('leap-epf-contribution-' + cfg.period + (cfg.period === 'split' && cfg.method && cfg.method !== 'split' ? '-' + cfg.method : '') + '.csv', [head].concat(rows, [tot]));
     track('epf-wage-ceiling-bulk', 'download_results');
   }
 
@@ -867,17 +961,20 @@
     document.querySelectorAll('input[name="wc-bulk-period"]').forEach(function (r) {
       r.addEventListener('change', function () {
         document.querySelectorAll('#wc-bulk-periods .opt-card').forEach(function (c) { c.classList.toggle('on', c.querySelector('input').checked); });
+        $('wc-bulk-method-wrap').hidden = r.value !== 'split';
         clearBulkResult();
       });
     });
+    $('wc-bulk-method').addEventListener('change', clearBulkResult);
   }
 
   /* ---------- Lead capture before bulk results ---------- */
   var LEAD_KEY = 'leap-bulk-pf-lead-v1';
+  var EXCEL_KEY = 'leap-excel-lead-v1';
   var LEAD_ENDPOINT = 'https://api.web3forms.com/submit';
 
   function hasLead() {
-    try { return !!localStorage.getItem(LEAD_KEY); } catch (e) { return false; }
+    try { return !!(localStorage.getItem(LEAD_KEY) || localStorage.getItem(EXCEL_KEY)); } catch (e) { return false; }
   }
   function saveLead() {
     try { localStorage.setItem(LEAD_KEY, String(Date.now())); } catch (e) { /* storage blocked, ask again next time */ }
@@ -951,6 +1048,76 @@
       .catch(function () { finish(false); });
   }
 
+  /* ---------- Excel download, in exchange for contact details ---------- */
+  var EXCEL_FILE = '/assets/downloads/leap-epf-wage-ceiling-calculator-v20260921-7c3f9a.xlsx';
+  var EXCEL_NAME = 'LEAP-EPF-Wage-Ceiling-Calculator.xlsx';
+
+  function hasExcelLead() {
+    try { return !!localStorage.getItem(EXCEL_KEY); } catch (e) { return false; }
+  }
+  function startExcelDownload() {
+    var a = document.createElement('a');
+    a.href = EXCEL_FILE; a.download = EXCEL_NAME;
+    document.body.appendChild(a); a.click(); a.remove();
+    track('epf-wage-ceiling-excel', 'file_download');
+  }
+  function paintExcelCard() {
+    var done = hasExcelLead();
+    $('wc-excel-form-wrap').hidden = done;
+    $('wc-excel-done').hidden = !done;
+  }
+  function showExcelDone(started) {
+    $('wc-excel-form-wrap').hidden = true;
+    $('wc-excel-done').hidden = false;
+    $('wc-excel-done-msg').textContent = started
+      ? 'Your download has started. If nothing happened, use the button below.'
+      : 'Thank you. Use the button below to download the workbook.';
+  }
+
+  function submitExcel(e) {
+    e.preventDefault();
+    var form = e.target, err = $('wc-x-error'), btn = $('wc-x-submit');
+    if (form.elements.botcheck && form.elements.botcheck.checked) return;
+    var v = function (n) { return form.elements[n].value.trim(); };
+    var digits = v('phone').replace(/\D/g, '');
+    if (!v('name') || !v('company')) { err.textContent = 'Please enter your name and company.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'))) { err.textContent = 'Please enter your company email address.'; return; }
+    if (isPersonalEmail(v('email'))) { err.textContent = 'Please use your company email address. Gmail, Yahoo, Outlook and other personal addresses are not accepted.'; return; }
+    if (digits.length < 10 || digits.length > 13) { err.textContent = 'Please enter a valid phone or WhatsApp number.'; return; }
+    if (!v('employees')) { err.textContent = 'Please choose the size of your workforce.'; return; }
+    if (!v('role')) { err.textContent = 'Please choose the option that describes you best.'; return; }
+    if (!form.elements.consent.checked) { err.textContent = 'Please tick the consent box so we can contact you.'; return; }
+    err.textContent = '';
+
+    var fd = new FormData(form);
+    fd.delete('consent');
+    fd.set('message', 'Excel calculator download. Role: ' + v('role') + '. Employees: ' + v('employees') + '. Interested in: ' + (v('interest') || 'not stated') + '.');
+    var label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Please wait...';
+
+    var finish = function (ok) {
+      btn.disabled = false; btn.textContent = label;
+      if (ok) {
+        try { localStorage.setItem(EXCEL_KEY, String(Date.now())); } catch (x) { /* storage blocked */ }
+        if (typeof root.gtag === 'function') root.gtag('event', 'generate_lead', { form_name: 'excel_download', tool_name: 'epf-wage-ceiling-excel' });
+        if (typeof root.showToast === 'function') root.showToast('Thank you. Your download is starting.');
+      }
+      /* If sending failed, the download still starts: our fault, not theirs. */
+      startExcelDownload();
+      showExcelDone(true);
+    };
+    fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { finish(!!(j && j.success)); })
+      .catch(function () { finish(false); });
+  }
+
+  function initExcel() {
+    if (!$('wc-excel-form')) return;
+    $('wc-excel-form').addEventListener('submit', submitExcel);
+    paintExcelCard();
+  }
+
   /* ---------- Share ---------- */
   function shareUrl() {
     var c = document.querySelector('link[rel="canonical"]');
@@ -991,6 +1158,10 @@
         $('wc-result').innerHTML = PLACEHOLDER; $('wc-print-bar-1').hidden = true;
       });
     });
+    $('wc-method').addEventListener('change', function () {
+      currentMethod = this.value; renderSegments();
+      $('wc-result').innerHTML = PLACEHOLDER; $('wc-print-bar-1').hidden = true;
+    });
     $('wc-segments').addEventListener('change', function (e) {
       if (e.target.matches('[data-field="pf"]')) syncEpsOptions(e.target.closest('.wc-seg'));
     });
@@ -1005,13 +1176,15 @@
     renderSegments();
     initChecklist();
     initBulk();
+    initExcel();
   }
 
   root.WageCeilingUI = {
     calcContribution: calcContribution, resetContribution: resetContribution,
     printTool: printTool, resetChecklist: resetChecklist, share: share,
     calcBulk: calcBulk, resetBulk: resetBulk, loadPasted: loadPasted,
-    downloadTemplate: downloadTemplate, downloadBulk: downloadBulk
+    downloadTemplate: downloadTemplate, downloadBulk: downloadBulk,
+    downloadExcel: startExcelDownload
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

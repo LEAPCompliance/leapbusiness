@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /assets/downloads/
 
 Sitemap: https://www.leapbusiness.in/sitemap.xml
