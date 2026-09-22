@@ -328,7 +328,7 @@ body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--off-
 <script src="js/components.js?v=14"></script>
 <script src="js/main.js?v=11"></script>
 <script src="js/pt-data.js?v=1"></script>
-<script src="js/minwage-data.js?v=2"></script>
+<script src="js/minwage-data.js?v=3"></script>
 <script>
 renderNavbar('resources');renderFooter();renderWhatsApp();
 
@@ -534,9 +534,10 @@ function mwBuildRows(name, entry, cats) {
     cats.forEach(function (c) {
       var cellVal = window.minWageCell ? window.minWageCell(name, c.key, zone) : null;
       if (!cellVal) return;
-      var total = cellVal.basic + cellVal.vda;
+      var hraVal = window.minWageHRA ? window.minWageHRA(name, c.key, zone) : 0;
+      var total = window.minWageRate ? window.minWageRate(name, c.key, zone) : cellVal.basic + hraVal + cellVal.vda;
       var perDay = window.minWagePerDay ? window.minWagePerDay(name, c.key, zone) : Math.round((total / (window.MIN_WAGE_PER_DAY_DIVISOR || 26)) * 100) / 100;
-      rows.push({ zone: zone, cat: c, basic: cellVal.basic, vda: cellVal.vda, total: total, perDay: perDay });
+      rows.push({ zone: zone, cat: c, basic: cellVal.basic, hra: hraVal, vda: cellVal.vda, total: total, perDay: perDay });
     });
   });
   return rows;
@@ -560,10 +561,15 @@ function mwRenderDetail(name) {
 
   var rows = mwBuildRows(name, entry, cats);
   var showZoneCol = entry.hasZones;
-  var thead = '<tr>' + (showZoneCol ? '<th>Zone</th>' : '') + '<th>Class of Employment</th><th>Basic /month</th><th>VDA /month</th><th>Total /day</th><th>Total /month</th></tr>';
+  var showHraCol = !!entry.hraPct;
+  var totalLabel = showHraCol ? 'Total /month (incl. HRA)' : 'Total /month';
+  var thead = '<tr>' + (showZoneCol ? '<th>Zone</th>' : '') + '<th>Class of Employment</th><th>Basic /month</th>' +
+    (showHraCol ? '<th>HRA /month</th>' : '') + '<th>VDA /month</th><th>Total /day</th><th>' + totalLabel + '</th></tr>';
   var tbody = rows.map(function (r) {
     return '<tr>' + (showZoneCol ? '<td>' + (r.zone || '—') + '</td>' : '') +
-      '<td>' + r.cat.label + '</td><td>' + mwMoney(r.basic) + '</td><td>' + mwMoney(r.vda) + '</td><td>₹' + r.perDay.toFixed(2) + '</td>' +
+      '<td>' + r.cat.label + '</td><td>' + mwMoney(r.basic) + '</td>' +
+      (showHraCol ? '<td>' + mwMoney(r.hra) + '</td>' : '') +
+      '<td>' + mwMoney(r.vda) + '</td><td>₹' + r.perDay.toFixed(2) + '</td>' +
       '<td style="font-weight:700;color:var(--navy)">' + mwMoney(r.total) + '</td></tr>';
   }).join('');
 
@@ -582,7 +588,8 @@ function mwRenderDetail(name) {
       (entry.scheduleNote ? '<div class="slab-note">📌 ' + entry.scheduleNote + '</div>' : '') +
       '<div class="slab-section-title">Minimum Wages — all categories' + (showZoneCol ? ' and zones' : '') + '</div>' +
       '<div style="overflow-x:auto"><table class="slab-table"><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table></div>' +
-      '<p style="font-size:11.5px;color:var(--text-light);margin-top:8px">Total per day assumes ' + (window.MIN_WAGE_PER_DAY_DIVISOR || 26) + ' working days a month, the usual convention in these notifications.</p>' +
+      (showHraCol && entry.hraNote ? '<p style="font-size:11.5px;color:var(--text-light);margin-top:8px">🏠 ' + entry.hraNote + '</p>' : '') +
+      '<p style="font-size:11.5px;color:var(--text-light);margin-top:4px">Total per day assumes ' + (window.MIN_WAGE_PER_DAY_DIVISOR || 26) + ' working days a month, the usual convention in these notifications.</p>' +
       (entry.notificationFile ? '<div style="margin-top:16px;text-align:center"><a href="' + entry.notificationFile + '" class="btn btn-outline-dark" download>📄 ' + (entry.notificationLabel || 'Download official notification') + '</a></div>' : '') +
       '<div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">💼 <strong>Need help checking your salary structure against this?</strong> <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Contact LEAP →</a></div>' +
     '</div>';

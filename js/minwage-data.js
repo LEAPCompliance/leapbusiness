@@ -53,7 +53,12 @@
   function blankEntry() {
     return {
       updated: null, wef: null, source: null, notificationFile: null, notificationLabel: null,
-      scheduleNote: null, hasZones: false, zones: null, rates: blankRates()
+      scheduleNote: null, hasZones: false, zones: null, rates: blankRates(),
+      /* A separate mandatory-HRA rule some states apply on top of the wage
+         notification itself (Maharashtra requires HRA even though the wage
+         schedule's own "Total" is Basic + VDA only). hraPct is a fraction of
+         Basic, e.g. 0.05 for 5%; null means no such rule is recorded here. */
+      hraPct: null, hraNote: null
     };
   }
 
@@ -77,7 +82,13 @@
     source: 'Government of Maharashtra, Minimum Wages notification (VDA revision), Shops & Establishments schedule',
     notificationFile: '/assets/notifications/maharashtra-minimum-wages-shops-establishments-jul2026.pdf',
     notificationLabel: 'Download official notification (PDF)',
-    scheduleNote: 'This notification covers multiple scheduled employments; the figures here are for the Shops & Establishments schedule only. Check the PDF directly for any other schedule.',
+    scheduleNote: 'This notification covers multiple scheduled employments; the figures here are for the Shops & Establishments schedule only. Check the PDF directly for any other schedule. Basic and VDA above are exactly as notified; House Rent Allowance is not part of this notification and is added separately below, since HRA is a mandatory wage component in Maharashtra.',
+    /* Rate and mandate as instructed by LEAP; not itself part of the wage
+       notification above, so kept as a separate, clearly-labelled figure
+       rather than folded silently into "Basic" or "VDA". Add a specific
+       notification/GR reference here once available. */
+    hraPct: 0.05,
+    hraNote: 'Minimum HRA of 5% of Basic, mandatory in Maharashtra, added on top of the wage schedule’s own Basic + VDA figures.',
     hasZones: true,
     zones: ['Zone I', 'Zone II', 'Zone III'],
     rates: {
@@ -104,11 +115,21 @@
     return bucket ? (bucket[categoryKey] || null) : null;
   }
 
-  /* Total for a category (+ zone, for a zoned state) in rupees per month, or
-     null if not on file / if a zoned state was asked for without a zone. */
+  /* Mandatory HRA in rupees for a cell, per the state's hraPct (a fraction of
+     Basic), or 0 if the state has no such rule recorded. */
+  function hra(state, categoryKey, zone) {
+    var entry = MIN_WAGE_DATA[state];
+    var c = cell(state, categoryKey, zone);
+    if (!entry || !c || !entry.hraPct) return 0;
+    return Math.round(c.basic * entry.hraPct);
+  }
+
+  /* Total for a category (+ zone, for a zoned state) in rupees per month —
+     Basic + mandatory HRA (if any) + VDA — or null if not on file / if a
+     zoned state was asked for without a zone. */
   function rate(state, categoryKey, zone) {
     var c = cell(state, categoryKey, zone);
-    return c ? c.basic + c.vda : null;
+    return c ? c.basic + hra(state, categoryKey, zone) + c.vda : null;
   }
   function perDay(state, categoryKey, zone) {
     var t = rate(state, categoryKey, zone);
@@ -122,6 +143,7 @@
   root.MIN_WAGE_PER_DAY_DIVISOR = PER_DAY_DIVISOR;
   root.minWageHasAnyRate = hasAnyRate;
   root.minWageCell = cell;
+  root.minWageHRA = hra;
   root.minWageRate = rate;
   root.minWagePerDay = perDay;
 })(typeof window !== 'undefined' ? window : this);
