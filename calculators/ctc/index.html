@@ -81,7 +81,8 @@
         </div>
         <div class="form-group"><label>Communication Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-comm" value="0" /></div>
         <div class="form-group"><label>Conveyance / Fuel Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-conv" value="0" /></div>
-        <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">Special Allowance is the balancing figure. Basic + DA must also meet the statutory minimum wage floor for the employee's skill category; not checked separately here.</p>
+        <div class="form-group"><label>Minimum Wage for this employee's state, zone &amp; skill category (&#8377;/month, optional)</label><input type="number" id="ctc-minwage" min="0" placeholder="e.g. 12,000" /></div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">Special Allowance is the balancing figure. Basic + DA must be at or above the Minimum Wage for the employee's state, zone and skill category. Enter that figure above and this calculator will flag it if Basic + DA falls short; leave it blank to skip the check. Minimum Wages are notified separately by each state and revised roughly every six months, so this calculator does not look them up for you.</p>
         <div style="display:flex;gap:12px;margin-top:20px">
           <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcTakeHome();trackCalcClick('ctc')">Calculate</button>
           <button type="button" class="btn btn-outline-dark" onclick="resetCtc()">↺ Reset</button>
@@ -133,7 +134,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=13"></script>
 <script src="/js/main.js?v=11"></script>
-<script src="/js/tools.js?v=19"></script>
+<script src="/js/tools.js?v=20"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

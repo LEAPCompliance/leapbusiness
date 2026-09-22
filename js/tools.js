@@ -83,9 +83,15 @@ function resetCtc() {
   document.getElementById('ctc-hrapct').value = 50;
   document.getElementById('ctc-comm').value = 0;
   document.getElementById('ctc-conv').value = 0;
+  document.getElementById('ctc-minwage').value = '';
   document.getElementById('ctc-summary').innerHTML = '';
   document.getElementById('th-result').innerHTML = CALC_PLACEHOLDER;
 }
+
+/* PF wage ceiling: Rs 25,000/month from 17 September 2026 (Gazette S.O. 5109(E)),
+   up from Rs 15,000 (Notification GSR 609(E), 2014). Employer rate of 13% = 12%
+   (EPS + EPF) + 0.5% EDLI + 0.5% admin charges, same structure as the EPF calculator. */
+const CTC_PF_CEILING = 25000;
 
 function ctcForward(gross, p) {
   const basicDA = gross * (p.basicPct / 100);
@@ -94,7 +100,7 @@ function ctcForward(gross, p) {
   const grossTotal = basicDA + hra + p.comm + p.conv + special; // = gross
 
   const pfWage = grossTotal - hra;
-  const pfEmp = pfWage > 15000 ? 1800 : pfWage * 0.12;
+  const pfEmp = pfWage > CTC_PF_CEILING ? CTC_PF_CEILING * 0.12 : pfWage * 0.12;
   const esicApplicable = basicDA < 21000;
   const esicEmp = esicApplicable ? basicDA * 0.0075 : 0;
   const st = CTC_STATES[p.state];
@@ -102,7 +108,7 @@ function ctcForward(gross, p) {
   const lwfEmp = st.lwfEE;
   const netSalary = grossTotal - pfEmp - esicEmp - pt - lwfEmp;
 
-  const pfEmployer = pfWage > 15000 ? 1950 : pfWage * 0.13;
+  const pfEmployer = pfWage > CTC_PF_CEILING ? CTC_PF_CEILING * 0.13 : pfWage * 0.13;
   const esicEmployer = esicApplicable ? basicDA * 0.0325 : 0;
   const lwfEmployer = st.lwfER;
   const bonus = basicDA * 0.0833;
@@ -110,7 +116,8 @@ function ctcForward(gross, p) {
   const employerCostTotal = pfEmployer + esicEmployer + lwfEmployer + bonus + gratuity;
 
   const ctc = grossTotal + employerCostTotal;
-  return { basicDA, hra, comm: p.comm, conv: p.conv, special, grossTotal, pfEmp, esicApplicable, esicEmp, pt, lwfEmp, netSalary, pfWage, pfEmployer, esicEmployer, lwfEmployer, bonus, gratuity, employerCostTotal, ctc };
+  const minWageOk = !(p.minWage > 0) || basicDA >= p.minWage;
+  return { basicDA, hra, comm: p.comm, conv: p.conv, special, grossTotal, pfEmp, esicApplicable, esicEmp, pt, lwfEmp, netSalary, pfWage, pfEmployer, esicEmployer, lwfEmployer, bonus, gratuity, employerCostTotal, ctc, minWageOk };
 }
 
 function ctcSolveGross(targetVal, getter, p) {
@@ -133,8 +140,9 @@ function calcTakeHome() {
   const hraPct = parseFloat(document.getElementById('ctc-hrapct').value) || 0;
   const comm = parseFloat(document.getElementById('ctc-comm').value) || 0;
   const conv = parseFloat(document.getElementById('ctc-conv').value) || 0;
+  const minWage = parseFloat(document.getElementById('ctc-minwage').value) || 0;
 
-  const p = { basicPct, hraPct, comm, conv, state: stateCode, female };
+  const p = { basicPct, hraPct, comm, conv, state: stateCode, female, minWage };
   const st = CTC_STATES[stateCode];
 
   let gross;
@@ -151,7 +159,8 @@ function calcTakeHome() {
 
   document.getElementById('th-result').innerHTML = `
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:4px">Part A — Earnings</div>
-    <div class="calc-row"><span>Basic + DA (${basicPct}% of gross)</span><strong>${fmtINR(r.basicDA)}</strong></div>
+    <div class="calc-row"><span>Basic + DA (${basicPct}% of gross)${minWage > 0 ? (r.minWageOk ? ' <span style="color:#1a7d3c;font-weight:700">✓ Compliant</span>' : ' <span style="color:#c0392b;font-weight:700">⚠ NC — below Minimum Wage</span>') : ''}</span><strong>${fmtINR(r.basicDA)}</strong></div>
+    ${minWage > 0 && !r.minWageOk ? `<div class="calc-alert" style="margin:4px 0 12px"><span class="calc-alert-icon">⚠️</span><div><h5>Basic + DA is below the Minimum Wage you entered</h5><p>Basic + DA of ${fmtINR(r.basicDA)} is less than the Minimum Wage floor of ${fmtINR(minWage)} you specified. Raise the Basic + DA % (or the gross/CTC) so Basic + DA is at least ${fmtINR(minWage)}, or confirm the correct notified Minimum Wage for this employee's state, zone and skill category.</p></div></div>` : ''}
     <div class="calc-row"><span>HRA (${hraPct}% of Basic + DA)</span><strong>${fmtINR(r.hra)}</strong></div>
     <div class="calc-row"><span>Communication Allowance</span><strong>${fmtINR(r.comm)}</strong></div>
     <div class="calc-row"><span>Conveyance / Fuel Allowance</span><strong>${fmtINR(r.conv)}</strong></div>
@@ -159,14 +168,14 @@ function calcTakeHome() {
     <div class="calc-row calc-total"><span>Gross Salary</span><strong>${fmtINR(r.grossTotal)}</strong></div>
 
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin:16px 0 4px">Part B — Employee Deductions</div>
-    <div class="calc-row"><span>PF — Employee (12%${r.pfWage > 15000 ? ', capped ₹1,800' : ''})</span><strong>- ${fmtINR(r.pfEmp)}</strong></div>
+    <div class="calc-row"><span>PF — Employee (12%${r.pfWage > CTC_PF_CEILING ? ', capped ' + fmtINR(CTC_PF_CEILING * 0.12) : ''})</span><strong>- ${fmtINR(r.pfEmp)}</strong></div>
     <div class="calc-row"><span>ESIC — Employee ${r.esicApplicable ? '(0.75%)' : '(n/a, Basic+DA ≥ ₹21,000)'}</span><strong>- ${fmtINR(r.esicEmp)}</strong></div>
     <div class="calc-row"><span>Professional Tax (${st.name})</span><strong>- ${fmtINR(r.pt)}</strong></div>
     <div class="calc-row"><span>LWF — Employee (monthly provision)</span><strong>- ${fmtINR(r.lwfEmp)}</strong></div>
     <div class="calc-row calc-total"><span>Net Take-Home Salary</span><strong>${fmtINR(r.netSalary)}</strong></div>
 
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin:16px 0 4px">Part C — Employer Cost (Over &amp; Above Gross)</div>
-    <div class="calc-row"><span>PF — Employer (13%${r.pfWage > 15000 ? ', capped ₹1,950' : ''})</span><strong>${fmtINR(r.pfEmployer)}</strong></div>
+    <div class="calc-row"><span>PF — Employer (13%${r.pfWage > CTC_PF_CEILING ? ', capped ' + fmtINR(CTC_PF_CEILING * 0.13) : ''})</span><strong>${fmtINR(r.pfEmployer)}</strong></div>
     <div class="calc-row"><span>ESIC — Employer ${r.esicApplicable ? '(3.25%)' : '(n/a, Basic+DA ≥ ₹21,000)'}</span><strong>${fmtINR(r.esicEmployer)}</strong></div>
     <div class="calc-row"><span>LWF — Employer (monthly provision)</span><strong>${fmtINR(r.lwfEmployer)}</strong></div>
     <div class="calc-row"><span>Statutory Bonus (8.33%)</span><strong>${fmtINR(r.bonus)}</strong></div>
@@ -178,8 +187,8 @@ function calcTakeHome() {
 
     <div style="margin-top:16px;padding-top:16px;border-top:1px dashed var(--border);font-size:13px;color:var(--text-secondary);line-height:1.7">
       <strong style="color:var(--text-primary)">Notes:</strong><br>
-      • Basic + DA must also meet the applicable Minimum Wages floor for the employee's skill category — this calculator does not check that separately.<br>
-      • PF wages = Gross − HRA (i.e. Basic+DA + all allowances except HRA), capped at the statutory wage ceiling of ₹15,000/month.<br>
+      • ${minWage > 0 ? `Basic + DA is checked against the Minimum Wage of ${fmtINR(minWage)} you entered. Minimum Wages vary by state, zone and skill category and are revised roughly every six months with the VDA, so confirm you used the current notified figure for this employee.` : `Basic + DA must also meet the applicable Minimum Wages floor for the employee's state, zone and skill category. Enter that figure in "Minimum Wage" above to have it checked automatically — this calculator does not look it up for you.`}<br>
+      • PF wages = Gross − HRA (i.e. Basic+DA + all allowances except HRA), capped at the statutory wage ceiling of ${fmtINR(CTC_PF_CEILING)}/month, effective 17 September 2026 (Gazette S.O. 5109(E)); it was ₹15,000/month before that date.<br>
       • ESIC applies only where Basic+DA is below ₹21,000/month; both employee and employer contributions stop above that.<br>
       ${st.febNote ? `• ${st.febNote}<br>` : ''}
       ${st.halfYearly ? `• ${st.name} levies Professional Tax half-yearly (April &amp; October); the figure shown is a monthly-equivalent average — the actual deduction happens as one lump sum twice a year.<br>` : ''}
