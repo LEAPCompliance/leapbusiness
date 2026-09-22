@@ -328,7 +328,7 @@ body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--off-
 <script src="js/components.js?v=14"></script>
 <script src="js/main.js?v=11"></script>
 <script src="js/pt-data.js?v=1"></script>
-<script src="js/minwage-data.js?v=1"></script>
+<script src="js/minwage-data.js?v=2"></script>
 <script>
 renderNavbar('resources');renderFooter();renderWhatsApp();
 
@@ -511,8 +511,6 @@ buildLwfGrid();
 lwfSelectState('Maharashtra');
 
 // ── MINIMUM WAGES (reads window.MIN_WAGE_DATA from js/minwage-data.js) ──
-var mwActiveState = null, mwActiveClass = 'unskilled';
-
 function mwFilterStates(q) {
   document.querySelectorAll('.mw-state-btn').forEach(function (btn) {
     btn.style.display = btn.dataset.name.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
@@ -520,15 +518,28 @@ function mwFilterStates(q) {
 }
 
 function mwSelectState(name) {
-  mwActiveState = name;
   document.querySelectorAll('.mw-state-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.name === name); });
   mwRenderDetail(name);
   document.getElementById('mwDetailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function mwSetClass(key) {
-  mwActiveClass = key;
-  if (mwActiveState) mwRenderDetail(mwActiveState);
+function mwMoney(n) { return '₹' + n.toLocaleString('en-IN'); }
+
+/* Every category the state has a rate for, one row per zone (or one row,
+   for a state with no zones) — "one below another", as asked for. */
+function mwBuildRows(name, entry, cats) {
+  var zones = entry.hasZones && entry.zones && entry.zones.length ? entry.zones : [null];
+  var rows = [];
+  zones.forEach(function (zone) {
+    cats.forEach(function (c) {
+      var cellVal = window.minWageCell ? window.minWageCell(name, c.key, zone) : null;
+      if (!cellVal) return;
+      var total = cellVal.basic + cellVal.vda;
+      var perDay = window.minWagePerDay ? window.minWagePerDay(name, c.key, zone) : Math.round((total / (window.MIN_WAGE_PER_DAY_DIVISOR || 26)) * 100) / 100;
+      rows.push({ zone: zone, cat: c, basic: cellVal.basic, vda: cellVal.vda, total: total, perDay: perDay });
+    });
+  });
+  return rows;
 }
 
 function mwRenderDetail(name) {
@@ -536,10 +547,6 @@ function mwRenderDetail(name) {
   var entry = window.MIN_WAGE_DATA ? window.MIN_WAGE_DATA[name] : null;
   var cats = window.MIN_WAGE_CATEGORIES || [];
   var populated = window.minWageHasAnyRate ? window.minWageHasAnyRate(entry) : false;
-
-  var pillsHtml = cats.map(function (c) {
-    return '<button class="fpill' + (mwActiveClass === c.key ? ' on' : '') + '" onclick="mwSetClass(\'' + c.key + '\')">' + c.label + '</button>';
-  }).join('');
 
   if (!populated) {
     panel.innerHTML =
@@ -551,34 +558,36 @@ function mwRenderDetail(name) {
     return;
   }
 
-  var entryForZone = entry;
-  var zonePicker = '';
-  if (entry.hasZones && entry.zones && entry.zones.length) {
-    zonePicker = '<div class="slab-section-title" style="margin-top:14px">Zone / Area</div><div class="filter-pills" style="margin-bottom:10px">' +
-      entry.zones.map(function (z, i) { return '<button class="fpill' + (i === 0 ? ' on' : '') + '" onclick="mwSetZone(this,\'' + z + '\')" data-zone="' + z + '">' + z + '</button>'; }).join('') + '</div>';
-  }
-  var zone = entry.hasZones && entry.zones ? entry.zones[0] : null;
-  var rateVal = window.minWageRate ? window.minWageRate(name, mwActiveClass, zone) : null;
+  var rows = mwBuildRows(name, entry, cats);
+  var showZoneCol = entry.hasZones;
+  var thead = '<tr>' + (showZoneCol ? '<th>Zone</th>' : '') + '<th>Class of Employment</th><th>Basic /month</th><th>VDA /month</th><th>Total /day</th><th>Total /month</th><th></th></tr>';
+  var tbody = rows.map(function (r) {
+    var ctcLink = 'https://www.leapbusiness.in/calculators/ctc/?mw_state=' + encodeURIComponent(name) + '&mw_class=' + r.cat.key + '&mw_rate=' + r.total + (r.zone ? '&mw_zone=' + encodeURIComponent(r.zone) : '');
+    return '<tr>' + (showZoneCol ? '<td>' + (r.zone || '—') + '</td>' : '') +
+      '<td>' + r.cat.label + '</td><td>' + mwMoney(r.basic) + '</td><td>' + mwMoney(r.vda) + '</td><td>₹' + r.perDay.toFixed(2) + '</td>' +
+      '<td style="font-weight:700;color:var(--navy)">' + mwMoney(r.total) + '</td>' +
+      '<td><a href="' + ctcLink + '" style="color:var(--navy);font-weight:600;font-size:12px;white-space:nowrap">Use in CTC →</a></td></tr>';
+  }).join('');
+
+  var meta = [];
+  if (entry.wef) meta.push(['Effective From (W.E.F.)', entry.wef]);
+  if (entry.updated) meta.push(['Notification Verified', entry.updated]);
+  if (entry.source) meta.push(['Source', entry.source]);
+  var metaHtml = meta.length ? '<div class="meta-grid" style="margin-bottom:16px">' + meta.map(function (m) {
+    return '<div class="meta-tile"' + (m[0] === 'Source' ? ' style="grid-column:1/-1"' : '') + '><div class="meta-lbl">' + m[0] + '</div><div class="meta-val" style="font-weight:' + (m[0] === 'Source' ? 400 : 600) + '">' + m[1] + '</div></div>';
+  }).join('') + '</div>' : '';
 
   panel.innerHTML =
     '<div class="detail-panel">' +
       '<div class="dp-header"><div class="dp-title">' + name + '</div><div class="dp-badges"><span class="badge-applicable">✓ Verified' + (entry.updated ? ', updated ' + entry.updated : '') + '</span></div></div>' +
-      (entry.source ? '<div class="meta-grid" style="margin-bottom:14px"><div class="meta-tile" style="grid-column:1/-1"><div class="meta-lbl">Source</div><div class="meta-val" style="font-weight:400">' + entry.source + '</div></div></div>' : '') +
-      '<div class="slab-section-title">Skill Category</div><div class="filter-pills" style="margin-bottom:14px" id="mwClassPills">' + pillsHtml + '</div>' +
-      zonePicker +
-      '<div class="meta-tile" style="text-align:center;padding:20px"><div class="meta-lbl">Minimum Wage, ' + (cats.filter(function (c) { return c.key === mwActiveClass; })[0] || {}).label + (zone ? ' — ' + zone : '') + '</div>' +
-      '<div style="font-size:28px;font-weight:700;color:var(--navy);margin-top:6px">' + (rateVal != null ? '₹' + rateVal.toLocaleString('en-IN') + ' / month' : 'Not added for this category yet') + '</div></div>' +
-      (rateVal != null ? '<div style="margin-top:14px;text-align:center"><a href="https://www.leapbusiness.in/calculators/ctc/?mw_state=' + encodeURIComponent(name) + '&mw_class=' + mwActiveClass + '&mw_rate=' + rateVal + '" class="btn btn-primary" style="text-decoration:none;display:inline-block">Use in CTC Calculator →</a></div>' : '') +
+      metaHtml +
+      (entry.scheduleNote ? '<div class="slab-note">📌 ' + entry.scheduleNote + '</div>' : '') +
+      '<div class="slab-section-title">Minimum Wages — all categories' + (showZoneCol ? ' and zones' : '') + '</div>' +
+      '<div style="overflow-x:auto"><table class="slab-table"><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table></div>' +
+      '<p style="font-size:11.5px;color:var(--text-light);margin-top:8px">Total per day assumes ' + (window.MIN_WAGE_PER_DAY_DIVISOR || 26) + ' working days a month, the usual convention in these notifications.</p>' +
+      (entry.notificationFile ? '<div style="margin-top:16px;text-align:center"><a href="' + entry.notificationFile + '" class="btn btn-outline-dark" download>📄 ' + (entry.notificationLabel || 'Download official notification') + '</a></div>' : '') +
       '<div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">💼 <strong>Need help checking your salary structure against this?</strong> <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Contact LEAP →</a></div>' +
     '</div>';
-}
-
-function mwSetZone(btn, zone) {
-  document.querySelectorAll('#mwDetailPanel [data-zone]').forEach(function (b) { b.classList.remove('on'); });
-  btn.classList.add('on');
-  var rateVal = window.minWageRate ? window.minWageRate(mwActiveState, mwActiveClass, zone) : null;
-  var valEl = document.querySelector('#mwDetailPanel .meta-tile[style*="text-align:center"] div[style*="font-size:28px"]');
-  if (valEl) valEl.textContent = rateVal != null ? '₹' + rateVal.toLocaleString('en-IN') + ' / month' : 'Not added for this category yet';
 }
 
 function mwBuildGrid() {

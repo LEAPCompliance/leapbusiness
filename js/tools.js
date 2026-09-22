@@ -132,6 +132,7 @@ function ctcApplyMinWageLink() {
   const mwState = params.get('mw_state');
   const mwClass = params.get('mw_class');
   const mwRate = params.get('mw_rate');
+  const mwZone = params.get('mw_zone');
   if (!mwState && !mwClass && !mwRate) return;
 
   let stateSupported = true;
@@ -141,8 +142,10 @@ function ctcApplyMinWageLink() {
     else stateSupported = false;
   }
   if (mwClass) document.getElementById('ctc-class').value = mwClass;
-  if (mwRate) document.getElementById('ctc-minwage').value = mwRate;
-  else if (mwState && stateSupported && mwClass) ctcLookupMinWage();
+  if (mwRate) {
+    document.getElementById('ctc-minwage').value = mwRate;
+    if (stateSupported) document.getElementById('ctc-minwage-hint').innerHTML = 'Filled in from LEAP’s Minimum Wages Hub' + (mwZone ? ' for ' + mwZone : '') + '. <a href="/knowledge.html#minwage" target="_blank" style="color:var(--primary);font-weight:600">View source →</a>';
+  } else if (mwState && stateSupported && mwClass) ctcLookupMinWage();
 
   if (mwState && !stateSupported) {
     document.getElementById('ctc-minwage-hint').textContent = mwState + ' is not yet one of the states this calculator supports for Professional Tax / LWF' + (mwRate ? ' — the Minimum Wage below has still been filled in.' : ', so the Minimum Wage could not be filled in automatically. Enter it manually.');
