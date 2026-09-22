@@ -88,7 +88,7 @@
        rather than folded silently into "Basic" or "VDA". Add a specific
        notification/GR reference here once available. */
     hraPct: 0.05,
-    hraNote: 'Minimum HRA of 5% of Basic, mandatory in Maharashtra, added on top of the wage schedule’s own Basic + VDA figures.',
+    hraNote: 'Minimum HRA of 5% of Basic + VDA (Basic + DA, as combined in the payroll register), mandatory in Maharashtra, added on top of the wage schedule’s own Basic + VDA figures.',
     hasZones: true,
     zones: ['Zone I', 'Zone II', 'Zone III'],
     rates: {
@@ -115,13 +115,17 @@
     return bucket ? (bucket[categoryKey] || null) : null;
   }
 
-  /* Mandatory HRA in rupees for a cell, per the state's hraPct (a fraction of
-     Basic), or 0 if the state has no such rule recorded. */
+  /* Mandatory HRA in rupees for a cell, per the state's hraPct (a fraction).
+     Payroll registers don't carry Basic and VDA as separate lines — they are
+     combined into one "Basic + DA" figure — so HRA is worked on that combined
+     figure, the same way it would be run in an actual register, even though
+     Basic and VDA are kept as separate columns here for checking. 0 if the
+     state has no such rule recorded. */
   function hra(state, categoryKey, zone) {
     var entry = MIN_WAGE_DATA[state];
     var c = cell(state, categoryKey, zone);
     if (!entry || !c || !entry.hraPct) return 0;
-    return Math.round(c.basic * entry.hraPct);
+    return Math.round((c.basic + c.vda) * entry.hraPct);
   }
 
   /* Total for a category (+ zone, for a zoned state) in rupees per month —
