@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MVF2MKYVWJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MVF2MKYVWJ');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional Tax Slabs, PAN-India | State-wise Reference | LEAP</title>
+  <meta name="description" content="Free state-wise Professional Tax reference: applicability, RC/EC status, employee slab rates, remittance periodicity and due dates for all 28 states. By LEAP Business Solutions." />
+  <meta name="keywords" content="professional tax slabs, pt rates by state, professional tax applicability india, pt due dates" />
+  <meta property="og:title" content="Professional Tax Slabs, PAN-India | LEAP" />
+  <meta property="og:description" content="State-wise PT applicability, slab rates, RC/EC status and due dates, all 28 states, free." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.leapbusiness.in/knowledge/professional-tax/" />
+  <link rel="canonical" href="https://www.leapbusiness.in/knowledge/professional-tax/" />
+  <link rel="icon" href="/assets/favicon.png?v=2" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/css/style.css?v=14" />
+  <link rel="stylesheet" href="/css/knowledge.css?v=1" />
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
+    {"@type": "ListItem", "position": 2, "name": "Knowledge Hub", "item": "https://www.leapbusiness.in/knowledge.html"},
+    {"@type": "ListItem", "position": 3, "name": "Professional Tax", "item": "https://www.leapbusiness.in/knowledge/professional-tax/"}
+  ]}
+  </script>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<div class="kb-hero">
+  <div class="kb-hero-inner">
+    <div class="breadcrumb"><a href="/index.html" style="color:rgba(255,255,255,0.75)">Home</a> <span>›</span> <a href="/knowledge.html" style="color:rgba(255,255,255,0.75)">Knowledge Hub</a> <span>›</span> <span style="color:#fff">Professional Tax</span></div>
+    <div class="kb-hero-badge">💼 Free Compliance Reference</div>
+    <h1>Professional Tax <span>Slabs</span></h1>
+    <p>State-wise PT applicability, RC/EC status, employee slab rates, remittance periodicity and due dates &mdash; all 28 states in one place.</p>
+  </div>
+</div>
+
+<div class="kb-page">
+  <div class="tool-card">
+    <div class="tool-card-header">
+      <div class="tool-header-left">
+        <div class="tool-icon">💼</div>
+        <div>
+          <div class="tool-title">Professional Tax &mdash; PAN-India Reference</div>
+          <div class="tool-desc">State-wise PT applicability, RC/EC status, employee slab rates, remittance periodicity, and all due dates in one place.</div>
+        </div>
+      </div>
+      <div class="tool-meta">
+        <span class="chip chip-green">✓ 28 States Covered</span>
+        <span class="chip chip-navy">Revised 4 Jul 2026</span>
+        <span class="chip chip-gold">Free Tool</span>
+      </div>
+    </div>
+
+    <div class="pt-wrap">
+      <div class="search-filter-row">
+        <input class="pt-search" type="text" id="ptSearch" placeholder="🔍  Search state..." oninput="filterStates(this.value)">
+        <div class="filter-pills">
+          <button class="fpill on" onclick="setFilter('all',this)">All States</button>
+          <button class="fpill" onclick="setFilter('applicable',this)">PT Applicable</button>
+          <button class="fpill" onclick="setFilter('na',this)">Not Applicable</button>
+        </div>
+      </div>
+      <div class="state-grid" id="stateGrid"></div>
+      <div id="detailPanel"></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>More free reference tools</span></div>
+  <div class="kb-related-grid">
+    <a href="/knowledge/labour-welfare-fund/" class="kb-related-card">
+      <div class="kb-related-icon">🤝</div>
+      <div class="kb-related-title">Labour Welfare Fund</div>
+      <div class="kb-related-desc">State-wise LWF contribution amounts, periodicity and due dates.</div>
+      <span class="kb-related-badge" style="background:#ecfdf5;color:#065f46">✓ Live</span>
+    </a>
+    <a href="/knowledge/minimum-wages/" class="kb-related-card">
+      <div class="kb-related-icon">📐</div>
+      <div class="kb-related-title">Minimum Wages, PAN-India</div>
+      <div class="kb-related-desc">State-wise Minimum Wage by skill category and zone.</div>
+      <span class="kb-related-badge" style="background:#fffbeb;color:#92400e">🔧 Building</span>
+    </a>
+    <a href="/calculators/professional-tax/" class="kb-related-card">
+      <div class="kb-related-icon">🧮</div>
+      <div class="kb-related-title">Professional Tax Calculator</div>
+      <div class="kb-related-desc">Work out the monthly PT liability for a given wage and state.</div>
+      <span class="kb-related-badge" style="background:var(--gold-pale);color:#0d4a63">Free Tool</span>
+    </a>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div id="whatsapp-placeholder"></div>
+
+<script src="/js/components.js?v=15"></script>
+<script src="/js/main.js?v=11"></script>
+<script src="/js/pt-data.js?v=1"></script>
+<script>
+renderNavbar('resources');renderFooter();renderWhatsApp();
+
+let activeFilter = 'all';
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.fpill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  filterStates(document.getElementById('ptSearch').value);
+}
+
+function filterStates(q) {
+  document.querySelectorAll('.state-btn').forEach(btn => {
+    const n = btn.dataset.name;
+    const d = PT_DATA[n];
+    const mq = n.toLowerCase().includes(q.toLowerCase());
+    const mf = activeFilter === 'all' || (activeFilter === 'applicable' && d.applicable) || (activeFilter === 'na' && !d.applicable);
+    btn.style.display = (mq && mf) ? '' : 'none';
+  });
+}
+
+function selectState(name) {
+  document.querySelectorAll('.state-btn').forEach(b => b.classList.toggle('active', b.dataset.name === name));
+  renderDetail(name);
+  document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (typeof gtag === 'function') gtag('event', 'state_select', { tool_name: 'professional-tax', state_name: name });
+}
+
+function renderDetail(name) {
+  const panel = document.getElementById('detailPanel');
+  const s = PT_DATA[name];
+
+  if (!s.applicable) {
+    panel.innerHTML = `
+      <div class="detail-panel">
+        <div class="dp-header">
+          <div class="dp-title">${name}</div>
+          <span class="badge-na">PT Not Applicable</span>
+        </div>
+        <p style="font-size:14px;color:var(--text-mid);line-height:1.6">Professional Tax is <strong>not levied</strong> in ${name}. No PT registration, deduction, remittance, or return obligations apply to establishments in this state.</p>
+        ${s.note ? `<div style="margin-top:12px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">📌 ${s.note}</div>` : ''}
+        <div style="margin-top:14px;padding:12px 14px;background:var(--off-white);border-radius:8px;border:1px solid var(--border);font-size:12.5px;color:var(--text-mid)">
+          💡 <strong>LEAP Tip:</strong> Even though PT is not applicable here, ensure your PF, ESIC, LWF and Shops &amp; Establishment compliances are in order. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:600">Contact us</a> for a free audit.
+        </div>
+      </div>`;
+    return;
+  }
+
+  let slabHead = s.slabCols.map(c => `<th>${c}</th>`).join('');
+  let slabRows = s.slabs.map(r => `<tr>${r.map((c, i) => `<td${i === r.length - 1 ? ' style="font-weight:600;color:var(--navy)"' : ''}>${c}</td>`).join('')}</tr>`).join('');
+
+  panel.innerHTML = `
+    <div class="detail-panel">
+      <div class="dp-header">
+        <div class="dp-title">${name}</div>
+        <div class="dp-badges">
+          <span class="badge-applicable">✓ PT Applicable</span>
+          <span class="badge-mode">${s.remittance} Remittance</span>
+          <span class="badge-mode">${s.empPeriodicity}</span>
+        </div>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-tile"><div class="meta-lbl">RC Status</div><div class="meta-val">${s.rc}</div></div>
+        <div class="meta-tile"><div class="meta-lbl">EC Status</div><div class="meta-val">${s.ec}</div></div>
+        <div class="meta-tile"><div class="meta-lbl">Employee Remittance Due</div><div class="meta-val">${s.empDue}</div></div>
+        <div class="meta-tile"><div class="meta-lbl">Return Due Date</div><div class="meta-val">${s.returnDue || '—'}</div></div>
+        <div class="meta-tile"><div class="meta-lbl">Employer PT Amount</div><div class="meta-val">${s.employerAmt}</div></div>
+        <div class="meta-tile"><div class="meta-lbl">Employer Remittance Due</div><div class="meta-val">${s.employerDue}</div></div>
+      </div>
+
+      <div class="slab-section-title">Employee PT Slab Rates</div>
+      <div class="slab-note">📌 ${s.slabNote}</div>
+      <div style="overflow-x:auto">
+        <table class="slab-table">
+          <thead><tr>${slabHead}</tr></thead>
+          <tbody>${slabRows}</tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">
+        💼 <strong>Need help with PT compliance in ${name}?</strong> LEAP manages end-to-end PT &mdash; from enrollment certificates to monthly deductions and returns. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Get in touch →</a>
+      </div>
+    </div>`;
+}
+
+function buildGrid() {
+  const grid = document.getElementById('stateGrid');
+  const applicable = Object.keys(PT_DATA).filter(k => PT_DATA[k].applicable).sort();
+  const na = Object.keys(PT_DATA).filter(k => !PT_DATA[k].applicable).sort();
+  [...applicable, ...na].forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'state-btn' + (PT_DATA[name].applicable ? '' : ' na');
+    btn.dataset.name = name;
+    btn.textContent = name;
+    btn.onclick = () => selectState(name);
+    grid.appendChild(btn);
+  });
+}
+
+buildGrid();
+selectState('Maharashtra');
+</script>
+</body>
+</html>

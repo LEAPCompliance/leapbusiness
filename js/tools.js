@@ -107,13 +107,13 @@ function ctcLookupMinWage() {
   }
   const entry = MIN_WAGE_DATA[st.name];
   if (entry && entry.hasZones) {
-    hint.innerHTML = st.name + '’s Minimum Wage differs by zone/area — check the <a href="/knowledge.html#minwage" target="_blank" style="color:var(--primary);font-weight:600">Minimum Wages Hub</a> for the right figure and enter it manually.';
+    hint.innerHTML = st.name + '’s Minimum Wage differs by zone/area — check the <a href="/knowledge/minimum-wages/" target="_blank" style="color:var(--primary);font-weight:600">Minimum Wages Hub</a> for the right figure and enter it manually.';
     return;
   }
   const rate = minWageRate(st.name, cls);
   if (rate != null) {
     document.getElementById('ctc-minwage').value = rate;
-    hint.innerHTML = 'Auto-filled from LEAP’s Minimum Wages Hub' + (entry.updated ? ', updated ' + entry.updated : '') + '. <a href="/knowledge.html#minwage" target="_blank" style="color:var(--primary);font-weight:600">View source →</a>';
+    hint.innerHTML = 'Auto-filled from LEAP’s Minimum Wages Hub' + (entry.updated ? ', updated ' + entry.updated : '') + '. <a href="/knowledge/minimum-wages/" target="_blank" style="color:var(--primary);font-weight:600">View source →</a>';
   } else {
     hint.textContent = 'We haven’t added ' + st.name + '’s Minimum Wage rates yet — enter the figure manually.';
   }
@@ -144,7 +144,7 @@ function ctcApplyMinWageLink() {
   if (mwClass) document.getElementById('ctc-class').value = mwClass;
   if (mwRate) {
     document.getElementById('ctc-minwage').value = mwRate;
-    if (stateSupported) document.getElementById('ctc-minwage-hint').innerHTML = 'Filled in from LEAP’s Minimum Wages Hub' + (mwZone ? ' for ' + mwZone : '') + '. <a href="/knowledge.html#minwage" target="_blank" style="color:var(--primary);font-weight:600">View source →</a>';
+    if (stateSupported) document.getElementById('ctc-minwage-hint').innerHTML = 'Filled in from LEAP’s Minimum Wages Hub' + (mwZone ? ' for ' + mwZone : '') + '. <a href="/knowledge/minimum-wages/" target="_blank" style="color:var(--primary);font-weight:600">View source →</a>';
   } else if (mwState && stateSupported && mwClass) ctcLookupMinWage();
 
   if (mwState && !stateSupported) {
@@ -655,7 +655,7 @@ function calcPT() {
         Employee PT periodicity: ${st.empPeriodicity} &nbsp;|&nbsp; Due: ${st.empDue}<br>
         Employer PT (EC): ${st.employerAmt} &nbsp;|&nbsp; Due: ${st.employerDue}<br>
         Remittance: ${st.remittance} &nbsp;|&nbsp; Returns: ${st.returnMode}<br>
-        Full state-wise reference: <a href="knowledge.html#pt" style="color:var(--primary);font-weight:600">Knowledge Hub PT tool →</a>
+        Full state-wise reference: <a href="/knowledge/professional-tax/" style="color:var(--primary);font-weight:600">Knowledge Hub PT tool →</a>
       </p>
     </div>
   `;

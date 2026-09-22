@@ -35,9 +35,9 @@ function renderNavbar(activePage) {
                 <a href="/coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
                 <a href="/registrations.html">Registrations</a>
                 <a href="/knowledge.html">Knowledge Hub</a>
-                <a href="/knowledge.html#lwf">Labour Welfare Fund</a>
-                <a href="/knowledge.html#pt">Professional Tax</a>
-                <a href="/knowledge.html#minwage">Minimum Wages</a>
+                <a href="/knowledge/labour-welfare-fund/">Labour Welfare Fund</a>
+                <a href="/knowledge/professional-tax/">Professional Tax</a>
+                <a href="/knowledge/minimum-wages/">Minimum Wages</a>
                 <a href="/coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
                 <a href="/coming-soon.html?item=Holidays">Holidays</a>
               </div>
@@ -113,9 +113,9 @@ function renderNavbar(activePage) {
           <a href="/coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
           <a href="/registrations.html">Registrations</a>
           <a href="/knowledge.html">Knowledge Hub</a>
-          <a href="/knowledge.html#lwf">Labour Welfare Fund</a>
-          <a href="/knowledge.html#pt">Professional Tax</a>
-          <a href="/knowledge.html#minwage">Minimum Wages</a>
+          <a href="/knowledge/labour-welfare-fund/">Labour Welfare Fund</a>
+          <a href="/knowledge/professional-tax/">Professional Tax</a>
+          <a href="/knowledge/minimum-wages/">Minimum Wages</a>
           <a href="/coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
           <a href="/coming-soon.html?item=Holidays">Holidays</a>
           <div class="mobile-accordion-heading">Compliance</div>

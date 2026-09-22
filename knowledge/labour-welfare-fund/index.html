@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MVF2MKYVWJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MVF2MKYVWJ');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Labour Welfare Fund (LWF) Rates, PAN-India | LEAP</title>
+  <meta name="description" content="Free state-wise Labour Welfare Fund reference: applicability, employee and employer contribution amounts, deduction dates and submission deadlines for 16 LWF states. By LEAP Business Solutions." />
+  <meta name="keywords" content="labour welfare fund rates, lwf contribution amount, lwf applicability state wise, lwf due dates" />
+  <meta property="og:title" content="Labour Welfare Fund Rates, PAN-India | LEAP" />
+  <meta property="og:description" content="State-wise LWF applicability, contribution amounts and due dates, free." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.leapbusiness.in/knowledge/labour-welfare-fund/" />
+  <link rel="canonical" href="https://www.leapbusiness.in/knowledge/labour-welfare-fund/" />
+  <link rel="icon" href="/assets/favicon.png?v=2" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/css/style.css?v=14" />
+  <link rel="stylesheet" href="/css/knowledge.css?v=1" />
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
+    {"@type": "ListItem", "position": 2, "name": "Knowledge Hub", "item": "https://www.leapbusiness.in/knowledge.html"},
+    {"@type": "ListItem", "position": 3, "name": "Labour Welfare Fund", "item": "https://www.leapbusiness.in/knowledge/labour-welfare-fund/"}
+  ]}
+  </script>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<div class="kb-hero">
+  <div class="kb-hero-inner">
+    <div class="breadcrumb"><a href="/index.html" style="color:rgba(255,255,255,0.75)">Home</a> <span>›</span> <a href="/knowledge.html" style="color:rgba(255,255,255,0.75)">Knowledge Hub</a> <span>›</span> <span style="color:#fff">Labour Welfare Fund</span></div>
+    <div class="kb-hero-badge">🤝 Free Compliance Reference</div>
+    <h1>Labour Welfare Fund <span>Rates</span></h1>
+    <p>State-wise LWF applicability, employee &amp; employer contribution amounts, deduction dates and submission deadlines.</p>
+  </div>
+</div>
+
+<div class="kb-page">
+  <div class="tool-card">
+    <div class="tool-card-header">
+      <div class="tool-header-left">
+        <div class="tool-icon">🤝</div>
+        <div>
+          <div class="tool-title">Labour Welfare Fund &mdash; PAN-India Reference</div>
+          <div class="tool-desc">State-wise LWF applicability, employee &amp; employer contribution amounts, deduction dates, and submission deadlines.</div>
+        </div>
+      </div>
+      <div class="tool-meta">
+        <span class="chip chip-green">✓ 16 States Covered</span>
+        <span class="chip chip-navy">Revised 4 Jul 2026</span>
+        <span class="chip chip-gold">Free Tool</span>
+      </div>
+    </div>
+
+    <div class="pt-wrap">
+      <div class="search-filter-row">
+        <input class="pt-search" type="text" id="lwfSearch" placeholder="🔍  Search state..." oninput="lwfFilterStates(this.value)">
+        <div class="filter-pills">
+          <button class="fpill lwf-pill on" onclick="lwfSetFilter('all',this)">All States</button>
+          <button class="fpill lwf-pill" onclick="lwfSetFilter('applicable',this)">LWF Applicable</button>
+          <button class="fpill lwf-pill" onclick="lwfSetFilter('na',this)">Not Applicable</button>
+        </div>
+      </div>
+      <div class="state-grid" id="lwfStateGrid"></div>
+      <div id="lwfDetailPanel"></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>More free reference tools</span></div>
+  <div class="kb-related-grid">
+    <a href="/knowledge/professional-tax/" class="kb-related-card">
+      <div class="kb-related-icon">💼</div>
+      <div class="kb-related-title">Professional Tax</div>
+      <div class="kb-related-desc">State-wise PT applicability, slab rates and due dates.</div>
+      <span class="kb-related-badge" style="background:#ecfdf5;color:#065f46">✓ Live</span>
+    </a>
+    <a href="/knowledge/minimum-wages/" class="kb-related-card">
+      <div class="kb-related-icon">📐</div>
+      <div class="kb-related-title">Minimum Wages, PAN-India</div>
+      <div class="kb-related-desc">State-wise Minimum Wage by skill category and zone.</div>
+      <span class="kb-related-badge" style="background:#fffbeb;color:#92400e">🔧 Building</span>
+    </a>
+    <a href="/calculators/ctc/" class="kb-related-card">
+      <div class="kb-related-icon">🧮</div>
+      <div class="kb-related-title">CTC ↔ Take-Home Calculator</div>
+      <div class="kb-related-desc">Includes LWF as part of the full employer-cost breakdown.</div>
+      <span class="kb-related-badge" style="background:var(--gold-pale);color:#0d4a63">Free Tool</span>
+    </a>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div id="whatsapp-placeholder"></div>
+
+<script src="/js/components.js?v=15"></script>
+<script src="/js/main.js?v=11"></script>
+<script src="/js/lwf-data.js?v=1"></script>
+<script>
+renderNavbar('resources');renderFooter();renderWhatsApp();
+
+let lwfFilter = 'all';
+
+function lwfSetFilter(f, btn) {
+  lwfFilter = f;
+  document.querySelectorAll('.lwf-pill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  lwfFilterStates(document.getElementById('lwfSearch').value);
+}
+
+function lwfFilterStates(q) {
+  document.querySelectorAll('.lwf-state-btn').forEach(btn => {
+    const n = btn.dataset.name, d = LWF_DATA[n];
+    const mq = n.toLowerCase().includes(q.toLowerCase());
+    const mf = lwfFilter === 'all' || (lwfFilter === 'applicable' && d.applicable) || (lwfFilter === 'na' && !d.applicable);
+    btn.style.display = (mq && mf) ? '' : 'none';
+  });
+}
+
+function lwfSelectState(name) {
+  document.querySelectorAll('.lwf-state-btn').forEach(b => b.classList.toggle('active', b.dataset.name === name));
+  const panel = document.getElementById('lwfDetailPanel');
+  const s = LWF_DATA[name];
+  if (typeof gtag === 'function') gtag('event', 'state_select', { tool_name: 'labour-welfare-fund', state_name: name });
+  if (!s.applicable) {
+    panel.innerHTML = `<div class="detail-panel"><div class="dp-header"><div class="dp-title">${name}</div><span class="badge-na">LWF Not Applicable</span></div><p style="font-size:14px;color:var(--text-mid);line-height:1.6">Labour Welfare Fund is <strong>not applicable</strong> in ${name}. No LWF deduction, contribution, or filing obligation applies to establishments here.</p><div style="margin-top:14px;padding:12px 14px;background:var(--off-white);border-radius:8px;border:1px solid var(--border);font-size:12.5px;color:var(--text-mid)">💡 <strong>LEAP Tip:</strong> Ensure PF, ESIC, PT and Shops &amp; Establishment compliances are in order even where LWF is not applicable. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:600">Contact us</a> for a free audit.</div></div>`;
+    document.getElementById('lwfDetailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    return;
+  }
+  const rows = s.contributions.map(c => `<tr><td>${c.period}</td><td style="font-weight:600;color:#065f46">${c.empContrib}</td><td style="font-weight:600;color:var(--navy)">${c.emplrContrib}</td><td style="font-weight:700;color:var(--navy)">${c.total}</td><td>${c.deductionDate}</td><td style="font-weight:600">${c.submissionDate}</td></tr>`).join('');
+  panel.innerHTML = `<div class="detail-panel"><div class="dp-header"><div class="dp-title">${name}</div><div class="dp-badges"><span class="badge-applicable">✓ LWF Applicable</span><span class="badge-mode">${s.periodicity}</span></div></div><div class="meta-grid" style="margin-bottom:18px"><div class="meta-tile" style="grid-column:1/-1"><div class="meta-lbl">Who is covered / exclusions</div><div class="meta-val" style="font-weight:400;font-size:13px;line-height:1.5">${s.exclusions}</div></div></div><div class="slab-section-title">Contribution Rates &amp; Due Dates</div>${s.notes ? `<div class="slab-note">📌 ${s.notes}</div>` : ''}<div style="overflow-x:auto"><table class="slab-table"><thead><tr><th>Period</th><th>Employee (₹)</th><th>Employer (₹)</th><th>Total (₹)</th><th>Deduction Date</th><th>Submission Deadline</th></tr></thead><tbody>${rows}</tbody></table></div><div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">🤝 <strong>Need help with LWF compliance in ${name}?</strong> LEAP manages LWF deductions, registers, and filings across all applicable states. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Get in touch →</a></div></div>`;
+  document.getElementById('lwfDetailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function buildLwfGrid() {
+  const grid = document.getElementById('lwfStateGrid');
+  const applicable = Object.keys(LWF_DATA).filter(k => LWF_DATA[k].applicable).sort();
+  const na = Object.keys(LWF_DATA).filter(k => !LWF_DATA[k].applicable).sort();
+  [...applicable, ...na].forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'state-btn lwf-state-btn' + (LWF_DATA[name].applicable ? '' : ' na');
+    btn.dataset.name = name;
+    btn.textContent = name;
+    btn.onclick = () => lwfSelectState(name);
+    grid.appendChild(btn);
+  });
+}
+
+buildLwfGrid();
+lwfSelectState('Maharashtra');
+</script>
+</body>
+</html>

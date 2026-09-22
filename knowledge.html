@@ -8,625 +8,102 @@
     gtag('js', new Date());
     gtag('config', 'G-MVF2MKYVWJ');
   </script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knowledge Hub | LEAP Business Solutions</title>
-<meta name="description" content="Free compliance reference tools and resources — PT slabs, LWF rates, PF limits and more. Built by LEAP Business Solutions, Mumbai.">
-<link rel="canonical" href="https://www.leapbusiness.in/knowledge.html" />
-<link rel="icon" href="assets/favicon.png?v=2" type="image/png" />
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-<link rel="stylesheet" href="css/style.css?v=14" />
-<style>
-:root {
-  --navy: #1A4F78;
-  --navy-mid: #184E77;
-  --navy-light: #3299C2;
-  --gold: #3299C2;
-  --gold-light: #5FB8DE;
-  --gold-pale: rgba(50, 153, 194, 0.08);
-  --white: #ffffff;
-  --off-white: #F5F7F9;
-  --text-dark: #333333;
-  --text-mid: #666666;
-  --text-light: #999999;
-  --border: #D9D9D9;
-  --radius: 8px;
-  --radius-lg: 16px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--off-white)}
-
-
-/* ── HERO ── */
-.kb-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,var(--navy-light) 100%);padding:52px 2rem 44px;text-align:center;position:relative;overflow:hidden}
-.kb-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(50,153,194,0.08) 0%,transparent 65%);pointer-events:none}
-.kb-hero-inner{max-width:720px;margin:auto;position:relative;z-index:1}
-.kb-hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(50,153,194,0.15);border:1px solid rgba(50,153,194,0.3);border-radius:20px;padding:5px 14px;font-size:11.5px;font-weight:600;color:var(--gold-light);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:18px}
-.kb-hero h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);color:var(--white);font-weight:400;line-height:1.2;margin-bottom:14px}
-.kb-hero h1 span{color:var(--gold)}
-.kb-hero p{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:520px;margin:0 auto 0}
-
-/* ── TOOL TABS ── */
-.tabs-section{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:72px;z-index:90}
-.tabs-inner{max-width:1100px;margin:auto;padding:0 2rem;display:flex;gap:0;overflow-x:auto}
-.tab-btn{padding:14px 18px;font-size:13.5px;font-weight:600;color:var(--text-mid);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all 0.2s;display:flex;align-items:center;gap:6px}
-.tab-btn:hover{color:var(--text-dark)}
-.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
-.tab-btn .tab-badge{font-size:10px;background:var(--gold-pale);color:var(--gold);font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid rgba(50,153,194,0.3)}
-
-/* ── MAIN LAYOUT ── */
-.page{max-width:1100px;margin:0 auto;padding:28px 2rem 60px}
-
-/* ── PT TOOL CARD ── */
-.tool-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
-.tool-card-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;justify-content:space-between}
-.tool-header-left{display:flex;gap:14px;align-items:flex-start}
-.tool-icon{width:46px;height:46px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.tool-title{font-size:17px;font-weight:700;color:var(--text-dark);margin-bottom:4px}
-.tool-desc{font-size:13px;color:var(--text-mid);line-height:1.5;max-width:500px}
-.tool-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.chip{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
-.chip-navy{background:rgba(26,79,120,0.08);color:var(--navy)}
-.chip-gold{background:var(--gold-pale);color:#0d4a63}
-.chip-green{background:#ecfdf5;color:#065f46}
-
-/* ── PT TOOL INTERIOR ── */
-.pt-wrap{padding:20px 24px}
-.search-filter-row{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
-.pt-search{flex:1;min-width:160px;height:36px;padding:0 12px;font-size:13.5px;font-family:'Inter',sans-serif;border:1px solid var(--border);border-radius:6px;color:var(--text-dark);background:var(--white);outline:none;transition:border 0.2s}
-.pt-search:focus{border-color:var(--navy)}
-.filter-pills{display:flex;gap:6px;flex-wrap:wrap}
-.fpill{font-size:12px;padding:5px 13px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text-mid);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:all 0.15s}
-.fpill:hover{border-color:var(--navy);color:var(--navy)}
-.fpill.on{background:var(--navy);border-color:var(--navy);color:var(--white)}
-
-.state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:6px;margin-bottom:20px}
-.state-btn{padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif;border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--text-dark);cursor:pointer;text-align:left;transition:all 0.15s;font-weight:500}
-.state-btn:hover{border-color:var(--navy-light);background:#f5f8ff}
-.state-btn.active{background:var(--navy);border-color:var(--navy);color:var(--white)}
-.state-btn.na{opacity:0.45;font-style:italic;font-weight:400}
-
-/* detail panel */
-.detail-panel{background:var(--off-white);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
-.dp-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.dp-title{font-size:19px;font-weight:700;color:var(--text-dark)}
-.dp-badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.badge-applicable{background:#ecfdf5;color:#065f46;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:20px}
-.badge-na{background:#fef2f2;color:#991b1b;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:20px}
-.badge-mode{background:rgba(26,79,120,0.07);color:var(--navy);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
-
-.meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:18px}
-.meta-tile{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:11px 14px}
-.meta-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-light);font-weight:600;margin-bottom:4px}
-.meta-val{font-size:13px;font-weight:600;color:var(--text-dark);line-height:1.4}
-
-.slab-section-title{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);font-weight:700;margin-bottom:8px}
-.slab-note{font-size:12px;color:var(--text-mid);font-style:italic;margin-bottom:10px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.25);border-radius:6px;padding:7px 12px}
-
-.slab-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--white);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
-.slab-table th{background:var(--navy);color:rgba(255,255,255,0.85);padding:9px 12px;text-align:left;font-size:11.5px;font-weight:600;letter-spacing:0.03em}
-.slab-table td{padding:9px 12px;border-top:1px solid var(--border);color:var(--text-dark)}
-.slab-table tr:hover td{background:#f5f8ff}
-.slab-table td:last-child{font-weight:600;color:var(--navy)}
-
-/* coming soon cards */
-.coming-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:20px}
-.coming-card{background:var(--white);border:1px dashed var(--border);border-radius:var(--radius);padding:18px;opacity:0.7}
-.coming-icon{font-size:22px;margin-bottom:8px}
-.coming-title{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:4px}
-.coming-desc{font-size:12px;color:var(--text-mid);line-height:1.5}
-.coming-badge{display:inline-block;margin-top:8px;font-size:10.5px;padding:3px 9px;border-radius:10px;background:var(--off-white);border:1px solid var(--border);color:var(--text-light);font-weight:600}
-
-/* section divider */
-.section-divider{display:flex;align-items:center;gap:12px;margin:28px 0 18px}
-.section-divider span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);white-space:nowrap}
-.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* mobile */
-@media(max-width:600px){
-  .kb-hero h1{font-size:26px}
-  .pt-wrap{padding:14px}
-  .dp-header{flex-direction:column}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knowledge Hub | LEAP Business Solutions</title>
+  <meta name="description" content="Free compliance reference tools — Professional Tax slabs, Labour Welfare Fund rates and Minimum Wages, state by state. Built by LEAP Business Solutions, Mumbai." />
+  <link rel="canonical" href="https://www.leapbusiness.in/knowledge.html" />
+  <link rel="icon" href="/assets/favicon.png?v=2" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/css/style.css?v=14" />
+  <link rel="stylesheet" href="/css/knowledge.css?v=1" />
 </head>
 <body>
-
 <div id="navbar-placeholder"></div>
 
-<!-- HERO -->
 <div class="kb-hero">
   <div class="kb-hero-inner">
     <div class="kb-hero-badge">📚 Free Compliance Resources</div>
     <h1>Knowledge <span>Hub</span></h1>
-    <p>Quick-reference tools, slab tables, and compliance guides — built by our experts for HR &amp; Finance teams across India. Free, always up to date.</p>
+    <p>Quick-reference tools built by our experts for HR &amp; Finance teams across India. Free, always up to date.</p>
   </div>
 </div>
 
-<!-- STICKY TABS -->
-<div class="tabs-section">
-  <div class="tabs-inner">
-    <button class="tab-btn active" onclick="showTab('pt',this)">💼 Professional Tax <span class="tab-badge">Live</span></button>
-    <button class="tab-btn" onclick="showTab('lwf',this)">🤝 LWF Rates <span class="tab-badge">Live</span></button>
-    <button class="tab-btn" onclick="showTab('minwage',this)">📐 Minimum Wages <span class="tab-badge" style="background:#fffbeb;color:#92400e;border-color:rgba(146,64,14,0.25)">Building</span></button>
-    <button class="tab-btn" onclick="showTab('pf',this)">📋 PF Limits <span class="tab-badge" style="background:#f0fdf4;color:#166534;border-color:rgba(22,101,52,0.3)">Soon</span></button>
-    <button class="tab-btn" onclick="showTab('esic',this)">🏥 ESIC Slabs <span class="tab-badge" style="background:#f0fdf4;color:#166534;border-color:rgba(22,101,52,0.3)">Soon</span></button>
-    <button class="tab-btn" onclick="showTab('calendar',this)">🗓️ Due Date Calendar <span class="tab-badge" style="background:#f0fdf4;color:#166534;border-color:rgba(22,101,52,0.3)">Soon</span></button>
+<div class="kb-page">
+  <div class="kb-hub-grid">
+    <a href="/knowledge/professional-tax/" class="kb-hub-card">
+      <div class="tool-icon">💼</div>
+      <div class="tool-title">Professional Tax</div>
+      <div class="tool-desc">State-wise PT applicability, RC/EC status, slab rates, remittance periodicity and due dates, all 28 states.</div>
+      <div class="tool-meta"><span class="chip chip-green">✓ Live</span><span class="chip chip-gold">Free Tool</span></div>
+    </a>
+    <a href="/knowledge/labour-welfare-fund/" class="kb-hub-card">
+      <div class="tool-icon">🤝</div>
+      <div class="tool-title">Labour Welfare Fund</div>
+      <div class="tool-desc">State-wise LWF applicability, employee &amp; employer contribution amounts, deduction and submission dates.</div>
+      <div class="tool-meta"><span class="chip chip-green">✓ Live</span><span class="chip chip-gold">Free Tool</span></div>
+    </a>
+    <a href="/knowledge/minimum-wages/" class="kb-hub-card">
+      <div class="tool-icon">📐</div>
+      <div class="tool-title">Minimum Wages</div>
+      <div class="tool-desc">State-wise Minimum Wage by skill category and zone, feeding straight into the CTC calculator.</div>
+      <div class="tool-meta"><span class="chip" style="background:#fffbeb;color:#92400e">🔧 Building</span><span class="chip chip-gold">Free Tool</span></div>
+    </a>
+  </div>
+
+  <div class="section-divider"><span>More resources coming soon</span></div>
+  <div class="kb-related-grid">
+    <a href="/coming-soon.html?item=Registers %26 Forms" class="kb-related-card">
+      <div class="kb-related-icon">📄</div>
+      <div class="kb-related-title">Registers &amp; Forms</div>
+      <div class="kb-related-desc">Statutory registers and forms required under each labour law.</div>
+      <span class="kb-related-badge" style="background:var(--off-white);border:1px solid var(--border);color:var(--text-light)">Coming Soon</span>
+    </a>
+    <a href="/coming-soon.html?item=Working Hours %26 Overtime" class="kb-related-card">
+      <div class="kb-related-icon">⏱️</div>
+      <div class="kb-related-title">Working Hours &amp; Overtime</div>
+      <div class="kb-related-desc">State-wise working hour limits and overtime pay rules.</div>
+      <span class="kb-related-badge" style="background:var(--off-white);border:1px solid var(--border);color:var(--text-light)">Coming Soon</span>
+    </a>
+    <a href="/coming-soon.html?item=Holidays" class="kb-related-card">
+      <div class="kb-related-icon">🎉</div>
+      <div class="kb-related-title">Holidays</div>
+      <div class="kb-related-desc">National and state-declared holiday calendars.</div>
+      <span class="kb-related-badge" style="background:var(--off-white);border:1px solid var(--border);color:var(--text-light)">Coming Soon</span>
+    </a>
+    <a href="/coming-soon.html?item=Compliance Calendar" class="kb-related-card">
+      <div class="kb-related-icon">🗓️</div>
+      <div class="kb-related-title">Compliance Due Date Calendar</div>
+      <div class="kb-related-desc">Monthly, quarterly and annual filings across PF, ESIC, PT and LWF.</div>
+      <span class="kb-related-badge" style="background:var(--off-white);border:1px solid var(--border);color:var(--text-light)">Coming Soon</span>
+    </a>
+    <a href="/coming-soon.html?item=Guidance" class="kb-related-card">
+      <div class="kb-related-icon">🧭</div>
+      <div class="kb-related-title">Guidance</div>
+      <div class="kb-related-desc">Plain-language guides to labour law obligations.</div>
+      <span class="kb-related-badge" style="background:var(--off-white);border:1px solid var(--border);color:var(--text-light)">Coming Soon</span>
+    </a>
+    <a href="/coming-soon.html?item=Govt. FAQs" class="kb-related-card">
+      <div class="kb-related-icon">❓</div>
+      <div class="kb-related-title">Govt. FAQs</div>
+      <div class="kb-related-desc">Frequently asked questions answered by government departments.</div>
+      <span class="kb-related-badge" style="background:var(--off-white);border:1px solid var(--border);color:var(--text-light)">Coming Soon</span>
+    </a>
   </div>
 </div>
-
-<!-- PAGE CONTENT -->
-<div class="page">
-
-  <!-- PT TAB -->
-  <div id="tab-pt">
-    <div class="tool-card">
-      <div class="tool-card-header">
-        <div class="tool-header-left">
-          <div class="tool-icon">💼</div>
-          <div>
-            <div class="tool-title">Professional Tax — PAN-India Reference</div>
-            <div class="tool-desc">State-wise PT applicability, RC/EC status, employee slab rates, remittance periodicity, and all due dates in one place.</div>
-          </div>
-        </div>
-        <div class="tool-meta">
-          <span class="chip chip-green">✓ 28 States Covered</span>
-          <span class="chip chip-navy">Revised 4 Jul 2026</span>
-          <span class="chip chip-gold">Free Tool</span>
-        </div>
-      </div>
-
-      <div class="pt-wrap">
-        <div class="search-filter-row">
-          <input class="pt-search" type="text" id="ptSearch" placeholder="🔍  Search state..." oninput="filterStates(this.value)">
-          <div class="filter-pills">
-            <button class="fpill on" onclick="setFilter('all',this)">All States</button>
-            <button class="fpill" onclick="setFilter('applicable',this)">PT Applicable</button>
-            <button class="fpill" onclick="setFilter('na',this)">Not Applicable</button>
-          </div>
-        </div>
-
-        <div class="state-grid" id="stateGrid"></div>
-
-        <div id="detailPanel"></div>
-      </div>
-    </div>
-
-    <div class="section-divider"><span>More tools coming soon</span></div>
-
-    <div class="coming-grid">
-      <div class="coming-card" style="border-color:#3299C2;opacity:1;background:var(--gold-pale)">
-        <div class="coming-icon">🤝</div>
-        <div class="coming-title">LWF State-wise Rates</div>
-        <div class="coming-desc">Contribution amounts, periodicity and due dates for all LWF-applicable states.</div>
-        <span class="coming-badge" style="background:#ecfdf5;border-color:#bbf7d0;color:#065f46">✓ Now Live</span>
-      </div>
-      <div class="coming-card" style="border-color:#3299C2;opacity:1;background:var(--gold-pale)">
-        <div class="coming-icon">📐</div>
-        <div class="coming-title">Minimum Wages, PAN-India</div>
-        <div class="coming-desc">State-wise rates by skill category, linked straight into the CTC calculator.</div>
-        <span class="coming-badge" style="background:#fffbeb;border-color:#fde68a;color:#92400e">🔧 Building — states added as verified</span>
-      </div>
-      <div class="coming-card">
-        <div class="coming-icon">📋</div>
-        <div class="coming-title">PF Wage Ceiling & Limits</div>
-        <div class="coming-desc">Current wage ceiling, admin charges, EDLI rates and recent EPFO circulars.</div>
-        <span class="coming-badge">Coming Soon</span>
-      </div>
-      <div class="coming-card">
-        <div class="coming-icon">🗓️</div>
-        <div class="coming-title">Compliance Due Date Calendar</div>
-        <div class="coming-desc">Monthly/quarterly/annual filings across PF, ESIC, PT and LWF — all in one calendar view.</div>
-        <span class="coming-badge">Coming Soon</span>
-      </div>
-      <div class="coming-card">
-        <div class="coming-icon">🏥</div>
-        <div class="coming-title">ESIC Wage Limit Guide</div>
-        <div class="coming-desc">Applicable wage ceiling, contribution rates, and state-wise ESIC applicability.</div>
-        <span class="coming-badge">Coming Soon</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- LWF TAB — FULL TOOL -->
-  <div id="tab-lwf" style="display:none">
-    <div class="tool-card">
-      <div class="tool-card-header">
-        <div class="tool-header-left">
-          <div class="tool-icon">🤝</div>
-          <div>
-            <div class="tool-title">Labour Welfare Fund — PAN-India Reference</div>
-            <div class="tool-desc">State-wise LWF applicability, employee &amp; employer contribution amounts, deduction dates, and submission deadlines.</div>
-          </div>
-        </div>
-        <div class="tool-meta">
-          <span class="chip chip-green">✓ 16 States Covered</span>
-          <span class="chip chip-navy">Revised 4 Jul 2026</span>
-          <span class="chip chip-gold">Free Tool</span>
-        </div>
-      </div>
-      <div class="pt-wrap">
-        <div class="search-filter-row">
-          <input class="pt-search" type="text" id="lwfSearch" placeholder="🔍  Search state..." oninput="lwfFilterStates(this.value)">
-          <div class="filter-pills">
-            <button class="fpill lwf-pill on" onclick="lwfSetFilter('all',this)">All States</button>
-            <button class="fpill lwf-pill" onclick="lwfSetFilter('applicable',this)">LWF Applicable</button>
-            <button class="fpill lwf-pill" onclick="lwfSetFilter('na',this)">Not Applicable</button>
-          </div>
-        </div>
-        <div class="state-grid" id="lwfStateGrid"></div>
-        <div id="lwfDetailPanel"></div>
-      </div>
-    </div>
-    <div class="section-divider"><span>More tools coming soon</span></div>
-    <div class="coming-grid">
-      <div class="coming-card"><div class="coming-icon">📋</div><div class="coming-title">PF Wage Ceiling &amp; Limits</div><div class="coming-desc">Current wage ceiling, admin charges, EDLI rates and recent EPFO circulars.</div><span class="coming-badge">Coming Soon</span></div>
-      <div class="coming-card"><div class="coming-icon">🗓️</div><div class="coming-title">Compliance Due Date Calendar</div><div class="coming-desc">Monthly/quarterly/annual filings across PF, ESIC, PT and LWF — all in one calendar view.</div><span class="coming-badge">Coming Soon</span></div>
-      <div class="coming-card"><div class="coming-icon">🏥</div><div class="coming-title">ESIC Wage Limit Guide</div><div class="coming-desc">Applicable wage ceiling, contribution rates, and state-wise ESIC applicability.</div><span class="coming-badge">Coming Soon</span></div>
-    </div>
-  </div>
-  <!-- MINIMUM WAGES TAB — FULL TOOL, DATA ADDED STATE BY STATE -->
-  <div id="tab-minwage" style="display:none">
-    <div class="tool-card">
-      <div class="tool-card-header">
-        <div class="tool-header-left">
-          <div class="tool-icon">📐</div>
-          <div>
-            <div class="tool-title">Minimum Wages — PAN-India Reference</div>
-            <div class="tool-desc">State-wise Minimum Wage by skill category (Unskilled, Semi-Skilled, Skilled, Highly Skilled), feeding straight into the CTC calculator's compliance check.</div>
-          </div>
-        </div>
-        <div class="tool-meta">
-          <span class="chip chip-gold" id="mwCoverageChip">0 of 36 states added</span>
-          <span class="chip chip-navy">Free Tool</span>
-        </div>
-      </div>
-
-      <div class="pt-wrap">
-        <div class="search-filter-row">
-          <input class="pt-search" type="text" id="mwSearch" placeholder="🔍  Search state..." oninput="mwFilterStates(this.value)">
-        </div>
-
-        <div class="state-grid" id="mwStateGrid"></div>
-
-        <div id="mwDetailPanel"></div>
-      </div>
-    </div>
-
-    <div style="margin-top:14px;padding:12px 14px;background:var(--off-white);border-radius:8px;border:1px solid var(--border);font-size:12.5px;color:var(--text-mid)">
-      📌 Minimum Wages apply in every state — unlike Professional Tax or LWF there is no "not applicable" state. Rates are also revised roughly every six months (the VDA adjustment) and can differ by zone or area within a state, so always confirm the figure against the current notification for the specific district before relying on it for payroll.
-    </div>
-  </div>
-
-  <div id="tab-pf" style="display:none">
-    <div style="text-align:center;padding:60px 20px;color:var(--text-light)">
-      <div style="font-size:40px;margin-bottom:12px">📋</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text-dark);margin-bottom:8px">PF Limits Reference — Coming Soon</div>
-      <div style="font-size:14px">We're building this next. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:600">Contact us</a> for any PF queries.</div>
-    </div>
-  </div>
-  <div id="tab-esic" style="display:none">
-    <div style="text-align:center;padding:60px 20px;color:var(--text-light)">
-      <div style="font-size:40px;margin-bottom:12px">🏥</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text-dark);margin-bottom:8px">ESIC Slabs — Coming Soon</div>
-      <div style="font-size:14px"><a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:600">Contact us</a> for ESIC guidance in the meantime.</div>
-    </div>
-  </div>
-  <div id="tab-calendar" style="display:none">
-    <div style="text-align:center;padding:60px 20px;color:var(--text-light)">
-      <div style="font-size:40px;margin-bottom:12px">🗓️</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text-dark);margin-bottom:8px">Due Date Calendar — Coming Soon</div>
-      <div style="font-size:14px"><a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:600">Contact us</a> to never miss a filing deadline.</div>
-    </div>
-  </div>
-
-</div><!-- /page -->
 
 <div id="footer-placeholder"></div>
 <div id="whatsapp-placeholder"></div>
-
-<script src="js/components.js?v=14"></script>
-<script src="js/main.js?v=11"></script>
-<script src="js/pt-data.js?v=1"></script>
-<script src="js/minwage-data.js?v=3"></script>
+<script src="/js/components.js?v=15"></script>
+<script src="/js/main.js?v=11"></script>
 <script>
 renderNavbar('resources');renderFooter();renderWhatsApp();
 
-let activeFilter='all', activeState=null;
-
-function showTab(id, btn) {
-  document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display='none');
-  document.getElementById('tab-'+id).style.display='block';
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function setFilter(f, btn) {
-  activeFilter=f;
-  document.querySelectorAll('.fpill').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  filterStates(document.getElementById('ptSearch').value);
-}
-
-function filterStates(q) {
-  document.querySelectorAll('.state-btn').forEach(btn => {
-    const n = btn.dataset.name;
-    const d = PT_DATA[n];
-    const mq = n.toLowerCase().includes(q.toLowerCase());
-    const mf = activeFilter==='all' || (activeFilter==='applicable' && d.applicable) || (activeFilter==='na' && !d.applicable);
-    btn.style.display = (mq && mf) ? '' : 'none';
-  });
-}
-
-function selectState(name) {
-  activeState=name;
-  document.querySelectorAll('.state-btn').forEach(b => b.classList.toggle('active', b.dataset.name===name));
-  renderDetail(name);
-  document.getElementById('detailPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function renderDetail(name) {
-  const panel = document.getElementById('detailPanel');
-  const s = PT_DATA[name];
-
-  if (!s.applicable) {
-    panel.innerHTML = `
-      <div class="detail-panel">
-        <div class="dp-header">
-          <div class="dp-title">${name}</div>
-          <span class="badge-na">PT Not Applicable</span>
-        </div>
-        <p style="font-size:14px;color:var(--text-mid);line-height:1.6">Professional Tax is <strong>not levied</strong> in ${name}. No PT registration, deduction, remittance, or return obligations apply to establishments in this state.</p>
-        ${s.note ? `<div style="margin-top:12px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">📌 ${s.note}</div>` : ''}
-        <div style="margin-top:14px;padding:12px 14px;background:var(--off-white);border-radius:8px;border:1px solid var(--border);font-size:12.5px;color:var(--text-mid)">
-          💡 <strong>LEAP Tip:</strong> Even though PT is not applicable here, ensure your PF, ESIC, LWF and Shops & Establishment compliances are in order. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:600">Contact us</a> for a free audit.
-        </div>
-      </div>`;
-    return;
-  }
-
-  let slabHead = s.slabCols.map(c=>`<th>${c}</th>`).join('');
-  let slabRows = s.slabs.map(r=>`<tr>${r.map((c,i)=>`<td${i===r.length-1?' style="font-weight:600;color:var(--navy)"':''}>${c}</td>`).join('')}</tr>`).join('');
-
-  panel.innerHTML = `
-    <div class="detail-panel">
-      <div class="dp-header">
-        <div class="dp-title">${name}</div>
-        <div class="dp-badges">
-          <span class="badge-applicable">✓ PT Applicable</span>
-          <span class="badge-mode">${s.remittance} Remittance</span>
-          <span class="badge-mode">${s.empPeriodicity}</span>
-        </div>
-      </div>
-
-      <div class="meta-grid">
-        <div class="meta-tile">
-          <div class="meta-lbl">RC Status</div>
-          <div class="meta-val">${s.rc}</div>
-        </div>
-        <div class="meta-tile">
-          <div class="meta-lbl">EC Status</div>
-          <div class="meta-val">${s.ec}</div>
-        </div>
-        <div class="meta-tile">
-          <div class="meta-lbl">Employee Remittance Due</div>
-          <div class="meta-val">${s.empDue}</div>
-        </div>
-        <div class="meta-tile">
-          <div class="meta-lbl">Return Due Date</div>
-          <div class="meta-val">${s.returnDue||'—'}</div>
-        </div>
-        <div class="meta-tile">
-          <div class="meta-lbl">Employer PT Amount</div>
-          <div class="meta-val">${s.employerAmt}</div>
-        </div>
-        <div class="meta-tile">
-          <div class="meta-lbl">Employer Remittance Due</div>
-          <div class="meta-val">${s.employerDue}</div>
-        </div>
-      </div>
-
-      <div class="slab-section-title">Employee PT Slab Rates</div>
-      <div class="slab-note">📌 ${s.slabNote}</div>
-      <div style="overflow-x:auto">
-        <table class="slab-table">
-          <thead><tr>${slabHead}</tr></thead>
-          <tbody>${slabRows}</tbody>
-        </table>
-      </div>
-
-      <div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">
-        💼 <strong>Need help with PT compliance in ${name}?</strong> LEAP manages end-to-end PT — from enrollment certificates to monthly deductions and returns. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Get in touch →</a>
-      </div>
-    </div>`;
-}
-
-function buildGrid() {
-  const grid = document.getElementById('stateGrid');
-  const applicable = Object.keys(PT_DATA).filter(k=>PT_DATA[k].applicable).sort();
-  const na = Object.keys(PT_DATA).filter(k=>!PT_DATA[k].applicable).sort();
-  [...applicable,...na].forEach(name => {
-    const btn = document.createElement('button');
-    btn.className = 'state-btn' + (PT_DATA[name].applicable?'':' na');
-    btn.dataset.name = name;
-    btn.textContent = name;
-    btn.onclick = () => selectState(name);
-    grid.appendChild(btn);
-  });
-}
-
-buildGrid();
-selectState('Maharashtra');
-
-// ── LWF DATA ──
-const LWF_DATA = {"Andhra Pradesh": {"applicable": true, "exclusions": "All employees except those employed mainly in a managerial capacity, or as an apprentice or on a part-time basis", "contributions": [{"period": "Annual", "empContrib": "₹30", "emplrContrib": "₹70", "total": "₹100", "deductionDate": "31st December", "submissionDate": "31st January"}], "periodicity": "Annual"}, "Chandigarh": {"applicable": true, "exclusions": "Employees drawing salary up to ₹15,000/month", "contributions": [{"period": "Half-Yearly", "empContrib": "₹5", "emplrContrib": "₹20", "total": "₹25", "deductionDate": "Last day of every month", "submissionDate": "15th October (Apr–Sep) & 15th April (Oct–Mar)"}], "periodicity": "Monthly deduction, Half-Yearly submission"}, "Chhattisgarh": {"applicable": true, "exclusions": "Managers, administrators, and supervisors drawing wages exceeding ₹10,000/month", "contributions": [{"period": "June cycle", "empContrib": "₹15", "emplrContrib": "₹45", "total": "₹60", "deductionDate": "15th July", "submissionDate": "30th June"}, {"period": "December cycle", "empContrib": "₹15", "emplrContrib": "₹45", "total": "₹60", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Half-Yearly"}, "Delhi": {"applicable": true, "exclusions": "Managers and supervisors drawing wages exceeding ₹2,500/month", "contributions": [{"period": "June cycle", "empContrib": "₹0.75", "emplrContrib": "₹2.25", "total": "₹3", "deductionDate": "30th June", "submissionDate": "15th July"}, {"period": "December cycle", "empContrib": "₹0.75", "emplrContrib": "₹2.25", "total": "₹3", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Half-Yearly"}, "Goa": {"applicable": true, "exclusions": "Managers and supervisors drawing wages exceeding ₹2,500/month", "contributions": [{"period": "June cycle", "empContrib": "₹60", "emplrContrib": "₹180", "total": "₹240", "deductionDate": "30th June", "submissionDate": "15th July"}, {"period": "December cycle", "empContrib": "₹60", "emplrContrib": "₹180", "total": "₹240", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Half-Yearly"}, "Gujarat": {"applicable": true, "exclusions": "Managers and supervisors drawing wages exceeding ₹2,500/month", "contributions": [{"period": "June cycle", "empContrib": "₹6", "emplrContrib": "₹12", "total": "₹18", "deductionDate": "30th June", "submissionDate": "15th July"}, {"period": "December cycle", "empContrib": "₹6", "emplrContrib": "₹12", "total": "₹18", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Half-Yearly"}, "Haryana": {"applicable": true, "exclusions": "All employees, employed directly or through a contractor, for remuneration in a factory or establishment", "contributions": [{"period": "Monthly", "empContrib": "₹35", "emplrContrib": "₹70", "total": "₹105", "deductionDate": "Every month", "submissionDate": "Last day of the month"}], "periodicity": "Monthly", "notes": "Revised (increased from ₹34 employee / ₹68 employer) per Haryana Labour Welfare Board Notification No. HLWB/REV/2026/3436 dated 8th May 2026, effective retroactively from 1st January 2026. Contribution is 0.2% of wages, subject to this revised cap."}, "Karnataka": {"applicable": true, "exclusions": "All employees employed for wages to do any skilled or unskilled, manual or clerical work, in an establishment with 10 or more employees", "contributions": [{"period": "Annual", "empContrib": "₹50", "emplrContrib": "₹100", "total": "₹150", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Annual"}, "Kerala": {"applicable": true, "exclusions": "All employees under the Kerala Shops and Commercial Establishments Act, 1960", "contributions": [{"period": "Monthly", "empContrib": "₹50", "emplrContrib": "₹50", "total": "₹100", "deductionDate": "Monthly", "submissionDate": "5th of every month"}], "periodicity": "Monthly"}, "Madhya Pradesh": {"applicable": true, "exclusions": "Managers, administrators, and supervisors drawing wages exceeding ₹10,000/month", "contributions": [{"period": "June cycle", "empContrib": "₹10", "emplrContrib": "₹30", "total": "₹40", "deductionDate": "30th June", "submissionDate": "15th July"}, {"period": "December cycle", "empContrib": "₹10", "emplrContrib": "₹30", "total": "₹40", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Half-Yearly"}, "Maharashtra": {"applicable": true, "exclusions": "Employees working in managerial or supervisory capacity are excluded", "contributions": [{"period": "June cycle", "empContrib": "₹25", "emplrContrib": "₹75", "total": "₹100", "deductionDate": "30th June", "submissionDate": "15th July"}, {"period": "December cycle", "empContrib": "₹25", "emplrContrib": "₹75", "total": "₹100", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Half-Yearly"}, "Odisha": {"applicable": true, "exclusions": "Employees working in managerial or supervisory capacity, apprentices, and part-time employees are excluded", "contributions": [{"period": "June cycle", "empContrib": "₹10", "emplrContrib": "₹20", "total": "₹30", "deductionDate": "30th June", "submissionDate": "15th July"}, {"period": "December cycle", "empContrib": "₹10", "emplrContrib": "₹20", "total": "₹30", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Half-Yearly", "notes": "Odisha's Professional Tax was repealed effective 1 April 2026 — this is unrelated to LWF, which continues to apply in Odisha as shown here."}, "Punjab": {"applicable": true, "exclusions": "Any person employed for hire or reward to do any work, skilled or unskilled, manual or clerical, in an establishment", "contributions": [{"period": "Half-Yearly", "empContrib": "₹5", "emplrContrib": "₹20", "total": "₹25", "deductionDate": "Last day of every month", "submissionDate": "15th April / 15th October"}], "periodicity": "Monthly deduction, Half-Yearly submission"}, "Tamil Nadu": {"applicable": true, "exclusions": "Managers/supervisors drawing wages exceeding ₹15,000/month, apprentices, and part-time employees", "contributions": [{"period": "Annual", "empContrib": "₹20", "emplrContrib": "₹40", "total": "₹60", "deductionDate": "31st December", "submissionDate": "31st January"}], "periodicity": "Annual"}, "Telangana": {"applicable": true, "exclusions": "Employees working in managerial or supervisory capacity and drawing wages exceeding ₹1,600/month", "contributions": [{"period": "Annual", "empContrib": "₹2", "emplrContrib": "₹5", "total": "₹7", "deductionDate": "31st December", "submissionDate": "31st January"}], "periodicity": "Annual"}, "West Bengal": {"applicable": true, "exclusions": "Managers and supervisors drawing wages exceeding ₹1,600/month", "contributions": [{"period": "June cycle", "empContrib": "₹3", "emplrContrib": "₹15", "total": "₹18", "deductionDate": "30th June", "submissionDate": "15th July"}, {"period": "December cycle", "empContrib": "₹3", "emplrContrib": "₹15", "total": "₹18", "deductionDate": "31st December", "submissionDate": "15th January"}], "periodicity": "Half-Yearly"}, "Andaman & Nicobar": {"applicable": false}, "Arunachal Pradesh": {"applicable": false}, "Assam": {"applicable": false}, "Bihar": {"applicable": false}, "Dadra, Nagar Haveli, Daman & Diu": {"applicable": false}, "Himachal Pradesh": {"applicable": false}, "Jammu & Kashmir": {"applicable": false}, "Ladakh": {"applicable": false}, "Jharkhand": {"applicable": false}, "Meghalaya": {"applicable": false}, "Mizoram": {"applicable": false}, "Nagaland": {"applicable": false}, "Lakshadweep": {"applicable": false}, "Manipur": {"applicable": false}, "Sikkim": {"applicable": false}, "Tripura": {"applicable": false}, "Puducherry": {"applicable": false}, "Rajasthan": {"applicable": false}, "Uttarakhand": {"applicable": false}, "Uttar Pradesh": {"applicable": false}};
-
-let lwfFilter='all';
-
-function lwfSetFilter(f,btn){
-  lwfFilter=f;
-  document.querySelectorAll('.lwf-pill').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  lwfFilterStates(document.getElementById('lwfSearch').value);
-}
-
-function lwfFilterStates(q){
-  document.querySelectorAll('.lwf-state-btn').forEach(btn=>{
-    const n=btn.dataset.name, d=LWF_DATA[n];
-    const mq=n.toLowerCase().includes(q.toLowerCase());
-    const mf=lwfFilter==='all'||(lwfFilter==='applicable'&&d.applicable)||(lwfFilter==='na'&&!d.applicable);
-    btn.style.display=(mq&&mf)?'':'none';
-  });
-}
-
-function lwfSelectState(name){
-  document.querySelectorAll('.lwf-state-btn').forEach(b=>b.classList.toggle('active',b.dataset.name===name));
-  const panel=document.getElementById('lwfDetailPanel');
-  const s=LWF_DATA[name];
-  if(!s.applicable){
-    panel.innerHTML=`<div class="detail-panel"><div class="dp-header"><div class="dp-title">${name}</div><span class="badge-na">LWF Not Applicable</span></div><p style="font-size:14px;color:var(--text-mid);line-height:1.6">Labour Welfare Fund is <strong>not applicable</strong> in ${name}. No LWF deduction, contribution, or filing obligation applies to establishments here.</p><div style="margin-top:14px;padding:12px 14px;background:var(--off-white);border-radius:8px;border:1px solid var(--border);font-size:12.5px;color:var(--text-mid)">💡 <strong>LEAP Tip:</strong> Ensure PF, ESIC, PT and Shops &amp; Establishment compliances are in order even where LWF is not applicable. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:600">Contact us</a> for a free audit.</div></div>`;
-    document.getElementById('lwfDetailPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
-    return;
-  }
-  const rows=s.contributions.map(c=>`<tr><td>${c.period}</td><td style="font-weight:600;color:#065f46">${c.empContrib}</td><td style="font-weight:600;color:var(--navy)">${c.emplrContrib}</td><td style="font-weight:700;color:var(--navy)">${c.total}</td><td>${c.deductionDate}</td><td style="font-weight:600">${c.submissionDate}</td></tr>`).join('');
-  panel.innerHTML=`<div class="detail-panel"><div class="dp-header"><div class="dp-title">${name}</div><div class="dp-badges"><span class="badge-applicable">✓ LWF Applicable</span><span class="badge-mode">${s.periodicity}</span></div></div><div class="meta-grid" style="margin-bottom:18px"><div class="meta-tile" style="grid-column:1/-1"><div class="meta-lbl">Who is covered / exclusions</div><div class="meta-val" style="font-weight:400;font-size:13px;line-height:1.5">${s.exclusions}</div></div></div><div class="slab-section-title">Contribution Rates &amp; Due Dates</div>${s.notes?`<div class="slab-note">📌 ${s.notes}</div>`:''}<div style="overflow-x:auto"><table class="slab-table"><thead><tr><th>Period</th><th>Employee (₹)</th><th>Employer (₹)</th><th>Total (₹)</th><th>Deduction Date</th><th>Submission Deadline</th></tr></thead><tbody>${rows}</tbody></table></div><div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">🤝 <strong>Need help with LWF compliance in ${name}?</strong> LEAP manages LWF deductions, registers, and filings across all applicable states. <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Get in touch →</a></div></div>`;
-  document.getElementById('lwfDetailPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function buildLwfGrid(){
-  const grid=document.getElementById('lwfStateGrid');
-  const applicable=Object.keys(LWF_DATA).filter(k=>LWF_DATA[k].applicable).sort();
-  const na=Object.keys(LWF_DATA).filter(k=>!LWF_DATA[k].applicable).sort();
-  [...applicable,...na].forEach(name=>{
-    const btn=document.createElement('button');
-    btn.className='state-btn lwf-state-btn'+(LWF_DATA[name].applicable?'':' na');
-    btn.dataset.name=name;
-    btn.textContent=name;
-    btn.onclick=()=>lwfSelectState(name);
-    grid.appendChild(btn);
-  });
-}
-
-buildLwfGrid();
-lwfSelectState('Maharashtra');
-
-// ── MINIMUM WAGES (reads window.MIN_WAGE_DATA from js/minwage-data.js) ──
-function mwFilterStates(q) {
-  document.querySelectorAll('.mw-state-btn').forEach(function (btn) {
-    btn.style.display = btn.dataset.name.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
-  });
-}
-
-function mwSelectState(name) {
-  document.querySelectorAll('.mw-state-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.name === name); });
-  mwRenderDetail(name);
-  document.getElementById('mwDetailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function mwMoney(n) { return '₹' + n.toLocaleString('en-IN'); }
-
-/* Every category the state has a rate for, one row per zone (or one row,
-   for a state with no zones) — "one below another", as asked for. */
-function mwBuildRows(name, entry, cats) {
-  var zones = entry.hasZones && entry.zones && entry.zones.length ? entry.zones : [null];
-  var rows = [];
-  zones.forEach(function (zone) {
-    cats.forEach(function (c) {
-      var cellVal = window.minWageCell ? window.minWageCell(name, c.key, zone) : null;
-      if (!cellVal) return;
-      var hraVal = window.minWageHRA ? window.minWageHRA(name, c.key, zone) : 0;
-      var total = window.minWageRate ? window.minWageRate(name, c.key, zone) : cellVal.basic + hraVal + cellVal.vda;
-      var perDay = window.minWagePerDay ? window.minWagePerDay(name, c.key, zone) : Math.round((total / (window.MIN_WAGE_PER_DAY_DIVISOR || 26)) * 100) / 100;
-      rows.push({ zone: zone, cat: c, basic: cellVal.basic, hra: hraVal, vda: cellVal.vda, total: total, perDay: perDay });
-    });
-  });
-  return rows;
-}
-
-function mwRenderDetail(name) {
-  var panel = document.getElementById('mwDetailPanel');
-  var entry = window.MIN_WAGE_DATA ? window.MIN_WAGE_DATA[name] : null;
-  var cats = window.MIN_WAGE_CATEGORIES || [];
-  var populated = window.minWageHasAnyRate ? window.minWageHasAnyRate(entry) : false;
-
-  if (!populated) {
-    panel.innerHTML =
-      '<div class="detail-panel">' +
-        '<div class="dp-header"><div class="dp-title">' + name + '</div><span class="badge-mode" style="background:#fffbeb;color:#92400e">🔧 Not added yet</span></div>' +
-        '<p style="font-size:14px;color:var(--text-mid);line-height:1.6">We’re still compiling verified Minimum Wage rates for <strong>' + name + '</strong>. This section updates as each state’s current notification is confirmed — nothing is shown until it is verified, so there is no risk of an out-of-date figure being used by mistake.</p>' +
-        '<div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">💼 <strong>Need this state’s Minimum Wage now?</strong> <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Contact LEAP</a> for the current figure for this state, zone and skill category.</div>' +
-      '</div>';
-    return;
-  }
-
-  var rows = mwBuildRows(name, entry, cats);
-  var showZoneCol = entry.hasZones;
-  var showHraCol = !!entry.hraPct;
-  var totalLabel = showHraCol ? 'Total /month (incl. HRA)' : 'Total /month';
-  var thead = '<tr>' + (showZoneCol ? '<th>Zone</th>' : '') + '<th>Class of Employment</th><th>Basic /month</th><th>VDA /month</th>' +
-    (showHraCol ? '<th>HRA /month</th>' : '') + '<th>Total /day</th><th>' + totalLabel + '</th></tr>';
-  var tbody = rows.map(function (r) {
-    return '<tr>' + (showZoneCol ? '<td>' + (r.zone || '—') + '</td>' : '') +
-      '<td>' + r.cat.label + '</td><td>' + mwMoney(r.basic) + '</td><td>' + mwMoney(r.vda) + '</td>' +
-      (showHraCol ? '<td>' + mwMoney(r.hra) + '</td>' : '') +
-      '<td>₹' + r.perDay.toFixed(2) + '</td>' +
-      '<td style="font-weight:700;color:var(--navy)">' + mwMoney(r.total) + '</td></tr>';
-  }).join('');
-
-  var meta = [];
-  if (entry.wef) meta.push(['Effective From (W.E.F.)', entry.wef]);
-  if (entry.updated) meta.push(['Notification Verified', entry.updated]);
-  if (entry.source) meta.push(['Source', entry.source]);
-  var metaHtml = meta.length ? '<div class="meta-grid" style="margin-bottom:16px">' + meta.map(function (m) {
-    return '<div class="meta-tile"' + (m[0] === 'Source' ? ' style="grid-column:1/-1"' : '') + '><div class="meta-lbl">' + m[0] + '</div><div class="meta-val" style="font-weight:' + (m[0] === 'Source' ? 400 : 600) + '">' + m[1] + '</div></div>';
-  }).join('') + '</div>' : '';
-
-  panel.innerHTML =
-    '<div class="detail-panel">' +
-      '<div class="dp-header"><div class="dp-title">' + name + '</div><div class="dp-badges"><span class="badge-applicable">✓ Verified' + (entry.updated ? ', updated ' + entry.updated : '') + '</span></div></div>' +
-      metaHtml +
-      (entry.scheduleNote ? '<div class="slab-note">📌 ' + entry.scheduleNote + '</div>' : '') +
-      '<div class="slab-section-title">Minimum Wages — all categories' + (showZoneCol ? ' and zones' : '') + '</div>' +
-      '<div style="overflow-x:auto"><table class="slab-table"><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table></div>' +
-      (showHraCol && entry.hraNote ? '<p style="font-size:11.5px;color:var(--text-light);margin-top:8px">🏠 ' + entry.hraNote + '</p>' : '') +
-      '<p style="font-size:11.5px;color:var(--text-light);margin-top:4px">Total per day assumes ' + (window.MIN_WAGE_PER_DAY_DIVISOR || 26) + ' working days a month, the usual convention in these notifications.</p>' +
-      (entry.notificationFile ? '<div style="margin-top:16px;text-align:center"><a href="' + entry.notificationFile + '" class="btn btn-outline-dark" download>📄 ' + (entry.notificationLabel || 'Download official notification') + '</a></div>' : '') +
-      '<div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">💼 <strong>Need help checking your salary structure against this?</strong> <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Contact LEAP →</a></div>' +
-    '</div>';
-}
-
-function mwBuildGrid() {
-  var grid = document.getElementById('mwStateGrid');
-  var states = (window.MIN_WAGE_STATES || []).slice().sort();
-  if (window.MIN_WAGE_CENTRAL_SPHERE) states.push(window.MIN_WAGE_CENTRAL_SPHERE);
-  var done = 0;
-  states.forEach(function (name) {
-    var entry = window.MIN_WAGE_DATA ? window.MIN_WAGE_DATA[name] : null;
-    var populated = window.minWageHasAnyRate ? window.minWageHasAnyRate(entry) : false;
-    if (populated) done++;
-    var btn = document.createElement('button');
-    btn.className = 'state-btn mw-state-btn' + (populated ? '' : ' na');
-    btn.dataset.name = name;
-    btn.textContent = name + (populated ? '' : '  ·  soon');
-    btn.onclick = function () { mwSelectState(name); };
-    grid.appendChild(btn);
-  });
-  var chip = document.getElementById('mwCoverageChip');
-  if (chip) chip.textContent = done + ' of ' + states.length + ' states added';
-}
-
-if (window.MIN_WAGE_DATA) {
-  mwBuildGrid();
-  mwSelectState('Maharashtra');
-}
-
-/* Deep-link support: knowledge.html#pt, #lwf or #minwage activates the right tab */
-(function(){
-  var hash = window.location.hash.replace('#','');
-  var tabBtns = document.querySelectorAll('.tab-btn');
-  if (hash === 'lwf' && tabBtns[1]) { showTab('lwf', tabBtns[1]); }
-  else if (hash === 'minwage' && tabBtns[2]) { showTab('minwage', tabBtns[2]); }
-  else if (hash === 'pt' && tabBtns[0]) { showTab('pt', tabBtns[0]); }
+/* Old bookmarks/shared links: knowledge.html#pt, #lwf, #minwage now live on
+   their own pages. Redirect rather than 404 or show nothing. */
+(function () {
+  var target = { pt: '/knowledge/professional-tax/', lwf: '/knowledge/labour-welfare-fund/', minwage: '/knowledge/minimum-wages/' }[window.location.hash.replace('#', '')];
+  if (target) window.location.replace(target);
 })();
 </script>
 </body>
