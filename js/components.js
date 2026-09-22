@@ -37,8 +37,8 @@ function renderNavbar(activePage) {
                 <a href="/knowledge.html">Knowledge Hub</a>
                 <a href="/knowledge.html#lwf">Labour Welfare Fund</a>
                 <a href="/knowledge.html#pt">Professional Tax</a>
+                <a href="/knowledge.html#minwage">Minimum Wages</a>
                 <a href="/coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
-                <a href="/coming-soon.html?item=Minimum Wages">Minimum Wages</a>
                 <a href="/coming-soon.html?item=Holidays">Holidays</a>
               </div>
               <div>
@@ -115,8 +115,8 @@ function renderNavbar(activePage) {
           <a href="/knowledge.html">Knowledge Hub</a>
           <a href="/knowledge.html#lwf">Labour Welfare Fund</a>
           <a href="/knowledge.html#pt">Professional Tax</a>
+          <a href="/knowledge.html#minwage">Minimum Wages</a>
           <a href="/coming-soon.html?item=Working Hours %26 Overtime">Working Hours &amp; Overtime</a>
-          <a href="/coming-soon.html?item=Minimum Wages">Minimum Wages</a>
           <a href="/coming-soon.html?item=Holidays">Holidays</a>
           <div class="mobile-accordion-heading">Compliance</div>
           <a href="/labour-codes.html">Labour Codes 2026</a>

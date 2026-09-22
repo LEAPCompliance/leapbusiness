@@ -83,9 +83,73 @@ function resetCtc() {
   document.getElementById('ctc-hrapct').value = 50;
   document.getElementById('ctc-comm').value = 0;
   document.getElementById('ctc-conv').value = 0;
+  document.getElementById('ctc-class').value = '';
   document.getElementById('ctc-minwage').value = '';
+  document.getElementById('ctc-minwage-hint').textContent = '';
   document.getElementById('ctc-summary').innerHTML = '';
   document.getElementById('th-result').innerHTML = CALC_PLACEHOLDER;
+}
+
+/* Looks up the Minimum Wage for the chosen State + Class of Employment in
+   LEAP's Minimum Wages Hub (js/minwage-data.js). Auto-fills the field when a
+   rate exists there; otherwise leaves it for manual entry and says so. The
+   field stays editable either way, so a looked-up figure can be overridden. */
+function ctcLookupMinWage() {
+  const hint = document.getElementById('ctc-minwage-hint');
+  const cls = document.getElementById('ctc-class').value;
+  if (!hint) return;
+  if (!cls) { hint.textContent = ''; return; }
+
+  const st = CTC_STATES[document.getElementById('ctc-state').value];
+  if (typeof MIN_WAGE_DATA === 'undefined' || typeof minWageRate !== 'function') {
+    hint.textContent = 'Enter the Minimum Wage for this category manually.';
+    return;
+  }
+  const entry = MIN_WAGE_DATA[st.name];
+  if (entry && entry.hasZones) {
+    hint.innerHTML = st.name + '’s Minimum Wage differs by zone/area — check the <a href="/knowledge.html#minwage" target="_blank" style="color:var(--primary);font-weight:600">Minimum Wages Hub</a> for the right figure and enter it manually.';
+    return;
+  }
+  const rate = minWageRate(st.name, cls);
+  if (rate != null) {
+    document.getElementById('ctc-minwage').value = rate;
+    hint.innerHTML = 'Auto-filled from LEAP’s Minimum Wages Hub' + (entry.updated ? ', updated ' + entry.updated : '') + '. <a href="/knowledge.html#minwage" target="_blank" style="color:var(--primary);font-weight:600">View source →</a>';
+  } else {
+    hint.textContent = 'We haven’t added ' + st.name + '’s Minimum Wage rates yet — enter the figure manually.';
+  }
+}
+
+/* Deep link from the Minimum Wages Hub: /calculators/ctc/?mw_state=...&mw_class=...&mw_rate=...
+   pre-fills the state (if it's one of the 8 this calculator supports), the
+   class and the rate, and points the visitor at Calculate. It does not run
+   the calculation itself: results only ever appear from the Calculate button
+   (see CALC_PLACEHOLDER), so every result shown still corresponds to exactly
+   one tracked calculate_click event. */
+function ctcApplyMinWageLink() {
+  const amountField = document.getElementById('ctc-amount');
+  if (!amountField) return;
+  const params = new URLSearchParams(window.location.search);
+  const mwState = params.get('mw_state');
+  const mwClass = params.get('mw_class');
+  const mwRate = params.get('mw_rate');
+  if (!mwState && !mwClass && !mwRate) return;
+
+  let stateSupported = true;
+  if (mwState) {
+    const code = Object.keys(CTC_STATES).find((k) => CTC_STATES[k].name === mwState);
+    if (code) document.getElementById('ctc-state').value = code;
+    else stateSupported = false;
+  }
+  if (mwClass) document.getElementById('ctc-class').value = mwClass;
+  if (mwRate) document.getElementById('ctc-minwage').value = mwRate;
+  else if (mwState && stateSupported && mwClass) ctcLookupMinWage();
+
+  if (mwState && !stateSupported) {
+    document.getElementById('ctc-minwage-hint').textContent = mwState + ' is not yet one of the states this calculator supports for Professional Tax / LWF' + (mwRate ? ' — the Minimum Wage below has still been filled in.' : ', so the Minimum Wage could not be filled in automatically. Enter it manually.');
+  }
+
+  const btn = document.querySelector('#ctc-takehome .btn-primary');
+  if (btn) { btn.focus({ preventScroll: true }); btn.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
 }
 
 /* PF wage ceiling: Rs 25,000/month from 17 September 2026 (Gazette S.O. 5109(E)),
@@ -141,6 +205,8 @@ function calcTakeHome() {
   const comm = parseFloat(document.getElementById('ctc-comm').value) || 0;
   const conv = parseFloat(document.getElementById('ctc-conv').value) || 0;
   const minWage = parseFloat(document.getElementById('ctc-minwage').value) || 0;
+  const classLabels = { unskilled: 'Unskilled', semiskilled: 'Semi-Skilled', skilled: 'Skilled', highlyskilled: 'Highly Skilled' };
+  const classLabel = classLabels[document.getElementById('ctc-class').value] || '';
 
   const p = { basicPct, hraPct, comm, conv, state: stateCode, female, minWage };
   const st = CTC_STATES[stateCode];
@@ -160,7 +226,7 @@ function calcTakeHome() {
   document.getElementById('th-result').innerHTML = `
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:4px">Part A — Earnings</div>
     <div class="calc-row"><span>Basic + DA (${basicPct}% of gross)${minWage > 0 ? (r.minWageOk ? ' <span style="color:#1a7d3c;font-weight:700">✓ Compliant</span>' : ' <span style="color:#c0392b;font-weight:700">⚠ NC — below Minimum Wage</span>') : ''}</span><strong>${fmtINR(r.basicDA)}</strong></div>
-    ${minWage > 0 && !r.minWageOk ? `<div class="calc-alert" style="margin:4px 0 12px"><span class="calc-alert-icon">⚠️</span><div><h5>Basic + DA is below the Minimum Wage you entered</h5><p>Basic + DA of ${fmtINR(r.basicDA)} is less than the Minimum Wage floor of ${fmtINR(minWage)} you specified. Raise the Basic + DA % (or the gross/CTC) so Basic + DA is at least ${fmtINR(minWage)}, or confirm the correct notified Minimum Wage for this employee's state, zone and skill category.</p></div></div>` : ''}
+    ${minWage > 0 && !r.minWageOk ? `<div class="calc-alert" style="margin:4px 0 12px"><span class="calc-alert-icon">⚠️</span><div><h5>Basic + DA is below the Minimum Wage you entered</h5><p>Basic + DA of ${fmtINR(r.basicDA)} is less than the Minimum Wage floor of ${fmtINR(minWage)}${classLabel ? ' for the ' + classLabel + ' category' : ' you specified'} in ${st.name}. Raise the Basic + DA % (or the gross/CTC) so Basic + DA is at least ${fmtINR(minWage)}, or confirm the correct notified Minimum Wage for this employee's zone and skill category.</p></div></div>` : ''}
     <div class="calc-row"><span>HRA (${hraPct}% of Basic + DA)</span><strong>${fmtINR(r.hra)}</strong></div>
     <div class="calc-row"><span>Communication Allowance</span><strong>${fmtINR(r.comm)}</strong></div>
     <div class="calc-row"><span>Conveyance / Fuel Allowance</span><strong>${fmtINR(r.conv)}</strong></div>
@@ -1131,7 +1197,7 @@ function calcWageFloor() {
    feature rather than a calculation, so it stays live as before. */
 document.addEventListener('DOMContentLoaded', () => {
   [epfPaintIW, buildEsicRows, onPtStateChange, onGratRegime, onGratCause,
-   bonusPaintRate, calcHeatmap, buildWfRows]
+   bonusPaintRate, calcHeatmap, buildWfRows, ctcApplyMinWageLink]
     .forEach(fn => {
       try { fn(); }
       catch (err) { console.warn('Calculator init skipped:', fn.name, err); }

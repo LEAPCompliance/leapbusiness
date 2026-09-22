@@ -148,6 +148,7 @@ body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--off-
   <div class="tabs-inner">
     <button class="tab-btn active" onclick="showTab('pt',this)">💼 Professional Tax <span class="tab-badge">Live</span></button>
     <button class="tab-btn" onclick="showTab('lwf',this)">🤝 LWF Rates <span class="tab-badge">Live</span></button>
+    <button class="tab-btn" onclick="showTab('minwage',this)">📐 Minimum Wages <span class="tab-badge" style="background:#fffbeb;color:#92400e;border-color:rgba(146,64,14,0.25)">Building</span></button>
     <button class="tab-btn" onclick="showTab('pf',this)">📋 PF Limits <span class="tab-badge" style="background:#f0fdf4;color:#166534;border-color:rgba(22,101,52,0.3)">Soon</span></button>
     <button class="tab-btn" onclick="showTab('esic',this)">🏥 ESIC Slabs <span class="tab-badge" style="background:#f0fdf4;color:#166534;border-color:rgba(22,101,52,0.3)">Soon</span></button>
     <button class="tab-btn" onclick="showTab('calendar',this)">🗓️ Due Date Calendar <span class="tab-badge" style="background:#f0fdf4;color:#166534;border-color:rgba(22,101,52,0.3)">Soon</span></button>
@@ -199,6 +200,12 @@ body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--off-
         <div class="coming-title">LWF State-wise Rates</div>
         <div class="coming-desc">Contribution amounts, periodicity and due dates for all LWF-applicable states.</div>
         <span class="coming-badge" style="background:#ecfdf5;border-color:#bbf7d0;color:#065f46">✓ Now Live</span>
+      </div>
+      <div class="coming-card" style="border-color:#3299C2;opacity:1;background:var(--gold-pale)">
+        <div class="coming-icon">📐</div>
+        <div class="coming-title">Minimum Wages, PAN-India</div>
+        <div class="coming-desc">State-wise rates by skill category, linked straight into the CTC calculator.</div>
+        <span class="coming-badge" style="background:#fffbeb;border-color:#fde68a;color:#92400e">🔧 Building — states added as verified</span>
       </div>
       <div class="coming-card">
         <div class="coming-icon">📋</div>
@@ -258,6 +265,39 @@ body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--off-
       <div class="coming-card"><div class="coming-icon">🏥</div><div class="coming-title">ESIC Wage Limit Guide</div><div class="coming-desc">Applicable wage ceiling, contribution rates, and state-wise ESIC applicability.</div><span class="coming-badge">Coming Soon</span></div>
     </div>
   </div>
+  <!-- MINIMUM WAGES TAB — FULL TOOL, DATA ADDED STATE BY STATE -->
+  <div id="tab-minwage" style="display:none">
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-header-left">
+          <div class="tool-icon">📐</div>
+          <div>
+            <div class="tool-title">Minimum Wages — PAN-India Reference</div>
+            <div class="tool-desc">State-wise Minimum Wage by skill category (Unskilled, Semi-Skilled, Skilled, Highly Skilled), feeding straight into the CTC calculator's compliance check.</div>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-gold" id="mwCoverageChip">0 of 36 states added</span>
+          <span class="chip chip-navy">Free Tool</span>
+        </div>
+      </div>
+
+      <div class="pt-wrap">
+        <div class="search-filter-row">
+          <input class="pt-search" type="text" id="mwSearch" placeholder="🔍  Search state..." oninput="mwFilterStates(this.value)">
+        </div>
+
+        <div class="state-grid" id="mwStateGrid"></div>
+
+        <div id="mwDetailPanel"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;padding:12px 14px;background:var(--off-white);border-radius:8px;border:1px solid var(--border);font-size:12.5px;color:var(--text-mid)">
+      📌 Minimum Wages apply in every state — unlike Professional Tax or LWF there is no "not applicable" state. Rates are also revised roughly every six months (the VDA adjustment) and can differ by zone or area within a state, so always confirm the figure against the current notification for the specific district before relying on it for payroll.
+    </div>
+  </div>
+
   <div id="tab-pf" style="display:none">
     <div style="text-align:center;padding:60px 20px;color:var(--text-light)">
       <div style="font-size:40px;margin-bottom:12px">📋</div>
@@ -285,9 +325,10 @@ body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--off-
 <div id="footer-placeholder"></div>
 <div id="whatsapp-placeholder"></div>
 
-<script src="js/components.js?v=13"></script>
+<script src="js/components.js?v=14"></script>
 <script src="js/main.js?v=11"></script>
 <script src="js/pt-data.js?v=1"></script>
+<script src="js/minwage-data.js?v=1"></script>
 <script>
 renderNavbar('resources');renderFooter();renderWhatsApp();
 
@@ -469,11 +510,108 @@ function buildLwfGrid(){
 buildLwfGrid();
 lwfSelectState('Maharashtra');
 
-/* Deep-link support: knowledge.html#pt or knowledge.html#lwf activates the right tab */
+// ── MINIMUM WAGES (reads window.MIN_WAGE_DATA from js/minwage-data.js) ──
+var mwActiveState = null, mwActiveClass = 'unskilled';
+
+function mwFilterStates(q) {
+  document.querySelectorAll('.mw-state-btn').forEach(function (btn) {
+    btn.style.display = btn.dataset.name.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+
+function mwSelectState(name) {
+  mwActiveState = name;
+  document.querySelectorAll('.mw-state-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.name === name); });
+  mwRenderDetail(name);
+  document.getElementById('mwDetailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function mwSetClass(key) {
+  mwActiveClass = key;
+  if (mwActiveState) mwRenderDetail(mwActiveState);
+}
+
+function mwRenderDetail(name) {
+  var panel = document.getElementById('mwDetailPanel');
+  var entry = window.MIN_WAGE_DATA ? window.MIN_WAGE_DATA[name] : null;
+  var cats = window.MIN_WAGE_CATEGORIES || [];
+  var populated = window.minWageHasAnyRate ? window.minWageHasAnyRate(entry) : false;
+
+  var pillsHtml = cats.map(function (c) {
+    return '<button class="fpill' + (mwActiveClass === c.key ? ' on' : '') + '" onclick="mwSetClass(\'' + c.key + '\')">' + c.label + '</button>';
+  }).join('');
+
+  if (!populated) {
+    panel.innerHTML =
+      '<div class="detail-panel">' +
+        '<div class="dp-header"><div class="dp-title">' + name + '</div><span class="badge-mode" style="background:#fffbeb;color:#92400e">🔧 Not added yet</span></div>' +
+        '<p style="font-size:14px;color:var(--text-mid);line-height:1.6">We’re still compiling verified Minimum Wage rates for <strong>' + name + '</strong>. This section updates as each state’s current notification is confirmed — nothing is shown until it is verified, so there is no risk of an out-of-date figure being used by mistake.</p>' +
+        '<div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">💼 <strong>Need this state’s Minimum Wage now?</strong> <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Contact LEAP</a> for the current figure for this state, zone and skill category.</div>' +
+      '</div>';
+    return;
+  }
+
+  var entryForZone = entry;
+  var zonePicker = '';
+  if (entry.hasZones && entry.zones && entry.zones.length) {
+    zonePicker = '<div class="slab-section-title" style="margin-top:14px">Zone / Area</div><div class="filter-pills" style="margin-bottom:10px">' +
+      entry.zones.map(function (z, i) { return '<button class="fpill' + (i === 0 ? ' on' : '') + '" onclick="mwSetZone(this,\'' + z + '\')" data-zone="' + z + '">' + z + '</button>'; }).join('') + '</div>';
+  }
+  var zone = entry.hasZones && entry.zones ? entry.zones[0] : null;
+  var rateVal = window.minWageRate ? window.minWageRate(name, mwActiveClass, zone) : null;
+
+  panel.innerHTML =
+    '<div class="detail-panel">' +
+      '<div class="dp-header"><div class="dp-title">' + name + '</div><div class="dp-badges"><span class="badge-applicable">✓ Verified' + (entry.updated ? ', updated ' + entry.updated : '') + '</span></div></div>' +
+      (entry.source ? '<div class="meta-grid" style="margin-bottom:14px"><div class="meta-tile" style="grid-column:1/-1"><div class="meta-lbl">Source</div><div class="meta-val" style="font-weight:400">' + entry.source + '</div></div></div>' : '') +
+      '<div class="slab-section-title">Skill Category</div><div class="filter-pills" style="margin-bottom:14px" id="mwClassPills">' + pillsHtml + '</div>' +
+      zonePicker +
+      '<div class="meta-tile" style="text-align:center;padding:20px"><div class="meta-lbl">Minimum Wage, ' + (cats.filter(function (c) { return c.key === mwActiveClass; })[0] || {}).label + (zone ? ' — ' + zone : '') + '</div>' +
+      '<div style="font-size:28px;font-weight:700;color:var(--navy);margin-top:6px">' + (rateVal != null ? '₹' + rateVal.toLocaleString('en-IN') + ' / month' : 'Not added for this category yet') + '</div></div>' +
+      (rateVal != null ? '<div style="margin-top:14px;text-align:center"><a href="https://www.leapbusiness.in/calculators/ctc/?mw_state=' + encodeURIComponent(name) + '&mw_class=' + mwActiveClass + '&mw_rate=' + rateVal + '" class="btn btn-primary" style="text-decoration:none;display:inline-block">Use in CTC Calculator →</a></div>' : '') +
+      '<div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">💼 <strong>Need help checking your salary structure against this?</strong> <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Contact LEAP →</a></div>' +
+    '</div>';
+}
+
+function mwSetZone(btn, zone) {
+  document.querySelectorAll('#mwDetailPanel [data-zone]').forEach(function (b) { b.classList.remove('on'); });
+  btn.classList.add('on');
+  var rateVal = window.minWageRate ? window.minWageRate(mwActiveState, mwActiveClass, zone) : null;
+  var valEl = document.querySelector('#mwDetailPanel .meta-tile[style*="text-align:center"] div[style*="font-size:28px"]');
+  if (valEl) valEl.textContent = rateVal != null ? '₹' + rateVal.toLocaleString('en-IN') + ' / month' : 'Not added for this category yet';
+}
+
+function mwBuildGrid() {
+  var grid = document.getElementById('mwStateGrid');
+  var states = (window.MIN_WAGE_STATES || []).slice().sort();
+  if (window.MIN_WAGE_CENTRAL_SPHERE) states.push(window.MIN_WAGE_CENTRAL_SPHERE);
+  var done = 0;
+  states.forEach(function (name) {
+    var entry = window.MIN_WAGE_DATA ? window.MIN_WAGE_DATA[name] : null;
+    var populated = window.minWageHasAnyRate ? window.minWageHasAnyRate(entry) : false;
+    if (populated) done++;
+    var btn = document.createElement('button');
+    btn.className = 'state-btn mw-state-btn' + (populated ? '' : ' na');
+    btn.dataset.name = name;
+    btn.textContent = name + (populated ? '' : '  ·  soon');
+    btn.onclick = function () { mwSelectState(name); };
+    grid.appendChild(btn);
+  });
+  var chip = document.getElementById('mwCoverageChip');
+  if (chip) chip.textContent = done + ' of ' + states.length + ' states added';
+}
+
+if (window.MIN_WAGE_DATA) {
+  mwBuildGrid();
+  mwSelectState('Maharashtra');
+}
+
+/* Deep-link support: knowledge.html#pt, #lwf or #minwage activates the right tab */
 (function(){
   var hash = window.location.hash.replace('#','');
   var tabBtns = document.querySelectorAll('.tab-btn');
   if (hash === 'lwf' && tabBtns[1]) { showTab('lwf', tabBtns[1]); }
+  else if (hash === 'minwage' && tabBtns[2]) { showTab('minwage', tabBtns[2]); }
   else if (hash === 'pt' && tabBtns[0]) { showTab('pt', tabBtns[0]); }
 })();
 </script>

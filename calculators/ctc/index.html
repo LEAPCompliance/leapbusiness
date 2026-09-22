@@ -62,8 +62,8 @@
           <button type="button" class="ctc-toggle-btn" id="ctc-dir-th" onclick="setCtcDirection('th')">Take-Home &rarr; CTC</button>
         </div>
         <div class="form-group"><label id="ctc-amount-label">Monthly CTC (&#8377;)</label><input type="number" id="ctc-amount" value="50000" /></div>
-        <div class="form-group"><label>State (for Professional Tax &amp; LWF)</label>
-          <select id="ctc-state">
+        <div class="form-group"><label>State (for Minimum Wages, Professional Tax &amp; LWF)</label>
+          <select id="ctc-state" onchange="ctcLookupMinWage()">
             <option value="MH">Maharashtra</option>
             <option value="KA">Karnataka</option>
             <option value="GJ">Gujarat</option>
@@ -81,8 +81,18 @@
         </div>
         <div class="form-group"><label>Communication Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-comm" value="0" /></div>
         <div class="form-group"><label>Conveyance / Fuel Allowance, Monthly (&#8377;, if any)</label><input type="number" id="ctc-conv" value="0" /></div>
+        <div class="form-group"><label>Class of Employment (for Minimum Wages)</label>
+          <select id="ctc-class" onchange="ctcLookupMinWage()">
+            <option value="">Not specified</option>
+            <option value="unskilled">Unskilled</option>
+            <option value="semiskilled">Semi-Skilled</option>
+            <option value="skilled">Skilled</option>
+            <option value="highlyskilled">Highly Skilled</option>
+          </select>
+        </div>
         <div class="form-group"><label>Minimum Wage for this employee's state, zone &amp; skill category (&#8377;/month, optional)</label><input type="number" id="ctc-minwage" min="0" placeholder="e.g. 12,000" /></div>
-        <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">Special Allowance is the balancing figure. Basic + DA must be at or above the Minimum Wage for the employee's state, zone and skill category. Enter that figure above and this calculator will flag it if Basic + DA falls short; leave it blank to skip the check. Minimum Wages are notified separately by each state and revised roughly every six months, so this calculator does not look them up for you.</p>
+        <p id="ctc-minwage-hint" style="font-size:12.5px;color:var(--text-secondary);margin-top:-10px;margin-bottom:4px"></p>
+        <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">Special Allowance is the balancing figure. Basic + DA must be at or above the Minimum Wage for the employee's state, zone and skill category. Choosing a state and a Class of Employment fills in the Minimum Wage automatically once LEAP's <a href="/knowledge.html#minwage" target="_blank" style="color:var(--primary);font-weight:600">Minimum Wages Hub</a> has that state's rates; until then, or if it's left blank, enter the figure manually to have it checked, or leave the check blank to skip it.</p>
         <div style="display:flex;gap:12px;margin-top:20px">
           <button type="button" class="btn btn-primary" style="flex:1;justify-content:center" onclick="calcTakeHome();trackCalcClick('ctc')">Calculate</button>
           <button type="button" class="btn btn-outline-dark" onclick="resetCtc()">↺ Reset</button>
@@ -132,9 +142,10 @@
 
 <div id="footer-placeholder"></div>
 <div id="whatsapp-placeholder"></div>
-<script src="/js/components.js?v=13"></script>
+<script src="/js/components.js?v=14"></script>
 <script src="/js/main.js?v=11"></script>
-<script src="/js/tools.js?v=20"></script>
+<script src="/js/minwage-data.js?v=1"></script>
+<script src="/js/tools.js?v=21"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
