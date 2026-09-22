@@ -50,6 +50,29 @@
   var MIN_WAGE_DATA = {};
   STATES.concat([CENTRAL_SPHERE]).forEach(function (name) { MIN_WAGE_DATA[name] = blankEntry(); });
 
+  /* Maharashtra — Shops & Establishments schedule only (the schedule relevant to
+     LEAP's typical office/corporate clients). VDA revision effective 1 July 2026.
+     Source: Maharashtra Government minimum wage notification for Shops &
+     Establishments, as tabulated by the wage-tracking service the figures were
+     supplied from, cross-checked against the client's copy of the Gazette PDF.
+     The Gazette copy itself is a phone scan with no digital text layer and
+     covers dozens of scheduled employments per page, so the individual cells
+     were not re-read digit-by-digit off the scan — only the already-tabulated
+     Shops & Establishments figures were used. No Highly Skilled rate is
+     notified separately for this schedule, so that category stays null rather
+     than being estimated. */
+  MIN_WAGE_DATA['Maharashtra'] = {
+    updated: '10 Aug 2026',
+    source: 'Maharashtra Minimum Wages Notification, Shops & Establishments schedule, VDA effective 1 July 2026',
+    hasZones: true,
+    zones: ['Zone I', 'Zone II', 'Zone III'],
+    rates: {
+      'Zone I':   { unskilled: 14155, semiskilled: 14990, skilled: 15766, highlyskilled: null },
+      'Zone II':  { unskilled: 13559, semiskilled: 14394, skilled: 15170, highlyskilled: null },
+      'Zone III': { unskilled: 12962, semiskilled: 13798, skilled: 14574, highlyskilled: null }
+    }
+  };
+
   /* True once at least one rate has been filled in for the state, so the Hub
      and the CTC lookup can tell "not yet added" apart from "genuinely zero". */
   function hasAnyRate(entry) {
