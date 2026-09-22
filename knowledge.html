@@ -560,13 +560,11 @@ function mwRenderDetail(name) {
 
   var rows = mwBuildRows(name, entry, cats);
   var showZoneCol = entry.hasZones;
-  var thead = '<tr>' + (showZoneCol ? '<th>Zone</th>' : '') + '<th>Class of Employment</th><th>Basic /month</th><th>VDA /month</th><th>Total /day</th><th>Total /month</th><th></th></tr>';
+  var thead = '<tr>' + (showZoneCol ? '<th>Zone</th>' : '') + '<th>Class of Employment</th><th>Basic /month</th><th>VDA /month</th><th>Total /day</th><th>Total /month</th></tr>';
   var tbody = rows.map(function (r) {
-    var ctcLink = 'https://www.leapbusiness.in/calculators/ctc/?mw_state=' + encodeURIComponent(name) + '&mw_class=' + r.cat.key + '&mw_rate=' + r.total + (r.zone ? '&mw_zone=' + encodeURIComponent(r.zone) : '');
     return '<tr>' + (showZoneCol ? '<td>' + (r.zone || '—') + '</td>' : '') +
       '<td>' + r.cat.label + '</td><td>' + mwMoney(r.basic) + '</td><td>' + mwMoney(r.vda) + '</td><td>₹' + r.perDay.toFixed(2) + '</td>' +
-      '<td style="font-weight:700;color:var(--navy)">' + mwMoney(r.total) + '</td>' +
-      '<td><a href="' + ctcLink + '" style="color:var(--navy);font-weight:600;font-size:12px;white-space:nowrap">Use in CTC →</a></td></tr>';
+      '<td style="font-weight:700;color:var(--navy)">' + mwMoney(r.total) + '</td></tr>';
   }).join('');
 
   var meta = [];
