@@ -970,11 +970,10 @@
 
   /* ---------- Lead capture before bulk results ---------- */
   var LEAD_KEY = 'leap-bulk-pf-lead-v1';
-  var EXCEL_KEY = 'leap-excel-lead-v1';
   var LEAD_ENDPOINT = 'https://api.web3forms.com/submit';
 
   function hasLead() {
-    try { return !!(localStorage.getItem(LEAD_KEY) || localStorage.getItem(EXCEL_KEY)); } catch (e) { return false; }
+    try { return !!localStorage.getItem(LEAD_KEY); } catch (e) { return false; }
   }
   function saveLead() {
     try { localStorage.setItem(LEAD_KEY, String(Date.now())); } catch (e) { /* storage blocked, ask again next time */ }
@@ -1046,76 +1045,6 @@
       .then(function (r) { return r.json(); })
       .then(function (j) { finish(!!(j && j.success)); })
       .catch(function () { finish(false); });
-  }
-
-  /* ---------- Excel download, in exchange for contact details ---------- */
-  var EXCEL_FILE = '/assets/downloads/leap-epf-wage-ceiling-calculator-v20260921-7c3f9a.xlsx';
-  var EXCEL_NAME = 'LEAP-EPF-Wage-Ceiling-Calculator.xlsx';
-
-  function hasExcelLead() {
-    try { return !!localStorage.getItem(EXCEL_KEY); } catch (e) { return false; }
-  }
-  function startExcelDownload() {
-    var a = document.createElement('a');
-    a.href = EXCEL_FILE; a.download = EXCEL_NAME;
-    document.body.appendChild(a); a.click(); a.remove();
-    track('epf-wage-ceiling-excel', 'file_download');
-  }
-  function paintExcelCard() {
-    var done = hasExcelLead();
-    $('wc-excel-form-wrap').hidden = done;
-    $('wc-excel-done').hidden = !done;
-  }
-  function showExcelDone(started) {
-    $('wc-excel-form-wrap').hidden = true;
-    $('wc-excel-done').hidden = false;
-    $('wc-excel-done-msg').textContent = started
-      ? 'Your download has started. If nothing happened, use the button below.'
-      : 'Thank you. Use the button below to download the workbook.';
-  }
-
-  function submitExcel(e) {
-    e.preventDefault();
-    var form = e.target, err = $('wc-x-error'), btn = $('wc-x-submit');
-    if (form.elements.botcheck && form.elements.botcheck.checked) return;
-    var v = function (n) { return form.elements[n].value.trim(); };
-    var digits = v('phone').replace(/\D/g, '');
-    if (!v('name') || !v('company')) { err.textContent = 'Please enter your name and company.'; return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'))) { err.textContent = 'Please enter your company email address.'; return; }
-    if (isPersonalEmail(v('email'))) { err.textContent = 'Please use your company email address. Gmail, Yahoo, Outlook and other personal addresses are not accepted.'; return; }
-    if (digits.length < 10 || digits.length > 13) { err.textContent = 'Please enter a valid phone or WhatsApp number.'; return; }
-    if (!v('employees')) { err.textContent = 'Please choose the size of your workforce.'; return; }
-    if (!v('role')) { err.textContent = 'Please choose the option that describes you best.'; return; }
-    if (!form.elements.consent.checked) { err.textContent = 'Please tick the consent box so we can contact you.'; return; }
-    err.textContent = '';
-
-    var fd = new FormData(form);
-    fd.delete('consent');
-    fd.set('message', 'Excel calculator download. Role: ' + v('role') + '. Employees: ' + v('employees') + '. Interested in: ' + (v('interest') || 'not stated') + '.');
-    var label = btn.textContent;
-    btn.disabled = true; btn.textContent = 'Please wait...';
-
-    var finish = function (ok) {
-      btn.disabled = false; btn.textContent = label;
-      if (ok) {
-        try { localStorage.setItem(EXCEL_KEY, String(Date.now())); } catch (x) { /* storage blocked */ }
-        if (typeof root.gtag === 'function') root.gtag('event', 'generate_lead', { form_name: 'excel_download', tool_name: 'epf-wage-ceiling-excel' });
-        if (typeof root.showToast === 'function') root.showToast('Thank you. Your download is starting.');
-      }
-      /* If sending failed, the download still starts: our fault, not theirs. */
-      startExcelDownload();
-      showExcelDone(true);
-    };
-    fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd })
-      .then(function (r) { return r.json(); })
-      .then(function (j) { finish(!!(j && j.success)); })
-      .catch(function () { finish(false); });
-  }
-
-  function initExcel() {
-    if (!$('wc-excel-form')) return;
-    $('wc-excel-form').addEventListener('submit', submitExcel);
-    paintExcelCard();
   }
 
   /* ---------- Share ---------- */
@@ -1230,7 +1159,6 @@
     renderSegments();
     initChecklist();
     initBulk();
-    initExcel();
     initTabs();
   }
 
@@ -1238,8 +1166,7 @@
     calcContribution: calcContribution, resetContribution: resetContribution,
     printTool: printTool, resetChecklist: resetChecklist, share: share,
     calcBulk: calcBulk, resetBulk: resetBulk, loadPasted: loadPasted,
-    downloadTemplate: downloadTemplate, downloadBulk: downloadBulk,
-    downloadExcel: startExcelDownload
+    downloadTemplate: downloadTemplate, downloadBulk: downloadBulk
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

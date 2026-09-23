@@ -22,7 +22,7 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/style.css?v=14" />
   <link rel="stylesheet" href="/css/calculators.css?v=3" />
-  <link rel="stylesheet" href="/css/wage-ceiling.css?v=9" />
+  <link rel="stylesheet" href="/css/wage-ceiling.css?v=10" />
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
@@ -262,36 +262,10 @@
         </ul>
       </div>
       <div class="wc-lead-card" id="wc-excel-card">
-        <div id="wc-excel-form-wrap">
-          <h3>Get the free Excel calculator</h3>
-          <p>Tell us a little about you and the download starts straight away. We use these details only to follow up on your PF query, and we never send you the file by email.</p>
-          <form id="wc-excel-form" novalidate>
-            <input type="hidden" name="access_key" value="53f8e9d0-2770-4150-b0d3-4f6f0d347a3d" />
-            <input type="hidden" name="subject" value="Excel Calculator Download Lead - LEAP Website" />
-            <input type="hidden" name="from_name" value="LEAP Website Excel Download" />
-            <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
-            <div class="wc-lead-grid">
-              <div class="form-group"><label for="wc-x-name">Full name *</label><input type="text" id="wc-x-name" name="name" placeholder="Rahul Sharma" autocomplete="name" required /></div>
-              <div class="form-group"><label for="wc-x-designation">Designation</label><input type="text" id="wc-x-designation" name="designation" placeholder="HR Manager" autocomplete="organization-title" /></div>
-              <div class="form-group"><label for="wc-x-company">Company name *</label><input type="text" id="wc-x-company" name="company" placeholder="Acme Pvt. Ltd." autocomplete="organization" required /></div>
-              <div class="form-group"><label for="wc-x-email">Company email *</label><input type="email" id="wc-x-email" name="email" placeholder="you@company.com" autocomplete="email" required /></div>
-              <div class="form-group"><label for="wc-x-phone">Phone / WhatsApp *</label><input type="tel" id="wc-x-phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" required /></div>
-              <div class="form-group"><label for="wc-x-employees">Employees on payroll *</label>
-                <select id="wc-x-employees" name="employees" required><option value="" selected disabled>Select</option><option>1 to 50</option><option>51 to 200</option><option>201 to 1,000</option><option>More than 1,000</option></select></div>
-              <div class="form-group"><label for="wc-x-role">You are *</label>
-                <select id="wc-x-role" name="role" required><option value="" selected disabled>Select</option><option>Employer or business owner</option><option>HR or payroll professional</option><option>CA, CS or compliance consultant</option><option>Other</option></select></div>
-              <div class="form-group"><label for="wc-x-interest">What do you need help with?</label>
-                <select id="wc-x-interest" name="interest"><option value="" selected>Just the Excel calculator</option><option>PF returns and compliance</option><option>Payroll processing</option><option>Labour code readiness audit</option><option>Something else</option></select></div>
-            </div>
-            <label class="wc-consent"><input type="checkbox" name="consent" /><span>I agree to LEAP contacting me about this enquiry. See the <a href="/privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
-            <p class="wc-lead-error" id="wc-x-error" role="alert"></p>
-            <button type="submit" class="btn btn-primary" id="wc-x-submit" style="width:100%;justify-content:center">Download the Excel calculator</button>
-          </form>
-        </div>
-        <div id="wc-excel-done" hidden>
-          <h3>Your Excel calculator</h3>
-          <p id="wc-excel-done-msg">You have already shared your details on this device, so the download is one click.</p>
-          <button type="button" class="btn btn-primary" style="width:100%;justify-content:center" onclick="WageCeilingUI.downloadExcel()">Download the Excel calculator</button>
+        <h3>Get the free Excel calculator</h3>
+        <p>Enter your details below. We will email you a confirmation link, and once you confirm, the download link lands straight in your inbox. This keeps the calculator going to a real, reachable person.</p>
+        <div class="wc-brevo-embed">
+          <iframe width="540" height="820" src="https://262d3e5b.sibforms.com/v2/serve/MUIFABCyaud2vLAjHKLZs9bsKmmEKW0K-8yRDH1n0kFy4cqET0Z50TGBmQWY_g1ZfOjccnBD6wcrLH2f6XaLGIUKtOrLn2UICeEAwzlQo_4FU9n1LStWiDYIqMP3Z9jp1ui8AQ5v0v93-AZ9sCWmJuSY0MpzlZeReGDIubwr_mpzi_EkL6USphnLcSNAPZ973croO3TTdW8vYhI9QQ==" frameborder="0" scrolling="auto" allowfullscreen title="Get the free EPF Wage Ceiling Excel calculator"></iframe>
         </div>
       </div>
     </div>
@@ -451,7 +425,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=15"></script>
 <script src="/js/main.js?v=11"></script>
-<script src="/js/wage-ceiling.js?v=10"></script>
+<script src="/js/wage-ceiling.js?v=11"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
