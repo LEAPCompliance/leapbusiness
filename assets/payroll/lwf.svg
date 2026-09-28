@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 340" width="480" height="340" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EAF4FA"/>
+      <stop offset="1" stop-color="#D5E9F4"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="340" rx="20" fill="url(#bg)"/>
+  <circle cx="440" cy="50" r="36" fill="#3299C2" opacity="0.12"/>
+  <circle cx="48" cy="292" r="46" fill="#1A4F78" opacity="0.07"/>
+
+  <!-- heart above the group -->
+  <path transform="translate(0 34)" d="M240 118 C186 82 196 44 222 44 C232 44 240 51 240 58 C240 51 248 44 258 44 C284 44 294 82 240 118 Z" fill="#3299C2"/>
+
+  <!-- three workers -->
+  <g>
+    <!-- left -->
+    <circle cx="150" cy="222" r="26" fill="#3299C2"/>
+    <path d="M100 296 C100 244 200 244 200 296 Z" fill="#3299C2"/>
+    <!-- right -->
+    <circle cx="330" cy="222" r="26" fill="#3299C2"/>
+    <path d="M280 296 C280 244 380 244 380 296 Z" fill="#3299C2"/>
+    <!-- centre (front) -->
+    <circle cx="240" cy="200" r="32" fill="#1A4F78"/>
+    <path d="M182 296 C182 216 298 216 298 296 Z" fill="#1A4F78"/>
+    <!-- helmet -->
+    <path d="M208 196 C208 164 272 164 272 196 Z" fill="#F2B441"/>
+    <rect x="204" y="194" width="72" height="9" rx="4.5" fill="#F7C65E"/>
+  </g>
+
+  <!-- coin jar -->
+  <g transform="translate(396 226)">
+    <rect x="4" y="0" width="48" height="10" rx="4" fill="#1A4F78"/>
+    <path d="M8 10 H48 V60 C48 68 44 72 36 72 H20 C12 72 8 68 8 60 Z" fill="#FFFFFF" stroke="#1A4F78" stroke-opacity="0.3" stroke-width="2"/>
+    <ellipse cx="28" cy="58" rx="14" ry="5" fill="#F2B441"/>
+    <ellipse cx="28" cy="48" rx="14" ry="5" fill="#F7C65E"/>
+    <ellipse cx="28" cy="38" rx="14" ry="5" fill="#F2B441"/>
+  </g>
+
+  <path d="M40 300 H440" stroke="#1A4F78" stroke-opacity="0.18" stroke-width="3" stroke-linecap="round"/>
+</svg>

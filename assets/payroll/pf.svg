@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 340" width="480" height="340" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EAF4FA"/>
+      <stop offset="1" stop-color="#D5E9F4"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2A6A98"/>
+      <stop offset="1" stop-color="#1A4F78"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="340" rx="20" fill="url(#bg)"/>
+  <circle cx="60" cy="52" r="34" fill="#3299C2" opacity="0.12"/>
+  <circle cx="440" cy="300" r="46" fill="#1A4F78" opacity="0.07"/>
+
+  <!-- rising bars -->
+  <g>
+    <rect x="316" y="118" width="22" height="40" rx="5" fill="#3299C2" opacity="0.45"/>
+    <rect x="346" y="96" width="22" height="62" rx="5" fill="#3299C2" opacity="0.65"/>
+    <rect x="376" y="70" width="22" height="88" rx="5" fill="#3299C2" opacity="0.85"/>
+    <rect x="406" y="42" width="22" height="116" rx="5" fill="#1A4F78"/>
+    <path d="M312 104 L350 76 L372 88 L420 34" stroke="#F2B441" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M404 32 H422 V50" stroke="#F2B441" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- shield -->
+  <path d="M168 44 L246 72 V152 C246 204 212 238 168 258 C124 238 90 204 90 152 V72 Z" fill="url(#shield)"/>
+  <path d="M168 62 L230 84 V150 C230 192 204 220 168 238 C132 220 106 192 106 150 V84 Z" fill="#FFFFFF" opacity="0.10"/>
+  <!-- rupee mark -->
+  <g stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M140 112 H198"/>
+    <path d="M140 132 H198"/>
+    <path d="M146 112 C190 112 190 154 146 154"/>
+    <path d="M146 154 L192 204"/>
+  </g>
+
+  <!-- coin stack -->
+  <g stroke="#D99A1E" stroke-width="2">
+    <rect x="300" y="262" width="96" height="18" rx="9" fill="#F2B441"/>
+    <rect x="304" y="244" width="88" height="18" rx="9" fill="#F7C65E"/>
+    <rect x="308" y="226" width="80" height="18" rx="9" fill="#F2B441"/>
+    <rect x="312" y="208" width="72" height="18" rx="9" fill="#F7C65E"/>
+  </g>
+  <ellipse cx="348" cy="208" rx="30" ry="6" fill="#FFE39A"/>
+
+  <!-- ground -->
+  <path d="M40 296 H440" stroke="#1A4F78" stroke-opacity="0.18" stroke-width="3" stroke-linecap="round"/>
+</svg>

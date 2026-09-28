@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 340" width="480" height="340" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EAF4FA"/>
+      <stop offset="1" stop-color="#D5E9F4"/>
+    </linearGradient>
+    <linearGradient id="heart" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3299C2"/>
+      <stop offset="1" stop-color="#1A4F78"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="340" rx="20" fill="url(#bg)"/>
+  <circle cx="430" cy="48" r="36" fill="#3299C2" opacity="0.12"/>
+  <circle cx="50" cy="300" r="44" fill="#1A4F78" opacity="0.07"/>
+
+  <!-- heart -->
+  <path d="M240 268 C120 190 138 96 200 96 C222 96 238 110 240 124 C242 110 258 96 280 96 C342 96 360 190 240 268 Z" fill="url(#heart)"/>
+  <!-- pulse line -->
+  <path d="M158 178 H206 L222 146 L244 218 L262 168 L272 178 H322" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- medical plus badge -->
+  <circle cx="368" cy="92" r="34" fill="#FFFFFF" stroke="#3299C2" stroke-width="3"/>
+  <path d="M368 74 V110 M350 92 H386" stroke="#1A4F78" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- insurance card -->
+  <g transform="translate(40 208)">
+    <rect width="132" height="82" rx="10" fill="#FFFFFF" stroke="#1A4F78" stroke-opacity="0.25" stroke-width="2"/>
+    <rect x="14" y="14" width="30" height="30" rx="8" fill="#3299C2" opacity="0.2"/>
+    <path d="M29 22 V36 M22 29 H36" stroke="#1A4F78" stroke-width="5" stroke-linecap="round"/>
+    <rect x="54" y="18" width="62" height="7" rx="3.5" fill="#1A4F78" opacity="0.7"/>
+    <rect x="54" y="32" width="44" height="7" rx="3.5" fill="#1A4F78" opacity="0.3"/>
+    <rect x="14" y="56" width="102" height="7" rx="3.5" fill="#1A4F78" opacity="0.18"/>
+  </g>
+
+  <!-- shield check -->
+  <g transform="translate(336 196)">
+    <path d="M52 0 L100 18 V64 C100 96 78 116 52 128 C26 116 4 96 4 64 V18 Z" fill="#FFFFFF" stroke="#1A4F78" stroke-opacity="0.25" stroke-width="2"/>
+    <path d="M30 62 L46 78 L76 44" stroke="#3299C2" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <path d="M40 316 H440" stroke="#1A4F78" stroke-opacity="0.18" stroke-width="3" stroke-linecap="round"/>
+</svg>
