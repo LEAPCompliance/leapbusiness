@@ -1066,6 +1066,22 @@
     if (asc.indexOf(digits) > -1 || desc.indexOf(digits) > -1) return true; /* sequential run */
     return false;
   }
+  var CORP_SUFFIXES = /\b(private|pvt|limited|ltd|llp|inc|incorporated|corporation|corp|company|the|and|industries|enterprises|solutions|group|india|international)\b/g;
+  function normalizeCompany(s) {
+    return s.toLowerCase().replace(/[^a-z\s]/g, ' ').replace(CORP_SUFFIXES, ' ').replace(/\s+/g, '');
+  }
+  function domainLabel(email) {
+    var domain = email.split('@').pop().toLowerCase();
+    var labels = domain.split('.');
+    while (labels.length > 1 && /^(com|net|org|in|co|uk|ac|us|au|ca|de|fr|nl|sg|ae)$/.test(labels[labels.length - 1])) labels.pop();
+    return labels.join('');
+  }
+  function companyMatchesEmail(company, email) {
+    var c = normalizeCompany(company), d = domainLabel(email);
+    if (!c || !d) return false;
+    if (c.indexOf(d) > -1 || d.indexOf(c) > -1) return true;
+    return c.length >= 4 && d.length >= 4 && c.slice(0, 4) === d.slice(0, 4);
+  }
   function triggerDownload(url) {
     var a = document.createElement('a');
     a.href = url; a.download = ''; a.rel = 'noopener';
@@ -1087,12 +1103,18 @@
     if (!name || !designation || !company || !employees) { err.textContent = 'Please fill in all fields.'; return; }
     if (digits.length < 10 || digits.length > 13) { err.textContent = 'Please enter a valid mobile number.'; return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email address.'; return; }
+
+    /* Reasons that don't block submission, but route to WhatsApp instead of an instant download */
+    var reason = null;
+    if (isJunkText(name) || isJunkText(company)) reason = 'Please enter your real name and company.';
+    else if (isJunkMobile(digits)) reason = 'Please enter a valid mobile number.';
+    else if (isPersonalEmail(email)) reason = 'Please use your company email for instant access.';
+    else if (!companyMatchesEmail(company, email)) reason = "We couldn't verify that this email matches your company.";
+    var genuine = !reason;
     err.textContent = '';
 
-    var genuine = !isJunkText(name) && !isJunkText(company) && !isJunkMobile(digits) && !isPersonalEmail(email);
-
     var fd = new FormData(form);
-    fd.set('message', 'EPF Excel workbook request. Employees: ' + employees + '. Route: ' + (genuine ? 'instant download' : 'WhatsApp verify') + '.');
+    fd.set('message', 'EPF Excel workbook request. Employees: ' + employees + '. Route: ' + (genuine ? 'instant download' : 'WhatsApp verify - ' + reason) + '.');
     var label = btn.textContent;
     btn.disabled = true; btn.textContent = 'Please wait...';
 
@@ -1105,6 +1127,7 @@
         triggerDownload(EXCEL_FILE_URL);
         if (typeof root.showToast === 'function') root.showToast('Thank you. Your download has started.');
       } else {
+        err.textContent = reason + ' Opening WhatsApp so we can share it with you directly.';
         var waMessage = 'Hi LEAP, I would like the EPF Wage Ceiling Excel workbook.\nName: ' + name + '\nDesignation: ' + designation + '\nCompany: ' + company + '\nEmployees: ' + employees + '\nEmail: ' + email + '\nPhone: ' + phone;
         window.open('https://wa.me/917977213501?text=' + encodeURIComponent(waMessage), '_blank', 'noopener');
       }
