@@ -263,10 +263,31 @@
       </div>
       <div class="wc-lead-card" id="wc-excel-card">
         <h3>Get the free Excel calculator</h3>
-        <p>Enter your details below. We will email you a confirmation link, and once you confirm, the download link lands straight in your inbox. This keeps the calculator going to a real, reachable person.</p>
-        <div class="wc-brevo-embed">
-          <iframe width="540" height="820" src="https://262d3e5b.sibforms.com/v2/serve/MUIFABCyaud2vLAjHKLZs9bsKmmEKW0K-8yRDH1n0kFy4cqET0Z50TGBmQWY_g1ZfOjccnBD6wcrLH2f6XaLGIUKtOrLn2UICeEAwzlQo_4FU9n1LStWiDYIqMP3Z9jp1ui8AQ5v0v93-AZ9sCWmJuSY0MpzlZeReGDIubwr_mpzi_EkL6USphnLcSNAPZ973croO3TTdW8vYhI9QQ==" frameborder="0" scrolling="auto" allowfullscreen title="Get the free EPF Wage Ceiling Excel calculator"></iframe>
-        </div>
+        <p>Genuine business details get the download instantly. If anything looks incomplete, we will open WhatsApp so we can share it with you directly instead.</p>
+        <form id="wc-excel-form" novalidate>
+          <input type="hidden" name="access_key" value="53f8e9d0-2770-4150-b0d3-4f6f0d347a3d" />
+          <input type="hidden" name="subject" value="EPF Excel Workbook Request - LEAP Website" />
+          <input type="hidden" name="from_name" value="LEAP Website EPF Excel Request" />
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
+          <div class="wc-lead-grid">
+            <div class="form-group"><label for="wc-excel-name">Full name *</label><input type="text" id="wc-excel-name" name="name" placeholder="Rahul Sharma" autocomplete="name" required /></div>
+            <div class="form-group"><label for="wc-excel-designation">Designation *</label><input type="text" id="wc-excel-designation" name="designation" placeholder="HR Manager" autocomplete="organization-title" required /></div>
+            <div class="form-group"><label for="wc-excel-phone">Mobile number *</label><input type="tel" id="wc-excel-phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" required /></div>
+            <div class="form-group"><label for="wc-excel-company">Company name *</label><input type="text" id="wc-excel-company" name="company" placeholder="Acme Pvt. Ltd." autocomplete="organization" required /></div>
+            <div class="form-group"><label for="wc-excel-email">Company email *</label><input type="email" id="wc-excel-email" name="email" placeholder="you@company.com" autocomplete="email" required /></div>
+            <div class="form-group"><label for="wc-excel-employees">Number of employees *</label>
+              <select id="wc-excel-employees" name="employees" required>
+                <option value="">Select</option>
+                <option value="1 to 50">1 to 50</option>
+                <option value="51 to 200">51 to 200</option>
+                <option value="201 to 1,000">201 to 1,000</option>
+                <option value="More than 1,000">More than 1,000</option>
+              </select>
+            </div>
+          </div>
+          <p class="wc-lead-error" id="wc-excel-error" role="alert"></p>
+          <button type="submit" class="btn btn-primary" id="wc-excel-submit" style="width:100%;justify-content:center">Get the Excel calculator</button>
+        </form>
       </div>
     </div>
   </div>
@@ -425,7 +446,7 @@
 <div id="whatsapp-placeholder"></div>
 <script src="/js/components.js?v=15"></script>
 <script src="/js/main.js?v=11"></script>
-<script src="/js/wage-ceiling.js?v=11"></script>
+<script src="/js/wage-ceiling.js?v=12"></script>
 <script>renderNavbar('tools');renderFooter();renderWhatsApp();</script>
 </body>
 </html>

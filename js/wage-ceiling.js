@@ -925,6 +925,7 @@
   function initBulk() {
     if (!$('wc-bulk-file')) return;
     $('wc-lead-form').addEventListener('submit', submitLead);
+    if ($('wc-excel-form')) $('wc-excel-form').addEventListener('submit', submitExcelLead);
     $('wc-bulk-file').addEventListener('change', function (e) { handleFile(e.target.files[0]); });
     var zone = $('wc-drop');
     ['dragenter', 'dragover'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('over'); }); });
@@ -1045,6 +1046,72 @@
       .then(function (r) { return r.json(); })
       .then(function (j) { finish(!!(j && j.success)); })
       .catch(function () { finish(false); });
+  }
+
+  /* ---------- Excel workbook request: instant download if genuine, WhatsApp handoff otherwise ---------- */
+  var EXCEL_FILE_URL = '/assets/downloads/leap-epf-wage-ceiling-calculator-v20260921-7c3f9a.xlsx';
+  var JUNK_WORDS = ['test', 'abc', 'xyz', 'abcd', 'abcde', 'asdf', 'asdfgh', 'qwerty', 'company', 'na', 'none', 'demo', 'sample', 'xxx', 'xxxx', 'xxxxx', 'name', 'yourcompany', 'companyname', 'sample company'];
+
+  function isJunkText(s) {
+    var v = s.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (!v) return true;
+    if (JUNK_WORDS.indexOf(v) > -1) return true;
+    if (/^(.)\1+$/.test(v)) return true;                                   /* aaaa, xxxx */
+    if (/^(0123456789|123456789|abcdefgh|abcdefg)/.test(v)) return true;   /* keyboard/alphabet runs */
+    return false;
+  }
+  function isJunkMobile(digits) {
+    if (/^(\d)\1+$/.test(digits)) return true;                            /* all same digit */
+    var asc = '01234567890123', desc = '98765432109876';
+    if (asc.indexOf(digits) > -1 || desc.indexOf(digits) > -1) return true; /* sequential run */
+    return false;
+  }
+  function triggerDownload(url) {
+    var a = document.createElement('a');
+    a.href = url; a.download = ''; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+
+  function submitExcelLead(e) {
+    e.preventDefault();
+    var form = e.target, err = $('wc-excel-error'), btn = $('wc-excel-submit');
+    if (form.elements.botcheck && form.elements.botcheck.checked) return;   /* bots only */
+    var name = form.elements.name.value.trim();
+    var designation = form.elements.designation.value.trim();
+    var phone = form.elements.phone.value.trim();
+    var company = form.elements.company.value.trim();
+    var email = form.elements.email.value.trim();
+    var employees = form.elements.employees.value;
+    var digits = phone.replace(/\D/g, '');
+
+    if (!name || !designation || !company || !employees) { err.textContent = 'Please fill in all fields.'; return; }
+    if (digits.length < 10 || digits.length > 13) { err.textContent = 'Please enter a valid mobile number.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email address.'; return; }
+    err.textContent = '';
+
+    var genuine = !isJunkText(name) && !isJunkText(company) && !isJunkMobile(digits) && !isPersonalEmail(email);
+
+    var fd = new FormData(form);
+    fd.set('message', 'EPF Excel workbook request. Employees: ' + employees + '. Route: ' + (genuine ? 'instant download' : 'WhatsApp verify') + '.');
+    var label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Please wait...';
+
+    var finish = function () {
+      btn.disabled = false; btn.textContent = label;
+      if (typeof root.gtag === 'function') {
+        root.gtag('event', 'generate_lead', { form_name: 'epf_excel_' + (genuine ? 'instant' : 'whatsapp'), tool_name: 'epf-wage-ceiling-excel' });
+      }
+      if (genuine) {
+        triggerDownload(EXCEL_FILE_URL);
+        if (typeof root.showToast === 'function') root.showToast('Thank you. Your download has started.');
+      } else {
+        var waMessage = 'Hi LEAP, I would like the EPF Wage Ceiling Excel workbook.\nName: ' + name + '\nDesignation: ' + designation + '\nCompany: ' + company + '\nEmployees: ' + employees + '\nEmail: ' + email + '\nPhone: ' + phone;
+        window.open('https://wa.me/917977213501?text=' + encodeURIComponent(waMessage), '_blank', 'noopener');
+      }
+    };
+    fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd })
+      .then(finish)
+      .catch(finish);
   }
 
   /* ---------- Share ---------- */
