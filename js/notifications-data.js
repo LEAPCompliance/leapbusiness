@@ -11,8 +11,9 @@ const NOTIFICATIONS = [
     releasedDate: "2026-09-25",
     effectiveDate: "2026-09-17",
     excerpt: "Gazette Notification G.S.R. 847(E) amends the Employees' Pension Scheme, 2026. An employee who is an EPF member but was never enrolled in EPS now qualifies for EPS membership too, if their wage on 17 September 2026 is at or below the new ₹25,000 ceiling. Effective retroactively from 17 September 2026, the same day as the wage ceiling hike.",
-    link: "/assets/notifications/eps-2026-para7-amendment-gsr847.pdf",
-    linkLabel: "View Notification (PDF)",
+    link: "/blog/eps-amendment-2026/",
+    linkLabel: "Read Full Update",
+    downloadUrl: "/assets/notifications/eps-2026-para7-amendment-gsr847.pdf",
     source: "Gazette of India G.S.R. 847(E), Ministry of Labour & Employment"
   },
   {
