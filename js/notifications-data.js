@@ -5,6 +5,17 @@
    ============================================ */
 const NOTIFICATIONS = [
   {
+    title: "EPS Amended: Some EPF-Only Members Now Qualify for Pension Too",
+    tag: "EPS / Pension",
+    region: "Central",
+    releasedDate: "2026-09-25",
+    effectiveDate: "2026-09-17",
+    excerpt: "Gazette Notification G.S.R. 847(E) amends the Employees' Pension Scheme, 2026. An employee who is an EPF member but was never enrolled in EPS now qualifies for EPS membership too, if their wage on 17 September 2026 is at or below the new ₹25,000 ceiling. Effective retroactively from 17 September 2026, the same day as the wage ceiling hike.",
+    link: "/assets/notifications/eps-2026-para7-amendment-gsr847.pdf",
+    linkLabel: "View Notification (PDF)",
+    source: "Gazette of India G.S.R. 847(E), Ministry of Labour & Employment"
+  },
+  {
     title: "EPFO Wage Ceiling Officially Notified at ₹25,000",
     tag: "PF / EPFO",
     region: "Central",
