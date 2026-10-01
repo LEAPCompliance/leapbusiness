@@ -51,7 +51,7 @@ function renderNavbar(activePage) {
                 <div class="dropdown-heading">Editorial</div>
                 <a href="/blog.html">Articles</a>
                 <a href="/faq.html">FAQs</a>
-                <a href="/coming-soon.html?item=Govt. FAQs">Govt. FAQs</a>
+                <a href="/govt-faqs/">Govt. FAQs</a>
               </div>
             </div>
           </li>
@@ -125,7 +125,7 @@ function renderNavbar(activePage) {
           <div class="mobile-accordion-heading">Editorial</div>
           <a href="/blog.html">Articles</a>
           <a href="/faq.html">FAQs</a>
-          <a href="/coming-soon.html?item=Govt. FAQs">Govt. FAQs</a>
+          <a href="/govt-faqs/">Govt. FAQs</a>
         </div>
       </details>
 

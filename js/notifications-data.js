@@ -5,6 +5,18 @@
    ============================================ */
 const NOTIFICATIONS = [
   {
+    title: "EPFO Circulates 48-Question FAQ on the Wage Ceiling Revision",
+    tag: "PF / EPFO",
+    region: "Central",
+    releasedDate: "2026-09-30",
+    effectiveDate: "2026-09-17",
+    excerpt: "EPFO's Head Office FAQ on the ₹25,000 wage ceiling, circulated through the Zonal Office to the Regional Office, Mumbai (Bandra), vide Note No. MH/BAN/Co-Ord/2026-27/182 dated 30 September 2026. Confirms the September split-month treatment, ECR filing, and enrolment of newly eligible employees. All 48 questions are reproduced and searchable on our Govt. FAQs page.",
+    link: "/govt-faqs/",
+    linkLabel: "Browse All 48 FAQs",
+    downloadUrl: "/assets/notifications/epfo-wage-ceiling-faqs-ro-mumbai-30sep2026.pdf",
+    source: "EPFO Regional Office, Mumbai (Bandra), Note No. MH/BAN/Co-Ord/2026-27/182 dated 30 September 2026"
+  },
+  {
     title: "EPS Amended: Some EPF-Only Members Now Qualify for Pension Too",
     tag: "EPS / Pension",
     region: "Central",
