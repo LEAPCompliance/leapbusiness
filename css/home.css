@@ -270,3 +270,11 @@
 .hp-wrap h1,.hp-wrap h2,.hp-wrap h3{text-wrap:balance;line-height:1.2}
 @media (max-width:560px){.whatsapp-fab{display:none}}
 #review{scroll-margin-top:84px}
+
+/* acts coming into line */
+.hp-acts{padding:72px 0 8px;overflow-x:clip}
+.hp-acts-row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:36px;padding:24px 0}
+.hp-act{width:112px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 8px;box-shadow:0 4px 16px rgba(26,79,120,.08);will-change:transform}
+.hp-act b{display:block;font-family:'Playfair Display',serif;font-size:20px;color:var(--primary);line-height:1.2}
+.hp-act small{display:block;font-size:11.5px;color:var(--muted);line-height:1.3;margin-top:4px}
+@media (max-width:560px){.hp-acts{padding-top:52px}.hp-acts-row{gap:10px}.hp-act{width:calc(33.333% - 7px)}}
