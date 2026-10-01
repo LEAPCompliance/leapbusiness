@@ -203,7 +203,7 @@ function renderFooter() {
           <div class="footer-social">
             <a class="social-btn" href="https://www.linkedin.com/company/leapbusiness" target="_blank" rel="noopener" title="LinkedIn">in</a>
             <a class="social-btn" href="https://twitter.com/leapbusiness" target="_blank" rel="noopener" title="X / Twitter">𝕏</a>
-            <a class="social-btn" href="https://wa.me/917977213501" target="_blank" rel="noopener" title="WhatsApp">💬</a>
+            <a class="social-btn" href="https://wa.me/917977213501" target="_blank" rel="noopener" title="WhatsApp"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.600 7.100L4 20l1-4.600A8 8 0 1 1 21 12z"/></svg></a>
           </div>
         </div>
 

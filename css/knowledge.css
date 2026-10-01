@@ -112,3 +112,13 @@
   .pt-wrap { padding: 14px; }
   .dp-header { flex-direction: column; }
 }
+
+
+/* 2026-10 refresh: light header to match the rest of the site */
+.kb-hero { background: linear-gradient(180deg, #EEF6FA 0%, #fff 100%); border-bottom: 1px solid var(--border); }
+.kb-hero::before { display: none; }
+.kb-hero h1 { color: var(--primary); font-weight: 700; }
+.kb-hero h1 span { color: #1A6F94; }
+.kb-hero p { color: #5B6770; }
+.kb-hero-badge { background: #fff; border-color: var(--border); color: #1A6F94; }
+.kb-hero { padding-top: 112px; }

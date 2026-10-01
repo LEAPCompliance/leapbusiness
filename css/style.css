@@ -833,3 +833,73 @@ footer { background: var(--primary); color: rgba(255,255,255,0.68); padding: 64p
 .delay-2 { transition-delay: 0.2s; }
 .delay-3 { transition-delay: 0.3s; }
 .delay-4 { transition-delay: 0.4s; }
+
+
+/* =============================================
+   2026-10 REFRESH
+   Brings every inner page in line with the homepage:
+   light page headers, line icons, calmer cards.
+   ============================================= */
+:root {
+  --text-primary:     #1F2A33;
+  --text-secondary:   #5B6770;
+  --text:             #1F2A33;
+  --text-muted:       #5B6770;
+  --border:           #DFE5EA;
+  --grey-light:       #DFE5EA;
+  --secondary-text:   #1A6F94;
+  --tint:             #EEF6FA;
+  --radius-lg:        14px;
+  --shadow:           0 6px 28px rgba(26, 79, 120, 0.10);
+  --shadow-lg:        0 10px 36px rgba(26, 79, 120, 0.12);
+}
+h1, h2, h3 { text-wrap: balance; }
+
+/* line icons that replaced the emojis */
+.ico { width: 1.1em; height: 1.1em; vertical-align: -0.18em; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; display: inline-block; flex-shrink: 0; }
+.service-icon .ico, .why-item-icon .ico, .stat-box-icon .ico, .tool-icon .ico, .kb-related-icon .ico, .trust-icon .ico { width: 24px; height: 24px; vertical-align: middle; }
+.btn .ico { width: 18px; height: 18px; vertical-align: middle; }
+
+/* page header: light, like the homepage hero */
+.page-hero { background: linear-gradient(180deg, var(--tint) 0%, #fff 100%); padding: 128px 0 56px; border-bottom: 1px solid var(--border); }
+.page-hero::before { display: none; }
+.page-hero-title { color: var(--primary); }
+.page-hero-desc { color: var(--text-secondary); max-width: 640px; }
+.breadcrumb { color: var(--text-secondary); }
+.breadcrumb a { color: var(--secondary-text); }
+.breadcrumb a:hover { color: var(--primary); }
+.page-hero .wc-share-btn { color: var(--primary); background: #fff; border-color: var(--border); }
+.page-hero .wc-share-btn:hover { background: var(--tint); border-color: var(--primary); }
+.page-hero .wc-share-btn:focus-visible { outline-color: var(--primary); }
+
+/* small label above headings */
+.tag { background: none; border: 0; padding: 0; border-radius: 0; font-size: 12px; font-weight: 700; color: var(--secondary-text); margin-bottom: 12px; }
+.audit-cta .tag, .hero .tag { color: #8FD3F0; }
+.section-sub { color: var(--text-secondary); }
+
+/* cards */
+.service-card { border-radius: 14px; padding: 28px 26px; }
+.service-card::before { display: none; }
+.service-card:hover { border-color: var(--secondary); box-shadow: var(--shadow); transform: translateY(-2px); }
+.service-icon { width: 44px; height: 44px; background: var(--tint); border: 0; color: var(--primary); margin-bottom: 16px; }
+.service-card:hover .service-icon { background: var(--primary); color: #fff; }
+.service-link, .blog-cat, .contact-info-label { color: var(--secondary-text); }
+.why-item { border-left-width: 1px; border-radius: 12px; }
+.why-item-icon, .stat-box-icon, .trust-icon { color: var(--primary); }
+.stat-box { background: var(--tint); }
+.faq-item { border-radius: 12px; }
+.faq-q { font-weight: 600; }
+.contact-form { box-shadow: var(--shadow); }
+.blog-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.btn-primary:hover { transform: none; box-shadow: none; }
+
+/* dark bands: flat brand blue instead of gradients */
+.audit-cta, body .reg-hero { background: var(--primary); }
+.audit-cta::after { display: none; }
+footer { background: #123A5A; }
+
+/* gentler scroll-in */
+.fade-up { transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+@media (prefers-reduced-motion: reduce) { .fade-up { opacity: 1; transform: none; transition: none; } }
+/* registrations page sets its own compact header: keep it clear of the fixed navbar */
+.page-hero:has(.page-hero-inner) { padding-top: 104px; }
