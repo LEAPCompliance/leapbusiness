@@ -88,3 +88,40 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', function () { measure(); onScroll(); });
 })();
+
+/* ============================================
+   Vendor band: soft glow that trails the mouse
+   ============================================ */
+(function () {
+  var band = document.getElementById('vendorBand');
+  if (!band || !window.matchMedia) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var tx = 0, ty = 0, x = 0, y = 0, running = false, inside = false;
+
+  function frame() {
+    /* ease towards the pointer so the glow trails slightly behind */
+    x += (tx - x) * 0.14;
+    y += (ty - y) * 0.14;
+    band.style.setProperty('--gx', x.toFixed(1) + 'px');
+    band.style.setProperty('--gy', y.toFixed(1) + 'px');
+    if (inside || Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5) {
+      requestAnimationFrame(frame);
+    } else {
+      running = false;
+    }
+  }
+
+  band.addEventListener('pointermove', function (e) {
+    var b = band.getBoundingClientRect();
+    tx = e.clientX - b.left;
+    ty = e.clientY - b.top;
+    if (!inside) { inside = true; x = tx; y = ty; band.style.setProperty('--go', '1'); }
+    if (!running) { running = true; requestAnimationFrame(frame); }
+  });
+  band.addEventListener('pointerleave', function () {
+    inside = false;
+    band.style.setProperty('--go', '0');
+  });
+})();
