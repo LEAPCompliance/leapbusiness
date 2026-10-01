@@ -284,3 +284,24 @@
 .hp-vendor::before{content:'';position:absolute;left:0;top:0;width:560px;height:560px;margin:-280px 0 0 -280px;border-radius:50%;
   background:radial-gradient(circle,rgba(120,205,245,.30) 0%,rgba(120,205,245,.10) 38%,rgba(120,205,245,0) 68%);
   transform:translate(var(--gx,-999px),var(--gy,-999px));opacity:var(--go,0);transition:opacity .4s ease;pointer-events:none;z-index:-1}
+
+/* How we work: a line that draws through the four steps on scroll */
+.hp-steps-4{position:relative;--sp:1}
+.hp-steps-4 .hp-step{position:relative;border-top-color:transparent}
+.hp-steps-track{position:absolute;left:0;right:0;top:0;height:3px;background:var(--line);border-radius:3px}
+.hp-steps-track i{display:block;height:100%;width:calc(var(--sp)*100%);background:var(--secondary);border-radius:3px}
+.hp-steps-4 .hp-step::after{content:'';position:absolute;left:0;top:-6px;width:15px;height:15px;border-radius:50%;background:var(--secondary);border:3px solid #fff;box-shadow:0 0 0 1px var(--secondary);transition:background .3s,box-shadow .3s,transform .3s}
+.hp-steps-4 .hp-step::before,.hp-steps-4 .hp-step h3{transition:color .3s}
+/* script-driven states: steps wait in grey until the line reaches them */
+.hp-steps-js .hp-step:not(.hp-on)::before{color:#B6C2CB}
+.hp-steps-js .hp-step:not(.hp-on) h3{color:#7F8D98}
+.hp-steps-js .hp-step:not(.hp-on)::after{background:#fff;box-shadow:0 0 0 1px #B6C2CB;transform:scale(.8)}
+@media (max-width:900px){
+  .hp-steps-4{gap:30px}
+  .hp-steps-4 .hp-step{padding:0 0 0 30px;border-top:0}
+  .hp-steps-track{right:auto;bottom:0;width:3px;height:auto;top:6px;left:6px}
+  .hp-steps-track i{width:100%;height:calc(var(--sp)*100%)}
+  .hp-steps-4 .hp-step::after{left:0;top:8px}
+}
+.hp-steps.hp-steps-4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:900px){.hp-steps.hp-steps-4{grid-template-columns:1fr}}

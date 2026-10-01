@@ -125,3 +125,46 @@
     band.style.setProperty('--go', '0');
   });
 })();
+
+/* ============================================
+   How we work: line draws through the steps
+   as the section scrolls through the screen
+   ============================================ */
+(function () {
+  var wrap = document.getElementById('stepsLine');
+  if (!wrap) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var steps = Array.prototype.slice.call(wrap.querySelectorAll('.hp-step'));
+  var ticking = false;
+  wrap.classList.add('hp-steps-js');
+
+  function update() {
+    ticking = false;
+    var rect = wrap.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var stacked = steps.length > 1 && steps[1].offsetTop > steps[0].offsetTop + 10;
+    var p;
+    if (stacked) {
+      /* phone: the line runs down the side and follows the scroll */
+      p = (vh * 0.62 - rect.top) / rect.height;
+    } else {
+      /* desktop: draws across while the row moves up the screen */
+      p = (vh * 0.88 - rect.top) / (vh * 0.5);
+    }
+    p = Math.max(0, Math.min(1, p));
+    wrap.style.setProperty('--sp', p.toFixed(3));
+    steps.forEach(function (el) {
+      var at = stacked ? el.offsetTop / wrap.offsetHeight : el.offsetLeft / wrap.offsetWidth;
+      el.classList.toggle('hp-on', p > 0 && p >= at);
+    });
+  }
+
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }
+
+  update();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+})();
