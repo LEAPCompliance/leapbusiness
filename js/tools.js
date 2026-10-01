@@ -92,18 +92,22 @@ function resetCtc() {
   ctcBasicModeChange();
 }
 
-/* "Basic + DA calculation method" toggle. Manual keeps the % field editable
+/* "Basic + DA calculation method" toggle. Manual keeps both % fields editable
    (the calculator's original behaviour). The other two modes compute Basic
-   automatically, so the % field is disabled in those modes to make clear it
-   is not being used. */
+   automatically and always target 50% HRA, so both % fields are disabled in
+   those modes to make clear they are not being used. */
 function ctcBasicModeChange() {
   const mode = document.getElementById('ctc-basicmode').value;
   const pctField = document.getElementById('ctc-basicpct');
   const pctWrap = document.getElementById('ctc-basicpct-wrap');
+  const hraField = document.getElementById('ctc-hrapct');
+  const hraWrap = document.getElementById('ctc-hrapct-wrap');
   const note = document.getElementById('ctc-basicmode-note');
   if (!pctField) return;
   pctField.disabled = mode !== 'manual';
   if (pctWrap) pctWrap.style.opacity = mode !== 'manual' ? '0.5' : '1';
+  if (hraField) hraField.disabled = mode !== 'manual';
+  if (hraWrap) hraWrap.style.opacity = mode !== 'manual' ? '0.5' : '1';
   const notes = {
     manual: '',
     esicfree: 'Basic + DA is set to 50% of Gross, with a floor of ₹21,500 so it stays at or above the ₹21,000 ESIC threshold — ESIC does not apply.',
@@ -204,9 +208,13 @@ function ctcBasicForMode(gross, mode, basicPct, minWage) {
 
 function ctcForward(gross, p) {
   const basicDA = ctcBasicForMode(gross, p.basicMode, p.basicPct, p.minWage);
-  const hraTarget = basicDA * (p.hraPct / 100);
+  /* ESIC-Free and Minimum-Wage modes always target 50% of Basic for HRA,
+     matching the internal CTC template, regardless of what's left in the
+     (disabled) manual HRA % field. Manual mode uses the field as entered. */
+  const hraPct = p.basicMode === 'manual' ? p.hraPct : 50;
+  const hraTarget = basicDA * (hraPct / 100);
   const room = Math.max(gross - basicDA - p.comm - p.conv, 0);
-  const hra = Math.min(hraTarget, room);   /* never lets Special Allowance go negative */
+  const hra = Math.min(hraTarget, room);   /* same effect as the template's floor/ceiling formula, verified against it; never lets Special Allowance go negative */
   const special = Math.max(gross - basicDA - hra - p.comm - p.conv, 0);
   const grossTotal = basicDA + hra + p.comm + p.conv + special; // = gross
 
@@ -275,7 +283,7 @@ function calcTakeHome() {
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:4px">Part A — Earnings</div>
     <div class="calc-row"><span>Basic + DA (${basicMode === 'esicfree' ? 'ESIC-Free mode' : basicMode === 'minwage' ? 'Minimum-Wage mode' : basicPct + '% of gross'})${minWage > 0 ? (r.minWageOk ? ' <span style="color:#1a7d3c;font-weight:700">✓ Compliant</span>' : ' <span style="color:#c0392b;font-weight:700">⚠ NC — below Minimum Wage</span>') : ''}</span><strong>${fmtINR(r.basicDA)}</strong></div>
     ${minWage > 0 && !r.minWageOk ? `<div class="calc-alert" style="margin:4px 0 12px"><span class="calc-alert-icon">⚠️</span><div><h5>Basic + DA is below the Minimum Wage you entered</h5><p>Basic + DA of ${fmtINR(r.basicDA)} is less than the Minimum Wage floor of ${fmtINR(minWage)}${classLabel ? ' for the ' + classLabel + ' category' : ' you specified'} in ${st.name}. Raise the Basic + DA % (or the gross/CTC) so Basic + DA is at least ${fmtINR(minWage)}, or confirm the correct notified Minimum Wage for this employee's zone and skill category.</p></div></div>` : ''}
-    <div class="calc-row"><span>HRA (${hraPct}% of Basic + DA)</span><strong>${fmtINR(r.hra)}</strong></div>
+    <div class="calc-row"><span>HRA (${basicMode === 'manual' ? hraPct + '% of Basic + DA' : 'targets 50% of Basic + DA, capped by what\'s left of gross'})</span><strong>${fmtINR(r.hra)}</strong></div>
     <div class="calc-row"><span>Communication Allowance</span><strong>${fmtINR(r.comm)}</strong></div>
     <div class="calc-row"><span>Conveyance / Fuel Allowance</span><strong>${fmtINR(r.conv)}</strong></div>
     <div class="calc-row"><span>Special Allowance (balancing)</span><strong>${fmtINR(r.special)}</strong></div>
