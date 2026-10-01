@@ -168,3 +168,125 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
 })();
+
+/* ============================================
+   People strip: hand-drawn figures walk along
+   the bottom edge. Illustrations: Open Peeps.
+   Loads only when scrolled near, pauses off screen.
+   ============================================ */
+(function () {
+  var section = document.getElementById('peopleStrip');
+  if (!section || !('IntersectionObserver' in window)) return;
+  var canvas = section.querySelector('canvas');
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  var COLS = 15, ROWS = 7;               /* figures across and down the sheet */
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var img = new Image();
+  var cells = [], crowd = [], free = [];
+  var W = 0, H = 0, dpr = 1, scale = 0.75, cw = 0, ch = 0;
+  var loaded = false, visible = false, running = false, last = 0;
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function place(p, fresh) {
+    p.dir = Math.random() > 0.5 ? 1 : -1;
+    p.speed = (W + cw) / rand(18, 40);                 /* px per second */
+    var r = Math.random();
+    p.baseY = H - ch + ch * 0.45 - ch * 0.5 * r * r;   /* most stand low, a few taller */
+    p.phase = Math.random() * Math.PI * 2;
+    var span = W + cw;
+    var prog = fresh ? Math.random() : 0;
+    p.x = p.dir === 1 ? -cw + span * prog : W - span * prog;
+  }
+
+  function fill() {
+    crowd.length = 0;
+    free = cells.slice();
+    var want = Math.max(14, Math.min(60, Math.round(W / 22)));
+    while (crowd.length < want && free.length) {
+      var p = { cell: free.splice((Math.random() * free.length) | 0, 1)[0] };
+      place(p, true);
+      crowd.push(p);
+    }
+    crowd.sort(function (a, b) { return a.baseY - b.baseY; });
+  }
+
+  function resize() {
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    scale = W < 560 ? 0.55 : 0.75;
+    cw = (img.naturalWidth / COLS) * scale;
+    ch = (img.naturalHeight / ROWS) * scale;
+    fill();
+    draw(0);
+  }
+
+  function draw(t) {
+    var sw = img.naturalWidth / COLS, sh = img.naturalHeight / ROWS;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < crowd.length; i++) {
+      var p = crowd[i];
+      var y = p.baseY - Math.abs(Math.sin(t * 6 + p.phase)) * 5;   /* walking bob */
+      ctx.save();
+      if (p.dir === 1) { ctx.translate(p.x, y); }
+      else { ctx.translate(p.x + cw, y); ctx.scale(-1, 1); }
+      ctx.drawImage(img, p.cell[0] * sw, p.cell[1] * sh, sw, sh, 0, 0, cw, ch);
+      ctx.restore();
+    }
+  }
+
+  function frame(now) {
+    if (!visible || document.hidden) { running = false; return; }
+    var dt = Math.min((now - last) / 1000, 0.05); last = now;
+    var resort = false;
+    for (var i = 0; i < crowd.length; i++) {
+      var p = crowd[i];
+      p.x += p.dir * p.speed * dt;
+      if ((p.dir === 1 && p.x > W) || (p.dir === -1 && p.x < -cw)) {
+        /* walked off: send a different figure in */
+        free.push(p.cell);
+        p.cell = free.splice((Math.random() * free.length) | 0, 1)[0];
+        place(p, false);
+        resort = true;
+      }
+    }
+    if (resort) crowd.sort(function (a, b) { return a.baseY - b.baseY; });
+    draw(now / 1000);
+    requestAnimationFrame(frame);
+  }
+
+  function start() {
+    if (still || running || !loaded || !visible) return;
+    running = true; last = performance.now();
+    requestAnimationFrame(frame);
+  }
+
+  img.onload = function () {
+    for (var r = 0; r < ROWS; r++) for (var c = 0; c < COLS; c++) cells.push([c, r]);
+    loaded = true;
+    resize();
+    start();
+  };
+
+  /* fetch the artwork only when the strip is about to come into view */
+  var loader = new IntersectionObserver(function (e) {
+    if (e[0].isIntersecting) { loader.disconnect(); img.src = canvas.getAttribute('data-src'); }
+  }, { rootMargin: '400px 0px' });
+  loader.observe(section);
+
+  new IntersectionObserver(function (e) {
+    visible = e[0].isIntersecting;
+    start();
+  }).observe(canvas);
+
+  document.addEventListener('visibilitychange', start);
+  var rt;
+  window.addEventListener('resize', function () {
+    clearTimeout(rt);
+    rt = setTimeout(function () { if (loaded) resize(); }, 150);
+  });
+})();

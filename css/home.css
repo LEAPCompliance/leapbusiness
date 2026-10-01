@@ -305,3 +305,9 @@
 }
 .hp-steps.hp-steps-4{grid-template-columns:repeat(4,1fr)}
 @media (max-width:900px){.hp-steps.hp-steps-4{grid-template-columns:1fr}}
+
+/* people strip: a crowd walking along the bottom edge */
+.hp-people{padding:64px 0 0;background:#fff;overflow:hidden}
+.hp-people .hp-h2{margin-bottom:10px}
+.hp-people-canvas{display:block;width:100%;height:230px;margin-top:4px}
+@media (max-width:560px){.hp-people{padding-top:44px}.hp-people-canvas{height:170px}}
