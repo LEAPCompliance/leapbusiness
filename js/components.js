@@ -18,7 +18,7 @@ function renderNavbar(activePage) {
           <li class="nav-dropdown">
             <a href="/services.html"           ${activePage==='services'?'class="active"':''}>Our Services</a>
             <div class="dropdown-menu">
-              <a href="/payroll-compliance.html">Payroll Compliance</a>
+              <a href="/payroll-compliance.html">Statutory Payroll Compliance</a>
               <a href="/services.html#establishment-compliance">Establishment Compliance</a>
               <a href="/registrations.html">Registrations &amp; Licenses</a>
               <a href="/services.html#audit">Audit &amp; Inspection</a>
@@ -96,7 +96,7 @@ function renderNavbar(activePage) {
       <details class="mobile-accordion">
         <summary>Our Services</summary>
         <div class="mobile-accordion-body">
-          <a href="/payroll-compliance.html">Payroll Compliance</a>
+          <a href="/payroll-compliance.html">Statutory Payroll Compliance</a>
           <a href="/services.html#establishment-compliance">Establishment Compliance</a>
           <a href="/registrations.html">Registrations &amp; Licenses</a>
           <a href="/services.html#audit">Audit &amp; Inspection</a>
@@ -209,7 +209,7 @@ function renderFooter() {
 
         <div class="footer-col">
           <h5>Services</h5>
-          <a href="/payroll-compliance.html">Payroll Compliance</a>
+          <a href="/payroll-compliance.html">Statutory Payroll Compliance</a>
           <a href="/services.html#establishment-compliance">Establishment Compliance</a>
           <a href="/registrations.html">Registrations &amp; Licenses</a>
           <a href="/services.html#audit">Audit &amp; Inspection</a>
