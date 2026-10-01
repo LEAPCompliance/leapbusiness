@@ -79,6 +79,7 @@ function resetCtc() {
   document.getElementById('ctc-amount').value = 50000;
   document.getElementById('ctc-state').value = 'MH';
   document.getElementById('ctc-gender').value = 'Male';
+  document.getElementById('ctc-basicmode').value = 'manual';
   document.getElementById('ctc-basicpct').value = 50;
   document.getElementById('ctc-hrapct').value = 50;
   document.getElementById('ctc-comm').value = 0;
@@ -88,6 +89,27 @@ function resetCtc() {
   document.getElementById('ctc-minwage-hint').textContent = '';
   document.getElementById('ctc-summary').innerHTML = '';
   document.getElementById('th-result').innerHTML = CALC_PLACEHOLDER;
+  ctcBasicModeChange();
+}
+
+/* "Basic + DA calculation method" toggle. Manual keeps the % field editable
+   (the calculator's original behaviour). The other two modes compute Basic
+   automatically, so the % field is disabled in those modes to make clear it
+   is not being used. */
+function ctcBasicModeChange() {
+  const mode = document.getElementById('ctc-basicmode').value;
+  const pctField = document.getElementById('ctc-basicpct');
+  const pctWrap = document.getElementById('ctc-basicpct-wrap');
+  const note = document.getElementById('ctc-basicmode-note');
+  if (!pctField) return;
+  pctField.disabled = mode !== 'manual';
+  if (pctWrap) pctWrap.style.opacity = mode !== 'manual' ? '0.5' : '1';
+  const notes = {
+    manual: '',
+    esicfree: 'Basic + DA is set to 50% of Gross, with a floor of ₹21,500 so it stays at or above the ₹21,000 ESIC threshold — ESIC does not apply.',
+    minwage: 'Basic + DA is set to 50% of Gross, or to the Minimum Wage entered below if that is higher — whichever keeps it compliant. Enter the Minimum Wage below for this to work; without it, this mode falls back to 50% of Gross unchecked.'
+  };
+  if (note) note.textContent = notes[mode] || '';
 }
 
 /* Looks up the Minimum Wage for the chosen State + Class of Employment in
@@ -160,10 +182,32 @@ function ctcApplyMinWageLink() {
    (EPS + EPF) + 0.5% EDLI + 0.5% admin charges, same structure as the EPF calculator. */
 const CTC_PF_CEILING = 25000;
 
+/* ESIC wage threshold is ₹21,000 (already used below as esicApplicable).
+   "ESIC-Free Basic" mode floors Basic + DA at ₹21,500, a ₹500 margin above
+   that threshold, so it stays clear of it. */
+const CTC_ESIC_FREE_FLOOR = 21500;
+
+/* Basic + DA for the chosen mode. "minwage" mode uses whatever Minimum Wage
+   figure is already in the calculator's own Minimum Wage field (looked up
+   from LEAP's Minimum Wages Hub, or entered manually) rather than a number
+   baked into this formula, so it never goes stale and never hardcodes a
+   state's statutory rate here. */
+function ctcBasicForMode(gross, mode, basicPct, minWage) {
+  if (mode === 'esicfree') return Math.min(gross, Math.max(CTC_ESIC_FREE_FLOOR, gross * 0.5));
+  if (mode === 'minwage') {
+    const half = gross * 0.5;
+    if (minWage > 0 && half < minWage) return Math.min(minWage, gross);
+    return half;
+  }
+  return gross * (basicPct / 100);
+}
+
 function ctcForward(gross, p) {
-  const basicDA = gross * (p.basicPct / 100);
-  const hra = basicDA * (p.hraPct / 100);
-  const special = gross - basicDA - hra - p.comm - p.conv;
+  const basicDA = ctcBasicForMode(gross, p.basicMode, p.basicPct, p.minWage);
+  const hraTarget = basicDA * (p.hraPct / 100);
+  const room = Math.max(gross - basicDA - p.comm - p.conv, 0);
+  const hra = Math.min(hraTarget, room);   /* never lets Special Allowance go negative */
+  const special = Math.max(gross - basicDA - hra - p.comm - p.conv, 0);
   const grossTotal = basicDA + hra + p.comm + p.conv + special; // = gross
 
   const pfWage = grossTotal - hra;
@@ -203,6 +247,7 @@ function calcTakeHome() {
   const stateCode = document.getElementById('ctc-state').value;
   const gender = document.getElementById('ctc-gender').value;
   const female = gender === 'Female';
+  const basicMode = document.getElementById('ctc-basicmode') ? document.getElementById('ctc-basicmode').value : 'manual';
   const basicPct = parseFloat(document.getElementById('ctc-basicpct').value) || 50;
   const hraPct = parseFloat(document.getElementById('ctc-hrapct').value) || 0;
   const comm = parseFloat(document.getElementById('ctc-comm').value) || 0;
@@ -211,7 +256,7 @@ function calcTakeHome() {
   const classLabels = { unskilled: 'Unskilled', semiskilled: 'Semi-Skilled', skilled: 'Skilled', highlyskilled: 'Highly Skilled' };
   const classLabel = classLabels[document.getElementById('ctc-class').value] || '';
 
-  const p = { basicPct, hraPct, comm, conv, state: stateCode, female, minWage };
+  const p = { basicMode, basicPct, hraPct, comm, conv, state: stateCode, female, minWage };
   const st = CTC_STATES[stateCode];
 
   let gross;
@@ -228,7 +273,7 @@ function calcTakeHome() {
 
   document.getElementById('th-result').innerHTML = `
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:4px">Part A — Earnings</div>
-    <div class="calc-row"><span>Basic + DA (${basicPct}% of gross)${minWage > 0 ? (r.minWageOk ? ' <span style="color:#1a7d3c;font-weight:700">✓ Compliant</span>' : ' <span style="color:#c0392b;font-weight:700">⚠ NC — below Minimum Wage</span>') : ''}</span><strong>${fmtINR(r.basicDA)}</strong></div>
+    <div class="calc-row"><span>Basic + DA (${basicMode === 'esicfree' ? 'ESIC-Free mode' : basicMode === 'minwage' ? 'Minimum-Wage mode' : basicPct + '% of gross'})${minWage > 0 ? (r.minWageOk ? ' <span style="color:#1a7d3c;font-weight:700">✓ Compliant</span>' : ' <span style="color:#c0392b;font-weight:700">⚠ NC — below Minimum Wage</span>') : ''}</span><strong>${fmtINR(r.basicDA)}</strong></div>
     ${minWage > 0 && !r.minWageOk ? `<div class="calc-alert" style="margin:4px 0 12px"><span class="calc-alert-icon">⚠️</span><div><h5>Basic + DA is below the Minimum Wage you entered</h5><p>Basic + DA of ${fmtINR(r.basicDA)} is less than the Minimum Wage floor of ${fmtINR(minWage)}${classLabel ? ' for the ' + classLabel + ' category' : ' you specified'} in ${st.name}. Raise the Basic + DA % (or the gross/CTC) so Basic + DA is at least ${fmtINR(minWage)}, or confirm the correct notified Minimum Wage for this employee's zone and skill category.</p></div></div>` : ''}
     <div class="calc-row"><span>HRA (${hraPct}% of Basic + DA)</span><strong>${fmtINR(r.hra)}</strong></div>
     <div class="calc-row"><span>Communication Allowance</span><strong>${fmtINR(r.comm)}</strong></div>
@@ -265,6 +310,58 @@ function calcTakeHome() {
       • Gratuity is a books provision — actually payable only after 5 years' continuous service (1 year for fixed-term employees under the new Labour Codes).<br>
       • Income-tax (TDS) is not modelled here — consult a tax professional for a personalised computation.<br>
       • These are indicative estimates for general awareness — <a href="contact.html" style="color:var(--primary);font-weight:600">contact LEAP</a> to get your exact CTC structure finalised.
+    </div>
+  ` + ctcScenarioCompareHtml(gross, p);
+}
+
+/* Side-by-side comparison of the two automatic Basic + DA structuring modes,
+   at the same gross salary, so the cost and take-home trade-off is visible
+   regardless of which mode is selected above. */
+function ctcScenarioCompareHtml(gross, p) {
+  const a = ctcForward(gross, Object.assign({}, p, { basicMode: 'minwage' }));
+  const b = ctcForward(gross, Object.assign({}, p, { basicMode: 'esicfree' }));
+  const row = (label, av, bv, bold) => {
+    const diff = bv - av;
+    const style = bold ? ' style="font-weight:700;border-top:1px solid var(--border)"' : '';
+    const cellStyle = bold ? ' style="padding-top:8px"' : '';
+    return `<tr${style}><td${cellStyle}>${label}</td><td${cellStyle}>${fmtINR(av)}</td><td${cellStyle}>${fmtINR(bv)}</td><td${cellStyle}>${diff === 0 ? '—' : signedINR(diff)}</td></tr>`;
+  };
+  function signedINR(n) { return (n > 0 ? '+' : n < 0 ? '-' : '') + fmtINR(Math.abs(n)); }
+
+  const ctcDiff = b.ctc - a.ctc;
+  const takeHomeDiff = b.netSalary - a.netSalary;
+  const verdict = ctcDiff === 0
+    ? 'Same CTC either way.'
+    : (ctcDiff < 0
+      ? `ESIC-Free works out cheaper for the company by ${fmtINR(Math.abs(ctcDiff))}/month.`
+      : `ESIC-Free costs the company ${fmtINR(ctcDiff)}/month more.`)
+    + ` Employee take-home is ${takeHomeDiff >= 0 ? '+' : '-'}${fmtINR(Math.abs(takeHomeDiff))}/month with ESIC-Free.`;
+
+  const minWageNote = p.minWage > 0 ? '' : '<p style="font-size:12.5px;color:var(--text-secondary);margin:4px 0 10px">Minimum-Wage column is shown without a Minimum Wage figure entered above, so it is just 50% of gross here, enter the Minimum Wage to check it properly.</p>';
+
+  return `
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--border)">
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:6px">ESIC-Free vs Minimum-Wage structuring, same Gross Salary</div>
+      ${minWageNote}
+      <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr style="text-align:left;border-bottom:2px solid var(--border)"><th style="padding:6px 8px 6px 0">Item</th><th style="padding:6px 8px">Minimum-Wage Basic</th><th style="padding:6px 8px">ESIC-Free Basic</th><th style="padding:6px 8px">Difference</th></tr></thead>
+        <tbody>
+          ${row('Basic + DA', a.basicDA, b.basicDA)}
+          ${row('HRA', a.hra, b.hra)}
+          ${row('Special Allowance', a.special, b.special)}
+          ${row('PF — Employee', a.pfEmp, b.pfEmp)}
+          ${row('ESIC — Employee', a.esicEmp, b.esicEmp)}
+          ${row('Net Salary (take-home)', a.netSalary, b.netSalary)}
+          ${row('PF — Employer', a.pfEmployer, b.pfEmployer)}
+          ${row('ESIC — Employer', a.esicEmployer, b.esicEmployer)}
+          ${row('Bonus + Gratuity + LWF (Employer)', a.bonus + a.gratuity + a.lwfEmployer, b.bonus + b.gratuity + b.lwfEmployer)}
+          ${row('Employer Cost', a.employerCostTotal, b.employerCostTotal)}
+          ${row('CTC', a.ctc, b.ctc, true)}
+        </tbody>
+      </table>
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:10px">${verdict}</p>
     </div>
   `;
 }
