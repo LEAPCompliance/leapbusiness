@@ -6,30 +6,59 @@
   var el = document.getElementById('flip');
   if (!el) return;
 
-  function set(state) {
+  var tiles = Array.prototype.slice.call(el.querySelectorAll('.hp-flip-tile'));
+  var grid = el.querySelector('.hp-flip-grid');
+  var manual = false, ticking = false;
+
+  function thumb(state) {
     el.classList.toggle('hp-is-before', state === 'before');
     el.classList.toggle('hp-is-after', state === 'after');
   }
 
+  /* a click on the switch sets every tile and stops the scroll-driven flipping */
   el.querySelectorAll('.hp-flip-switch button').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      el.classList.add('hp-touched');
-      set(btn.dataset.s);
+      manual = true;
+      var after = btn.dataset.s === 'after';
+      tiles.forEach(function (t) { t.classList.toggle('hp-a', after); });
+      thumb(after ? 'after' : 'before');
     });
   });
 
-  /* Flip once by itself when the section scrolls into view */
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) {
-        io.disconnect();
-        setTimeout(function () {
-          if (!el.classList.contains('hp-touched')) set('after');
-        }, 1800);
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  /* While scrolling, tiles turn from Before to With LEAP one after another,
+     and turn back if the visitor scrolls up again. No click needed. */
+  function update() {
+    ticking = false;
+    if (manual) return;
+    var vh = window.innerHeight;
+    var rect = grid.getBoundingClientRect();
+    var stacked = rect.height > vh * 0.55;      /* phone: one tall column */
+    var done = 0;
+    tiles.forEach(function (t, i) {
+      var on;
+      if (stacked) {
+        var r = t.getBoundingClientRect();
+        on = r.top + r.height / 2 < vh * 0.58;  /* each row flips as it passes mid-screen */
+      } else {
+        /* desktop: a wave across the grid as it rises from 78% to 38% of the screen */
+        var p = (vh * 0.78 - rect.top) / (vh * 0.40);
+        on = p > (i + 0.5) / tiles.length;
       }
-    }, { threshold: 0.5 });
-    io.observe(el);
+      t.classList.toggle('hp-a', on);
+      if (on) done++;
+    });
+    thumb(done * 2 >= tiles.length ? 'after' : 'before');
   }
+
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }
+
+  update();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
 })();
 
 /* ============================================

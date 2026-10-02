@@ -331,3 +331,14 @@
 .hp-flip-tile .hp-icon{width:18px;height:18px}
 @media (max-width:560px){.hp-sec-flip{padding:44px 0}.hp-flip-grid{gap:8px}.hp-flip-tile{padding:10px 14px}.hp-flip-tile p{font-size:15px}}
 @media (prefers-reduced-motion:reduce){.hp-flip-switch::before{transition:none}}
+
+/* Before / With LEAP: each tile now carries its own state, driven by scroll */
+.hp-flip .hp-flip-tile{background:#FBF6F4;border-color:#EBDAD4;transition:background .35s,border-color .35s}
+.hp-flip .hp-flip-tile.hp-a{background:var(--tint);border-color:#BFE0EE}
+.hp-flip .hp-flip-tile .hp-t-before{display:flex}
+.hp-flip .hp-flip-tile .hp-t-after{display:none}
+.hp-flip .hp-flip-tile.hp-a .hp-t-before{display:none}
+.hp-flip .hp-flip-tile.hp-a .hp-t-after{display:flex}
+.hp-flip.hp-is-after .hp-flip-tile p.hp-t-before,.hp-flip.hp-is-after .hp-flip-tile p.hp-t-after{animation:none}
+.hp-flip .hp-flip-tile.hp-a p.hp-t-after{animation:pop .35s ease both;animation-delay:0s}
+@media (prefers-reduced-motion:reduce){.hp-flip .hp-flip-tile.hp-a p.hp-t-after{animation:none}}
