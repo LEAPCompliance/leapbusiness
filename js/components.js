@@ -16,7 +16,7 @@ function renderNavbar(activePage) {
         <ul class="nav-links">
           <li><a href="/index.html"            ${activePage==='home'    ?'class="active"':''}>Home</a></li>
           <li class="nav-dropdown">
-            <a href="/services.html"           ${activePage==='services'?'class="active"':''}>Our Services</a>
+            <a href="/services.html"           ${activePage==='services'||activePage==='registrations'?'class="active"':''}>Our Services</a>
             <div class="dropdown-menu">
               <a href="/payroll-compliance.html">Statutory Payroll Compliance</a>
               <a href="/establishment-compliance.html">Establishment Compliance</a>
@@ -27,13 +27,12 @@ function renderNavbar(activePage) {
             </div>
           </li>
           <li class="nav-dropdown">
-            <a href="/blog.html" ${activePage==='blog'||activePage==='registrations'||activePage==='faq'||activePage==='labourcodes'||activePage==='resources'?'class="active"':''}>Resources</a>
+            <a href="/blog.html" ${activePage==='blog'||activePage==='faq'||activePage==='labourcodes'||activePage==='resources'?'class="active"':''}>Resources</a>
             <div class="dropdown-menu dropdown-mega">
               <div>
                 <div class="dropdown-heading">Reference Hubs</div>
                 <a href="/notifications/">Gazette Notifications</a>
                 <a href="/coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
-                <a href="/registrations.html">Registrations</a>
                 <a href="/knowledge.html">Knowledge Hub</a>
                 <a href="/knowledge/labour-welfare-fund/">Labour Welfare Fund</a>
                 <a href="/knowledge/professional-tax/">Professional Tax</a>
@@ -111,7 +110,6 @@ function renderNavbar(activePage) {
           <div class="mobile-accordion-heading">Reference Hubs</div>
           <a href="/notifications/">Gazette Notifications</a>
           <a href="/coming-soon.html?item=Registers %26 Forms">Registers &amp; Forms</a>
-          <a href="/registrations.html">Registrations</a>
           <a href="/knowledge.html">Knowledge Hub</a>
           <a href="/knowledge/labour-welfare-fund/">Labour Welfare Fund</a>
           <a href="/knowledge/professional-tax/">Professional Tax</a>
