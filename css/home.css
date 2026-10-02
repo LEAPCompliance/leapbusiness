@@ -315,3 +315,19 @@
 /* hero now carries the "Every month, you know" card */
 .hp-know-foot{padding:14px 22px;background:var(--tint);border-top:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--primary)}
 .hp-hero .hp-know-row{padding:12px 22px}
+
+/* Before / With LEAP: compact version with a sliding switch */
+.hp-sec-flip{padding:56px 0}
+.hp-sec-flip .hp-flip{margin-top:20px}
+.hp-flip-switch{position:relative;display:inline-grid;grid-template-columns:1fr 1fr;padding:4px;margin-bottom:20px}
+.hp-flip-switch::before{content:'';position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:40px;background:#8A3B2B;transition:transform .3s cubic-bezier(.4,0,.2,1),background .3s}
+.hp-flip.hp-is-after .hp-flip-switch::before{transform:translateX(100%);background:var(--primary)}
+.hp-flip-switch button{position:relative;z-index:1;padding:9px 22px;white-space:nowrap}
+.hp-flip.hp-is-before .hp-flip-switch button[data-s=before],.hp-flip.hp-is-after .hp-flip-switch button[data-s=after]{background:transparent;color:#fff}
+.hp-flip-grid{gap:10px}
+.hp-flip-tile{padding:12px 16px;min-height:0;border-radius:10px}
+.hp-flip-tile small{font-size:10.5px;margin-bottom:3px}
+.hp-flip-tile p{font-size:15.5px;gap:8px}
+.hp-flip-tile .hp-icon{width:18px;height:18px}
+@media (max-width:560px){.hp-sec-flip{padding:44px 0}.hp-flip-grid{gap:8px}.hp-flip-tile{padding:10px 14px}.hp-flip-tile p{font-size:15px}}
+@media (prefers-reduced-motion:reduce){.hp-flip-switch::before{transition:none}}
