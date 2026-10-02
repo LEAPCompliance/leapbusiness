@@ -19,11 +19,11 @@ function renderNavbar(activePage) {
             <a href="/services.html"           ${activePage==='services'?'class="active"':''}>Our Services</a>
             <div class="dropdown-menu">
               <a href="/payroll-compliance.html">Statutory Payroll Compliance</a>
-              <a href="/services.html#establishment-compliance">Establishment Compliance</a>
+              <a href="/establishment-compliance.html">Establishment Compliance</a>
               <a href="/registrations.html">Registrations &amp; Licenses</a>
-              <a href="/services.html#audit">Audit &amp; Inspection</a>
-              <a href="/services.html#vendor-audit">Vendor/Client Audit</a>
-              <a href="/services.html#factory">Factory Compliance</a>
+              <a href="/audit-inspection.html">Audit &amp; Inspection</a>
+              <a href="/vendor-audit.html">Vendor/Client Audit</a>
+              <a href="/establishment-compliance.html#factory">Factory Compliance</a>
             </div>
           </li>
           <li class="nav-dropdown">
@@ -97,11 +97,11 @@ function renderNavbar(activePage) {
         <summary>Our Services</summary>
         <div class="mobile-accordion-body">
           <a href="/payroll-compliance.html">Statutory Payroll Compliance</a>
-          <a href="/services.html#establishment-compliance">Establishment Compliance</a>
+          <a href="/establishment-compliance.html">Establishment Compliance</a>
           <a href="/registrations.html">Registrations &amp; Licenses</a>
-          <a href="/services.html#audit">Audit &amp; Inspection</a>
-          <a href="/services.html#vendor-audit">Vendor/Client Audit</a>
-          <a href="/services.html#factory">Factory Compliance</a>
+          <a href="/audit-inspection.html">Audit &amp; Inspection</a>
+          <a href="/vendor-audit.html">Vendor/Client Audit</a>
+          <a href="/establishment-compliance.html#factory">Factory Compliance</a>
         </div>
       </details>
 
@@ -210,12 +210,12 @@ function renderFooter() {
         <div class="footer-col">
           <h5>Services</h5>
           <a href="/payroll-compliance.html">Statutory Payroll Compliance</a>
-          <a href="/services.html#establishment-compliance">Establishment Compliance</a>
+          <a href="/establishment-compliance.html">Establishment Compliance</a>
           <a href="/registrations.html">Registrations &amp; Licenses</a>
-          <a href="/services.html#audit">Audit &amp; Inspection</a>
-          <a href="/services.html#vendor-audit">Vendor/Client Audit</a>
-          <a href="/services.html#factory">Factory Compliance</a>
-          <a href="/services.html#posh">POSH Compliance</a>
+          <a href="/audit-inspection.html">Audit &amp; Inspection</a>
+          <a href="/vendor-audit.html">Vendor/Client Audit</a>
+          <a href="/establishment-compliance.html#factory">Factory Compliance</a>
+          <a href="/establishment-compliance.html#posh">POSH Compliance</a>
         </div>
 
         <div class="footer-col">
