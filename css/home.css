@@ -311,3 +311,7 @@
 .hp-people .hp-h2{margin-bottom:10px}
 .hp-people-canvas{display:block;width:100%;height:230px;margin-top:4px}
 @media (max-width:560px){.hp-people{padding-top:44px}.hp-people-canvas{height:170px}}
+
+/* hero now carries the "Every month, you know" card */
+.hp-know-foot{padding:14px 22px;background:var(--tint);border-top:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--primary)}
+.hp-hero .hp-know-row{padding:12px 22px}
