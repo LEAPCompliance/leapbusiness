@@ -346,3 +346,41 @@
     if (fine) q.addEventListener('mouseenter', function () { show(i); });   /* desktop: hover is enough */
   });
 })();
+
+/* ============================================
+   Numbers bar: count up to the value the first
+   time the bar scrolls into view
+   ============================================ */
+(function () {
+  var nums = Array.prototype.slice.call(document.querySelectorAll('.hp-proof-num'));
+  if (!nums.length || !('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var items = nums.map(function (el) {
+    var text = el.textContent.trim();
+    var m = text.match(/^([\d,]+)(.*)$/);
+    return m ? { el: el, target: parseInt(m[1].replace(/,/g, ''), 10), suffix: m[2], final: text } : null;
+  }).filter(Boolean);
+
+  function run() {
+    var start = null, dur = 1400;
+    items.forEach(function (it) { it.el.textContent = '0' + it.suffix; });
+    function frame(now) {
+      if (start === null) start = now;
+      var t = Math.min((now - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - t, 3);          /* fast at first, settles gently */
+      items.forEach(function (it) {
+        it.el.textContent = t < 1
+          ? Math.round(it.target * eased).toLocaleString('en-IN') + it.suffix
+          : it.final;
+      });
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  var io = new IntersectionObserver(function (e) {
+    if (e[0].isIntersecting) { io.disconnect(); run(); }
+  }, { threshold: 0.6 });
+  io.observe(nums[0].closest('section') || nums[0]);
+})();
