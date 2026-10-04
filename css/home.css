@@ -342,3 +342,20 @@
 .hp-flip.hp-is-after .hp-flip-tile p.hp-t-before,.hp-flip.hp-is-after .hp-flip-tile p.hp-t-after{animation:none}
 .hp-flip .hp-flip-tile.hp-a p.hp-t-after{animation:pop .35s ease both;animation-delay:0s}
 @media (prefers-reduced-motion:reduce){.hp-flip .hp-flip-tile.hp-a p.hp-t-after{animation:none}}
+
+/* free tools: compact two-column band */
+.hp-toolband{padding:52px 0;border-top:1px solid var(--line)}
+.hp-toolband-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:center}
+.hp-toolband .hp-h2{font-size:clamp(24px,2.6vw,30px);margin-bottom:8px}
+.hp-toolband .hp-lead{font-size:16px}
+.hp-toolband .hp-tools{grid-template-columns:1fr 1fr;gap:12px;margin-top:0}
+.hp-toolband .hp-tool{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hp-toolband .hp-tool::after{content:'\2192';color:var(--secondary-text);font-weight:600;transition:transform .2s}
+.hp-toolband .hp-tool:hover::after{transform:translateX(3px)}
+.hp-toolband .hp-tool b{font-size:15px;margin-bottom:1px}
+.hp-toolband .hp-tool span{display:block}
+.hp-toolband .hp-res-row{justify-content:flex-start;gap:8px 18px;margin-top:18px}
+.hp-toolband .hp-res-row a{border:0;padding:0;background:none;border-radius:0;color:var(--secondary-text)}
+.hp-toolband .hp-res-row a:hover{text-decoration:underline}
+@media (max-width:900px){.hp-toolband-grid{grid-template-columns:1fr;gap:24px}}
+@media (max-width:560px){.hp-toolband{padding:40px 0}.hp-toolband .hp-tools{grid-template-columns:1fr;gap:8px}}
