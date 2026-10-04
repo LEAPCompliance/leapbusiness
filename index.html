@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" />
   <link rel="stylesheet" href="css/style.css?v=15" />
-  <link rel="stylesheet" href="css/home.css?v=11" />
+  <link rel="stylesheet" href="css/home.css?v=12" />
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "ProfessionalService", "name": "LEAP Business Solutions", "url": "https://www.leapbusiness.in", "logo": "https://www.leapbusiness.in/assets/logo.png", "image": "https://www.leapbusiness.in/assets/logo.png", "telephone": "+91-7977213501", "email": "support@leapbusiness.in", "address": {"@type": "PostalAddress", "addressLocality": "Mumbai", "addressRegion": "Maharashtra", "addressCountry": "IN"}, "geo": {"@type": "GeoCoordinates", "latitude": 19.0825, "longitude": 72.7411}, "openingHoursSpecification": {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "opens": "09:00", "closes": "19:00"}, "priceRange": "$$", "sameAs": ["https://www.linkedin.com/company/leapbusiness", "https://twitter.com/leapbusiness"], "description": "Expert Labour Law Compliance Consultants – PF, ESIC, PT, LWF, Statutory Payroll Compliance, Labour Law Audits across India.", "areaServed": "IN", "knowsAbout": ["Provident Fund (PF/EPF) Compliance", "ESIC Compliance", "Professional Tax (PT)", "Labour Welfare Fund (LWF)", "Statutory Payroll Compliance", "Contract Labour (CLRA) Registration", "Shop and Establishment Registration", "POSH Act Compliance", "Labour Law Audits", "India's New Labour Codes 2026"]}
   </script>
@@ -392,16 +392,28 @@
 </section>
 
 <!-- 12. FAQ -->
-<section class="hp-sec">
-  <div class="hp-container">
-    <div class="hp-center"><div class="hp-eyebrow">Quick answers</div><h2 class="hp-h2">Frequently asked questions</h2></div>
-    <div class="hp-faq">
-      <details open><summary>Do we need a separate consultant for each state?</summary><p>No. LEAP handles pan-India compliance from a single point of contact. We manage state-specific PT slabs, LWF applicability and Shops and Establishments Acts, so you do not need multiple vendors.</p></details>
-      <details><summary>What happens in the free compliance review?</summary><p>We assess your current status across PF, ESIC, PT, LWF and other applicable acts, identify the key gaps and confirm scope. It takes about 30 minutes and you get a gap report at no cost.</p></details>
-      <details><summary>How long does onboarding take?</summary><p>Usually 1 to 2 weeks. In that time we collect your employee master, registrations and current-month salary data. We then run one full month side by side with your existing process, so nothing changes until the numbers match.</p></details>
-      <details><summary>What is a labour law audit and why would we need one?</summary><p>It is a systematic review of your employment practices, filings, registers and policies against the applicable statutes. It identifies compliance gaps before regulators do.</p></details>
+<section class="hp-faqband" id="faqBand">
+  <div class="hp-container hp-faqband-grid">
+    <div>
+      <div class="hp-eyebrow">Quick answers</div>
+      <h2 class="hp-h2">Frequently asked questions</h2>
+      <div class="hp-faq-qs" role="tablist" aria-label="Questions">
+        <button type="button" role="tab" id="faq-q0" aria-controls="faq-a0" aria-selected="true" class="hp-on">Do we need a separate consultant for each state?</button>
+        <button type="button" role="tab" id="faq-q1" aria-controls="faq-a1" aria-selected="false">What happens in the free compliance review?</button>
+        <button type="button" role="tab" id="faq-q2" aria-controls="faq-a2" aria-selected="false">How long does onboarding take?</button>
+        <button type="button" role="tab" id="faq-q3" aria-controls="faq-a3" aria-selected="false">What is a labour law audit and why would we need one?</button>
+      </div>
     </div>
-    <div class="hp-center" style="margin-top:28px"><a href="/faq.html" class="hp-btn hp-btn-ghost">See all FAQs</a></div>
+    <div class="hp-faq-panel">
+      <div class="hp-faq-a hp-on" role="tabpanel" id="faq-a0" aria-labelledby="faq-q0"><h3>Do we need a separate consultant for each state?</h3><p>No. LEAP handles pan-India compliance from a single point of contact. We manage state-specific PT slabs, LWF applicability and Shops and Establishments Acts, so you do not need multiple vendors.</p></div>
+      <div class="hp-faq-a" role="tabpanel" id="faq-a1" aria-labelledby="faq-q1"><h3>What happens in the free compliance review?</h3><p>We assess your current status across PF, ESIC, PT, LWF and other applicable acts, identify the key gaps and confirm scope. It takes about 30 minutes and you get a gap report at no cost.</p></div>
+      <div class="hp-faq-a" role="tabpanel" id="faq-a2" aria-labelledby="faq-q2"><h3>How long does onboarding take?</h3><p>Usually 1 to 2 weeks. In that time we collect your employee master, registrations and current-month salary data. We then run one full month side by side with your existing process, so nothing changes until the numbers match.</p></div>
+      <div class="hp-faq-a" role="tabpanel" id="faq-a3" aria-labelledby="faq-q3"><h3>What is a labour law audit and why would we need one?</h3><p>It is a systematic review of your employment practices, filings, registers and policies against the applicable statutes. It identifies compliance gaps before regulators do.</p></div>
+      <div class="hp-faq-actions">
+        <a href="#review" class="hp-btn hp-btn-primary">Get a Free Compliance Review</a>
+        <a href="/faq.html" class="hp-faq-all">See all FAQs →</a>
+      </div>
+    </div>
   </div>
 </section>
 </main>
@@ -413,7 +425,7 @@
 
 <script src="js/components.js?v=20"></script>
 <script src="js/main.js?v=11"></script>
-<script src="js/home.js?v=6"></script>
+<script src="js/home.js?v=7"></script>
 <script>
   renderNavbar('home');
   renderFooter();

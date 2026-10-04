@@ -319,3 +319,30 @@
     rt = setTimeout(function () { if (loaded) resize(); }, 150);
   });
 })();
+
+/* ============================================
+   FAQ band: pick a question on the left,
+   its answer shows on the right
+   ============================================ */
+(function () {
+  var band = document.getElementById('faqBand');
+  if (!band) return;
+  var qs = Array.prototype.slice.call(band.querySelectorAll('.hp-faq-qs button'));
+  var as = Array.prototype.slice.call(band.querySelectorAll('.hp-faq-a'));
+  band.classList.add('hp-faq-js');
+
+  function show(i) {
+    qs.forEach(function (q, n) {
+      q.classList.toggle('hp-on', n === i);
+      q.setAttribute('aria-selected', n === i ? 'true' : 'false');
+    });
+    as.forEach(function (a, n) { a.classList.toggle('hp-on', n === i); });
+  }
+
+  var fine = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  qs.forEach(function (q, i) {
+    q.addEventListener('click', function () { show(i); });
+    q.addEventListener('focus', function () { show(i); });
+    if (fine) q.addEventListener('mouseenter', function () { show(i); });   /* desktop: hover is enough */
+  });
+})();

@@ -369,3 +369,27 @@
 .hp-priceband .hp-btn{flex-shrink:0}
 @media (max-width:1040px){.hp-priceband h2{white-space:normal}}
 @media (max-width:700px){.hp-priceband{padding:28px 0}.hp-priceband-in{flex-direction:column;align-items:flex-start;gap:16px}.hp-priceband h2{line-height:1.7}}
+
+/* FAQ: questions on the left, one answer at a time on the right */
+.hp-faqband{padding:56px 0;border-top:1px solid var(--line)}
+.hp-faqband-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:40px;align-items:stretch}
+.hp-faqband .hp-h2{font-size:clamp(24px,2.6vw,30px);margin-bottom:16px}
+.hp-faq-qs{display:flex;flex-direction:column;gap:6px}
+.hp-faq-qs button{font:600 15px/1.4 'Inter',sans-serif;text-align:left;color:var(--primary);background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 38px 11px 14px;cursor:pointer;position:relative;transition:background .2s,border-color .2s,color .2s}
+.hp-faq-qs button::after{content:'\2192';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--secondary-text);opacity:0;transition:opacity .2s}
+.hp-faq-qs button:hover{border-color:var(--secondary)}
+.hp-faq-qs button.hp-on{background:var(--primary);border-color:var(--primary);color:#fff}
+.hp-faq-qs button.hp-on::after{opacity:1;color:#fff}
+.hp-faq-panel{background:var(--tint);border:1px solid #BFE0EE;border-radius:14px;padding:26px 28px;display:flex;flex-direction:column}
+.hp-faq-a{margin-bottom:18px}
+.hp-faq-a h3{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:var(--primary);margin-bottom:8px}
+.hp-faq-a p{font-size:15.5px;color:var(--ink);line-height:1.65}
+.hp-faq-js .hp-faq-a{display:none;margin-bottom:0}
+.hp-faq-js .hp-faq-a.hp-on{display:block;animation:pop .3s ease both}
+.hp-faq-js .hp-faq-a h3{display:none}
+.hp-faq-actions{margin-top:auto;padding-top:20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hp-faq-all{font-size:14px;font-weight:600;color:var(--secondary-text)}
+.hp-faq-all:hover{text-decoration:underline}
+@media (max-width:900px){.hp-faqband-grid{grid-template-columns:1fr;gap:16px}}
+@media (max-width:560px){.hp-faqband{padding:40px 0}.hp-faq-panel{padding:20px}.hp-faq-actions .hp-btn{width:100%;justify-content:center}}
+@media (prefers-reduced-motion:reduce){.hp-faq-js .hp-faq-a.hp-on{animation:none}}
