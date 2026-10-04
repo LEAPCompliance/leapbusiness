@@ -359,3 +359,13 @@
 .hp-toolband .hp-res-row a:hover{text-decoration:underline}
 @media (max-width:900px){.hp-toolband-grid{grid-template-columns:1fr;gap:24px}}
 @media (max-width:560px){.hp-toolband{padding:40px 0}.hp-toolband .hp-tools{grid-template-columns:1fr;gap:8px}}
+
+/* pricing: one-line band in brand blue */
+.hp-priceband{background:var(--primary);color:#fff;padding:26px 0}
+.hp-priceband-in{display:flex;align-items:center;justify-content:space-between;gap:28px}
+.hp-priceband h2{color:#fff;font-size:clamp(19px,2.05vw,26px);line-height:1.5;margin:0;white-space:nowrap}
+.hp-priceband h2 span{display:inline-block;background:#fff;color:var(--primary);border-radius:8px;padding:0 12px;margin:0 3px}
+.hp-priceband p{color:rgba(255,255,255,.78);font-size:14px;margin-top:6px}
+.hp-priceband .hp-btn{flex-shrink:0}
+@media (max-width:1040px){.hp-priceband h2{white-space:normal}}
+@media (max-width:700px){.hp-priceband{padding:28px 0}.hp-priceband-in{flex-direction:column;align-items:flex-start;gap:16px}.hp-priceband h2{line-height:1.7}}
