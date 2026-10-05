@@ -461,9 +461,8 @@ function calcEpfSplit() {
     <div class="epf-src">
       <h5>Source provisions</h5>
       <p>
-        EPF rate: Section 6, EPF &amp; MP Act, 1952.<br>
-        EPS 8.33%: Para 3, Employees&rsquo; Pension Scheme, 1995.<br>
-        EDLI 0.5%: Para 8A, EDLI Scheme, 1976.<br>
+        Contribution rates (employee 12%; employer 8.33% EPS and 3.67% EPF; EDLI 0.5%; admin 0.5%): Q7 and Q13 of the EPFO FAQ on the wage ceiling revision, circulated by EPFO Regional Office Mumbai (Bandra) vide Note No. MH/BAN/Co-Ord/2026-27/182 dated 30.09.2026 (<a href="/govt-faqs/">read the FAQ</a>).<br>
+        Framework: Chapter III, Code on Social Security, 2020, with the Employees&rsquo; Provident Funds Scheme, 2026, the Employees&rsquo; Pension Scheme, 2026 and the EDLI Scheme, 2026.<br>
         ${epfCeilingSource(ceiling)}
       </p>
     </div>
@@ -631,8 +630,7 @@ function calcEsicSplit() {
       <h5>Source provisions</h5>
       <p>
         Definition of wages and the 50% proviso: Section 2(y), Code on Wages, 2019, adopted by Section 2(88), Code on Social Security, 2020.<br>
-        ESIC contribution rates 0.75% employee / 3.25% employer: Rule 51, ESI (Central) Rules, 1950, w.e.f. 01.07.2019.<br>
-        Wage ceiling ₹21,000 per month (₹25,000 for persons with disability): Rule 50, ESI (Central) Rules, 1950.
+        ESIC contribution rates 0.75% employee / 3.25% employer, and wage ceiling ₹21,000 per month (₹25,000 for persons with disability): as prescribed earlier under Rules 50 and 51 of the ESI (Central) Rules, 1950 (rates w.e.f. 01.07.2019). Confirm against ESIC&rsquo;s current notification under the Code on Social Security, 2020.
       </p>
     </div>
   `;
