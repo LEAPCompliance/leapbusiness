@@ -110,8 +110,8 @@ function ctcBasicModeChange() {
   if (hraWrap) hraWrap.style.opacity = mode !== 'manual' ? '0.5' : '1';
   const notes = {
     manual: '',
-    esicfree: 'Basic + DA is set to 50% of Gross, with a floor of ₹21,500 so it stays at or above the ₹21,000 ESIC threshold — ESIC does not apply.',
-    minwage: 'Basic + DA is set to 50% of Gross, or to the Minimum Wage entered below if that is higher — whichever keeps it compliant. Enter the Minimum Wage below for this to work; without it, this mode falls back to 50% of Gross unchecked.'
+    esicfree: 'Basic + DA is set to 50% of Gross, with a floor of ₹21,500 so it stays above the ₹21,000 ESIC threshold and ESIC does not apply.',
+    minwage: 'Basic + DA is set to 50% of Gross, or to the Minimum Wage entered below if that is higher, whichever keeps it compliant. Enter the Minimum Wage below for this to work; without it, this mode falls back to 50% of Gross unchecked.'
   };
   if (note) note.textContent = notes[mode] || '';
 }
@@ -220,7 +220,7 @@ function ctcForward(gross, p) {
 
   const pfWage = grossTotal - hra;
   const pfEmp = pfWage > CTC_PF_CEILING ? CTC_PF_CEILING * 0.12 : pfWage * 0.12;
-  const esicApplicable = basicDA < 21000;
+  const esicApplicable = basicDA <= 21000;
   const esicEmp = esicApplicable ? basicDA * 0.0075 : 0;
   const st = CTC_STATES[p.state];
   const pt = st.pt(gross, p.female);
@@ -291,14 +291,14 @@ function calcTakeHome() {
 
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin:16px 0 4px">Part B — Employee Deductions</div>
     <div class="calc-row"><span>PF — Employee (12%${r.pfWage > CTC_PF_CEILING ? ', capped ' + fmtINR(CTC_PF_CEILING * 0.12) : ''})</span><strong>- ${fmtINR(r.pfEmp)}</strong></div>
-    <div class="calc-row"><span>ESIC — Employee ${r.esicApplicable ? '(0.75%)' : '(n/a, Basic+DA ≥ ₹21,000)'}</span><strong>- ${fmtINR(r.esicEmp)}</strong></div>
+    <div class="calc-row"><span>ESIC — Employee ${r.esicApplicable ? '(0.75%)' : '(n/a, Basic+DA above ₹21,000)'}</span><strong>- ${fmtINR(r.esicEmp)}</strong></div>
     <div class="calc-row"><span>Professional Tax (${st.name})</span><strong>- ${fmtINR(r.pt)}</strong></div>
     <div class="calc-row"><span>LWF — Employee (monthly provision)</span><strong>- ${fmtINR(r.lwfEmp)}</strong></div>
     <div class="calc-row calc-total"><span>Net Take-Home Salary</span><strong>${fmtINR(r.netSalary)}</strong></div>
 
     <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--secondary);margin:16px 0 4px">Part C — Employer Cost (Over &amp; Above Gross)</div>
     <div class="calc-row"><span>PF — Employer (13%${r.pfWage > CTC_PF_CEILING ? ', capped ' + fmtINR(CTC_PF_CEILING * 0.13) : ''})</span><strong>${fmtINR(r.pfEmployer)}</strong></div>
-    <div class="calc-row"><span>ESIC — Employer ${r.esicApplicable ? '(3.25%)' : '(n/a, Basic+DA ≥ ₹21,000)'}</span><strong>${fmtINR(r.esicEmployer)}</strong></div>
+    <div class="calc-row"><span>ESIC — Employer ${r.esicApplicable ? '(3.25%)' : '(n/a, Basic+DA above ₹21,000)'}</span><strong>${fmtINR(r.esicEmployer)}</strong></div>
     <div class="calc-row"><span>LWF — Employer (monthly provision)</span><strong>${fmtINR(r.lwfEmployer)}</strong></div>
     <div class="calc-row"><span>Statutory Bonus (8.33%)</span><strong>${fmtINR(r.bonus)}</strong></div>
     <div class="calc-row"><span>Gratuity provision (4.81%)</span><strong>${fmtINR(r.gratuity)}</strong></div>
@@ -311,7 +311,7 @@ function calcTakeHome() {
       <strong style="color:var(--text-primary)">Notes:</strong><br>
       • ${minWage > 0 ? `Basic + DA is checked against the Minimum Wage of ${fmtINR(minWage)} you entered. Minimum Wages vary by state, zone and skill category and are revised roughly every six months with the VDA, so confirm you used the current notified figure for this employee.` : `Basic + DA must also meet the applicable Minimum Wages floor for the employee's state, zone and skill category. Enter that figure in "Minimum Wage" above to have it checked automatically — this calculator does not look it up for you.`}<br>
       • PF wages = Gross − HRA (i.e. Basic+DA + all allowances except HRA), capped at the statutory wage ceiling of ${fmtINR(CTC_PF_CEILING)}/month, effective 17 September 2026 (Gazette S.O. 5109(E)); it was ₹15,000/month before that date.<br>
-      • ESIC applies only where Basic+DA is below ₹21,000/month; both employee and employer contributions stop above that.<br>
+      • ESIC applies only where Basic+DA is ₹21,000/month or less; both employee and employer contributions stop above that.<br>
       ${st.febNote ? `• ${st.febNote}<br>` : ''}
       ${st.halfYearly ? `• ${st.name} levies Professional Tax half-yearly (April &amp; October); the figure shown is a monthly-equivalent average — the actual deduction happens as one lump sum twice a year.<br>` : ''}
       • LWF for ${st.name} is a ${st.lwfFreq} contribution, shown here as an averaged monthly provision; applicable only to employees below managerial/supervisory level, subject to each state's own threshold.<br>
@@ -332,7 +332,7 @@ function ctcScenarioCompareHtml(gross, p) {
     const diff = bv - av;
     const style = bold ? ' style="font-weight:700;border-top:1px solid var(--border)"' : '';
     const cellStyle = bold ? ' style="padding-top:8px"' : '';
-    return `<tr${style}><td${cellStyle}>${label}</td><td${cellStyle}>${fmtINR(av)}</td><td${cellStyle}>${fmtINR(bv)}</td><td${cellStyle}>${diff === 0 ? '—' : signedINR(diff)}</td></tr>`;
+    return `<tr${style}><td${cellStyle}>${label}</td><td${cellStyle}>${fmtINR(av)}</td><td${cellStyle}>${fmtINR(bv)}</td><td${cellStyle}>${diff === 0 ? 'No change' : signedINR(diff)}</td></tr>`;
   };
   function signedINR(n) { return (n > 0 ? '+' : n < 0 ? '-' : '') + fmtINR(Math.abs(n)); }
 
@@ -358,11 +358,11 @@ function ctcScenarioCompareHtml(gross, p) {
           ${row('Basic + DA', a.basicDA, b.basicDA)}
           ${row('HRA', a.hra, b.hra)}
           ${row('Special Allowance', a.special, b.special)}
-          ${row('PF — Employee', a.pfEmp, b.pfEmp)}
-          ${row('ESIC — Employee', a.esicEmp, b.esicEmp)}
+          ${row('PF (Employee)', a.pfEmp, b.pfEmp)}
+          ${row('ESIC (Employee)', a.esicEmp, b.esicEmp)}
           ${row('Net Salary (take-home)', a.netSalary, b.netSalary)}
-          ${row('PF — Employer', a.pfEmployer, b.pfEmployer)}
-          ${row('ESIC — Employer', a.esicEmployer, b.esicEmployer)}
+          ${row('PF (Employer)', a.pfEmployer, b.pfEmployer)}
+          ${row('ESIC (Employer)', a.esicEmployer, b.esicEmployer)}
           ${row('Bonus + Gratuity + LWF (Employer)', a.bonus + a.gratuity + a.lwfEmployer, b.bonus + b.gratuity + b.lwfEmployer)}
           ${row('Employer Cost', a.employerCostTotal, b.employerCostTotal)}
           ${row('CTC', a.ctc, b.ctc, true)}
