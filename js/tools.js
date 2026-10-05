@@ -3,6 +3,12 @@
    Indicative estimates only. Not legal/financial advice.
    ============================================ */
 
+/* ESIC contributions are rounded up to the next whole rupee. The toFixed guard stops
+   floating-point noise (e.g. 135.00000000000003) from adding a rupee. */
+function ceilRupee(x) {
+  return Math.ceil(Number(x.toFixed(4)));
+}
+
 function fmtINR(n) {
   if (isNaN(n)) return '₹0';
   return '₹' + Math.round(n).toLocaleString('en-IN');
@@ -221,14 +227,14 @@ function ctcForward(gross, p) {
   const pfWage = grossTotal - hra;
   const pfEmp = pfWage > CTC_PF_CEILING ? CTC_PF_CEILING * 0.12 : pfWage * 0.12;
   const esicApplicable = basicDA <= 21000;
-  const esicEmp = esicApplicable ? basicDA * 0.0075 : 0;
+  const esicEmp = esicApplicable ? ceilRupee(basicDA * 0.0075) : 0;
   const st = CTC_STATES[p.state];
   const pt = st.pt(gross, p.female);
   const lwfEmp = st.lwfEE;
   const netSalary = grossTotal - pfEmp - esicEmp - pt - lwfEmp;
 
   const pfEmployer = pfWage > CTC_PF_CEILING ? CTC_PF_CEILING * 0.13 : pfWage * 0.13;
-  const esicEmployer = esicApplicable ? basicDA * 0.0325 : 0;
+  const esicEmployer = esicApplicable ? ceilRupee(basicDA * 0.0325) : 0;
   const lwfEmployer = st.lwfER;
   const bonus = basicDA * 0.0833;
   const gratuity = basicDA * 0.0481;
@@ -311,7 +317,7 @@ function calcTakeHome() {
       <strong style="color:var(--text-primary)">Notes:</strong><br>
       • ${minWage > 0 ? `Basic + DA is checked against the Minimum Wage of ${fmtINR(minWage)} you entered. Minimum Wages vary by state, zone and skill category and are revised roughly every six months with the VDA, so confirm you used the current notified figure for this employee.` : `Basic + DA must also meet the applicable Minimum Wages floor for the employee's state, zone and skill category. Enter that figure in "Minimum Wage" above to have it checked automatically — this calculator does not look it up for you.`}<br>
       • PF wages = Gross − HRA (i.e. Basic+DA + all allowances except HRA), capped at the statutory wage ceiling of ${fmtINR(CTC_PF_CEILING)}/month, effective 17 September 2026 (Gazette S.O. 5109(E)); it was ₹15,000/month before that date.<br>
-      • ESIC applies only where Basic+DA is ₹21,000/month or less; both employee and employer contributions stop above that.<br>
+      • ESIC applies only where Basic+DA is ₹21,000/month or less; both employee and employer contributions stop above that. Each ESIC contribution is rounded up to the next whole rupee.<br>
       ${st.febNote ? `• ${st.febNote}<br>` : ''}
       ${st.halfYearly ? `• ${st.name} levies Professional Tax half-yearly (April &amp; October); the figure shown is a monthly-equivalent average — the actual deduction happens as one lump sum twice a year.<br>` : ''}
       • LWF for ${st.name} is a ${st.lwfFreq} contribution, shown here as an averaged monthly provision; applicable only to employees below managerial/supervisory level, subject to each state's own threshold.<br>
@@ -581,8 +587,8 @@ function calcEsicSplit() {
   }
 
   const eligible = wages <= ceiling;
-  const ee = eligible ? Math.round(wages * eeRate) : 0;
-  const er = eligible ? Math.round(wages * erRate) : 0;
+  const ee = eligible ? ceilRupee(wages * eeRate) : 0;
+  const er = eligible ? ceilRupee(wages * erRate) : 0;
   const e50Pct = TR > 0 ? (E50 / TR) * 100 : 0;
   const breached = excess > 0;
 
@@ -610,7 +616,8 @@ function calcEsicSplit() {
     ${eligible ? `
       <div class="epf-line"><span>Employee (${(eeRate*100).toFixed(2)}% of ${fmtINR(wages)})</span><strong>${fmtINR(ee)}</strong></div>
       <div class="epf-line"><span>Employer (${(erRate*100).toFixed(2)}% of ${fmtINR(wages)})</span><strong>${fmtINR(er)}</strong></div>
-      <div class="epf-line credit"><span>Total monthly ESIC</span><strong>${fmtINR(ee + er)}</strong></div>`
+      <div class="epf-line credit"><span>Total monthly ESIC</span><strong>${fmtINR(ee + er)}</strong></div>
+      <p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin:8px 0 0">Each contribution is rounded up to the next whole rupee.</p>`
     : `<p style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text-secondary);line-height:1.7;margin:8px 0 0">
          The ESIC wage base of ${fmtINR(wages)} exceeds the ${fmtINR(ceiling)} ceiling, so ESIC is not applicable for this employee. If the employee was already covered, contributions continue until the end of the running contribution period.
        </p>`}
