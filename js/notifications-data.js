@@ -5,6 +5,18 @@
    ============================================ */
 const NOTIFICATIONS = [
   {
+    title: "EPFO Extends September 2026 ECR Filing and Remittance Due Date to 31 October 2026",
+    tag: "PF / EPFO",
+    region: "Central",
+    releasedDate: "2026-10-13",
+    effectiveDate: null,
+    excerpt: "EPFO Head Office circular dated 13 October 2026 extends the due date for filing the Electronic Challan-cum-Return (ECR) and remitting the contributions for the wage month of September 2026 from 15 October 2026 to 31 October 2026. The circular cites the difficulties employers reported after the wage ceiling revision took effect on 17 September 2026. The extension is confined to the September 2026 wage month and is not a general extension for any other month.",
+    link: "/calculators/epf-wage-ceiling/",
+    linkLabel: "Open the Wage Ceiling Calculator",
+    downloadUrl: "/assets/notifications/epfo-ecr-sep2026-due-date-extended-circular-13oct2026.pdf",
+    source: "EPFO Head Office, Compliance Division, Circular No. Compliance/AnnAcPlan/2022-23/RationalizationofECR-Part(1)/e-704368 dated 13 October 2026"
+  },
+  {
     title: "EPFO Circulates 48-Question FAQ on the Wage Ceiling Revision",
     tag: "PF / EPFO",
     region: "Central",
