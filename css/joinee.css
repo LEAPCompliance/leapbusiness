@@ -1,0 +1,96 @@
+/* =============================================
+   New joinee guides (/pf-new-joinee/, /esic-new-joinee/)
+   Page-specific. Every class is prefixed jn- so nothing here
+   touches the sitewide css/style.css.
+   ============================================= */
+.jn-wrap { font-family: 'Inter', system-ui, sans-serif; color: var(--text-primary); }
+.jn-narrow { max-width: 860px; margin: 0 auto; }
+.jn-sec { padding: 56px 0; }
+.jn-sec.alt { background: var(--background-light); }
+.jn-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--secondary); margin-bottom: 8px; }
+.jn-h2 { font-family: 'Playfair Display', serif; font-size: clamp(24px, 3.2vw, 32px); color: var(--primary); line-height: 1.25; margin: 0 0 12px; }
+.jn-lead { font-size: 16.5px; line-height: 1.7; color: var(--text-secondary); margin: 0 0 24px; max-width: 720px; }
+.jn-p { font-size: 15.5px; line-height: 1.75; color: var(--text-secondary); margin: 0 0 14px; }
+.jn-wrap a.jn-link { color: var(--primary); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.jn-wrap a.jn-link:hover { color: var(--secondary); }
+
+/* hero actions */
+.jn-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 22px; }
+.jn-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14.5px; padding: 11px 20px; border-radius: 8px; border: 2px solid var(--border); background: var(--white); color: var(--primary); cursor: pointer; transition: border-color .15s ease, background .15s ease; text-decoration: none; }
+.jn-btn:hover { border-color: var(--primary); }
+.jn-btn.wa { background: #1FAF57; border-color: #1FAF57; color: #fff; }
+.jn-btn.wa:hover { background: #18934A; border-color: #18934A; }
+.jn-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+/* two-up cards */
+.jn-grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.jn-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.jn-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 24px 22px; }
+.jn-card h3 { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--primary); margin: 0 0 8px; line-height: 1.3; }
+.jn-card p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin: 0 0 10px; }
+.jn-card p:last-child { margin-bottom: 0; }
+.jn-card.yes { border-top: 4px solid var(--secondary); }
+.jn-card.new { border-top: 4px solid var(--primary); }
+.jn-chip { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--primary); background: var(--secondary-faint); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; margin-bottom: 10px; }
+
+/* numbered steps */
+.jn-steps { list-style: none; margin: 0; padding: 0; counter-reset: jn; }
+.jn-steps li { position: relative; counter-increment: jn; padding: 0 0 22px 56px; font-size: 15.5px; line-height: 1.7; color: var(--text-secondary); }
+.jn-steps li::before { content: counter(jn); position: absolute; left: 0; top: 0; width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.jn-steps li::after { content: ""; position: absolute; left: 18px; top: 42px; bottom: 4px; width: 2px; background: var(--border); }
+.jn-steps li:last-child { padding-bottom: 0; }
+.jn-steps li:last-child::after { display: none; }
+.jn-steps strong { display: block; color: var(--primary); font-size: 16.5px; margin-bottom: 2px; }
+.jn-steps a { color: var(--primary); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.jn-store { display: inline-flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.jn-store a { display: inline-block; text-decoration: none !important; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--white); color: var(--primary); }
+.jn-store a:hover { border-color: var(--primary); }
+
+/* call-outs */
+.jn-note { border-left: 4px solid var(--primary); background: var(--secondary-faint); border-radius: var(--radius); padding: 16px 20px; font-size: 15px; line-height: 1.7; color: var(--text-primary); margin: 22px 0 0; }
+.jn-note strong { color: var(--primary); }
+.jn-note.warn { border-left-color: #C98A1B; background: #FFF8EC; }
+
+/* checklists */
+.jn-check { list-style: none; margin: 0; padding: 0; }
+.jn-check li { position: relative; padding: 7px 0 7px 30px; font-size: 15px; line-height: 1.6; color: var(--text-primary); border-bottom: 1px solid var(--background-light); }
+.jn-check li:last-child { border-bottom: none; }
+.jn-check li::before { content: ""; position: absolute; left: 2px; top: 11px; width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--secondary); background: var(--white); }
+.jn-check li::after { content: ""; position: absolute; left: 7px; top: 14px; width: 4px; height: 8px; border: solid var(--secondary); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.jn-check small { display: block; color: var(--text-secondary); font-size: 13.5px; }
+.jn-group-title { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--secondary); margin: 0 0 6px; }
+
+/* video */
+.jn-video { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); overflow: hidden; background: #0f2a3d; border: 1px solid var(--border); }
+.jn-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.jn-video-cap { font-size: 13.5px; color: var(--text-secondary); margin-top: 10px; }
+
+/* document links */
+.jn-docs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.jn-docs a { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--primary); font-weight: 600; font-size: 15px; transition: border-color .15s ease; }
+.jn-docs a:hover { border-color: var(--secondary); }
+.jn-docs a span { display: block; font-weight: 400; font-size: 13.5px; color: var(--text-secondary); margin-top: 2px; }
+.jn-docs svg { width: 22px; height: 22px; flex-shrink: 0; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* HR strip and sources */
+.jn-hr { background: var(--primary); color: #fff; border-radius: var(--radius-lg); padding: 30px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; }
+.jn-hr h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; margin: 0 0 6px; }
+.jn-hr p { margin: 0; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,.88); max-width: 560px; }
+.jn-hr .jn-btn { border-color: #fff; }
+.jn-sources { font-size: 13.5px; line-height: 1.75; color: var(--text-secondary); }
+.jn-sources li { margin-bottom: 4px; }
+.jn-sources a { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+.jn-small { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+@media (max-width: 860px) {
+  .jn-grid3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 680px) {
+  .jn-grid2 { grid-template-columns: 1fr; }
+  .jn-sec { padding: 40px 0; }
+  .jn-hr { padding: 24px 22px; }
+  .jn-actions .jn-btn { width: 100%; justify-content: center; }
+}
+@media print {
+  #navbar, .jn-actions, .jn-hr, .jn-video { display: none !important; }
+}
