@@ -120,12 +120,7 @@
         <div>
           <ul class="jn-tick jn-tick-group" data-title="If earlier PF member">
             <li><label data-text="Previous PF member ID"><input type="checkbox" /><span>Previous PF member ID</span></label></li>
-            <li><label data-text="Date of exit from the previous job"><input type="checkbox" /><span>Date of exit from the previous job</span></label></li>
             <li><label data-text="Earlier EPS (pension) membership: Yes or No, mandatory"><input type="checkbox" /><span>Earlier EPS membership: Yes or No <span class="jn-badge">Mandatory</span></span></label></li>
-            <li><label data-text="Scheme certificate or PPO number, if issued"><input type="checkbox" /><span>Scheme certificate or PPO number, if issued</span></label></li>
-          </ul>
-          <ul class="jn-tick jn-tick-group" data-title="International workers only" style="margin-top:14px">
-            <li><label data-text="Country of origin, passport number and validity"><input type="checkbox" /><span>Country of origin, passport number and validity</span></label></li>
           </ul>
         </div>
       </div>
@@ -153,8 +148,8 @@
         <button type="button" class="jn-opt" aria-pressed="false" data-show="r-never">Never had a PF account</button>
         <button type="button" class="jn-opt" aria-pressed="false" data-show="r-cant">Cannot open the passbook</button>
       </div>
-      <div class="jn-result" id="r-yes" hidden><strong>Item 7: Yes. Item 8: Yes.</strong> Also note the previous member ID and the date of exit.</div>
-      <div class="jn-result" id="r-no" hidden><strong>Item 7: Yes. Item 8: No.</strong> Also note the previous member ID and the date of exit.</div>
+      <div class="jn-result" id="r-yes" hidden><strong>Item 7: Yes. Item 8: Yes.</strong> The rest of the earlier-employment details are filled in on Form 11.</div>
+      <div class="jn-result" id="r-no" hidden><strong>Item 7: Yes. Item 8: No.</strong> The rest of the earlier-employment details are filled in on Form 11.</div>
       <div class="jn-result" id="r-never" hidden><strong>Item 7: No. Item 8: No.</strong> This is a first PF job, so a UAN has to be generated.</div>
       <div class="jn-result warn" id="r-cant" hidden><strong>Do not guess.</strong> Get the details from the previous employer's HR, or ask LEAP, before the form is signed.</div>
     </div>
