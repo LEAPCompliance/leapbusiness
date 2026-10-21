@@ -22,7 +22,7 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/style.css?v=15" />
   <link rel="stylesheet" href="/css/knowledge.css?v=2" />
-  <link rel="stylesheet" href="/css/minwage.css?v=1" />
+  <link rel="stylesheet" href="/css/minwage.css?v=2" />
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
@@ -50,8 +50,8 @@
     <p class="mwc-sub">Pick the state and category, enter what you pay, and get a straight answer with the shortfall, if any.</p>
     <div class="mwc-grid">
       <div><label for="mwcState">State</label><select id="mwcState"></select></div>
-      <div id="mwcZoneWrap" hidden><label for="mwcZone">Zone</label><select id="mwcZone"></select></div>
-      <div class="mwc-full"><span class="mwc-lbl">Category</span><div class="mwc-chips" id="mwcCats" role="group" aria-label="Skill category"></div></div>
+      <div id="mwcIndWrap" hidden><label for="mwcInd">Industry or scheduled employment</label><select id="mwcInd"></select></div>
+      <div id="mwcClsWrap" class="mwc-full" hidden><label for="mwcCls">Category, zone or designation</label><input type="search" id="mwcClsFilter" class="mwc-filter" placeholder="Type to narrow the list" hidden /><select id="mwcCls"></select></div>
       <div><label for="mwcWage">Monthly Basic + DA you pay (₹)</label><input type="number" id="mwcWage" inputmode="numeric" min="0" placeholder="e.g. 18500" /></div>
       <div><button type="button" class="mwc-go" id="mwcGo" disabled>Check</button></div>
     </div>
@@ -63,7 +63,7 @@
     <div class="mw-board-main">
       <strong id="mwBoardTitle">Coverage</strong>
       <div class="mw-bar" aria-hidden="true"><span id="mwBoardBar"></span></div>
-      <p>A state goes live here only after we check it against the government's own notification. Each one links the order, so you can see where the figures come from.</p>
+      <p id="mwBoardNote">Rates are shown with their effective-from date and stay valid until the state revises them.</p>
     </div>
     <div class="mw-legend"><span><i class="mw-dot v"></i>Verified by LEAP</span><span><i class="mw-dot p"></i>Being verified</span></div>
   </div>
@@ -74,7 +74,7 @@
         <div class="tool-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6zM9 7h6M9 12h.010M12 12h.010M15 12h.010M9 16h.010M12 16h.010M15 16h.010"/></svg></div>
         <div>
           <div class="tool-title">Minimum Wages &mdash; PAN-India Reference</div>
-          <div class="tool-desc">State-wise Minimum Wage by skill category (Unskilled, Semi-Skilled, Skilled, Highly Skilled), feeding straight into the CTC calculator's compliance check.</div>
+          <div class="tool-desc">State-wise Minimum Wage by industry and category, with the effective-from date, ready to check against your own pay.</div>
         </div>
       </div>
       <div class="tool-meta">
@@ -124,121 +124,7 @@
 
 <script src="/js/components.js?v=20"></script>
 <script src="/js/main.js?v=11"></script>
-<script src="/js/minwage-data.js?v=4"></script>
-<script src="/js/minwage-check.js?v=1"></script>
-<script>
-renderNavbar('resources');renderFooter();renderWhatsApp();
-
-function mwFilterStates(q) {
-  document.querySelectorAll('.mw-state-btn').forEach(function (btn) {
-    btn.style.display = btn.dataset.name.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
-  });
-}
-
-function mwSelectState(name, noScroll) {
-  document.querySelectorAll('.mw-state-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.name === name); });
-  mwRenderDetail(name);
-  if (!noScroll) document.getElementById('mwDetailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (typeof gtag === 'function') gtag('event', 'state_select', { tool_name: 'minimum-wages', state_name: name });
-}
-
-function mwMoney(n) { return '₹' + n.toLocaleString('en-IN'); }
-
-function mwBuildRows(name, entry, cats) {
-  var zones = entry.hasZones && entry.zones && entry.zones.length ? entry.zones : [null];
-  var rows = [];
-  zones.forEach(function (zone) {
-    cats.forEach(function (c) {
-      var cellVal = window.minWageCell ? window.minWageCell(name, c.key, zone) : null;
-      if (!cellVal) return;
-      var hraVal = window.minWageHRA ? window.minWageHRA(name, c.key, zone) : 0;
-      var total = window.minWageRate ? window.minWageRate(name, c.key, zone) : cellVal.basic + hraVal + cellVal.vda;
-      var perDay = window.minWagePerDay ? window.minWagePerDay(name, c.key, zone) : Math.round((total / (window.MIN_WAGE_PER_DAY_DIVISOR || 26)) * 100) / 100;
-      rows.push({ zone: zone, cat: c, basic: cellVal.basic, hra: hraVal, vda: cellVal.vda, total: total, perDay: perDay });
-    });
-  });
-  return rows;
-}
-
-function mwRenderDetail(name) {
-  var panel = document.getElementById('mwDetailPanel');
-  var entry = window.MIN_WAGE_DATA ? window.MIN_WAGE_DATA[name] : null;
-  var cats = window.MIN_WAGE_CATEGORIES || [];
-  var populated = window.minWageHasAnyRate ? window.minWageHasAnyRate(entry) : false;
-
-  if (!populated) {
-    panel.innerHTML =
-      '<div class="detail-panel">' +
-        '<div class="dp-header"><div class="dp-title">' + name + '</div><span class="badge-mode" style="background:#fffbeb;color:#92400e">🔧 Not added yet</span></div>' +
-        '<p style="font-size:14px;color:var(--text-mid);line-height:1.6">We’re still compiling verified Minimum Wage rates for <strong>' + name + '</strong>. This section updates as each state’s current notification is confirmed — nothing is shown until it is verified, so there is no risk of an out-of-date figure being used by mistake.</p>' +
-        '<div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">💼 <strong>Need this state’s Minimum Wage now?</strong> <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Contact LEAP</a> for the current figure for this state, zone and skill category.</div>' +
-      '</div>';
-    return;
-  }
-
-  var rows = mwBuildRows(name, entry, cats);
-  var showZoneCol = entry.hasZones;
-  var showHraCol = !!entry.hraPct;
-  var totalLabel = showHraCol ? 'Total /month (incl. HRA)' : 'Total /month';
-  var thead = '<tr>' + (showZoneCol ? '<th>Zone</th>' : '') + '<th>Class of Employment</th><th>Basic /month</th><th>VDA /month</th>' +
-    (showHraCol ? '<th>HRA /month</th>' : '') + '<th>Total /day</th><th>' + totalLabel + '</th></tr>';
-  var tbody = rows.map(function (r) {
-    return '<tr>' + (showZoneCol ? '<td>' + (r.zone || '—') + '</td>' : '') +
-      '<td>' + r.cat.label + '</td><td>' + mwMoney(r.basic) + '</td><td>' + mwMoney(r.vda) + '</td>' +
-      (showHraCol ? '<td>' + mwMoney(r.hra) + '</td>' : '') +
-      '<td>₹' + r.perDay.toFixed(2) + '</td>' +
-      '<td style="font-weight:700;color:var(--navy)">' + mwMoney(r.total) + '</td></tr>';
-  }).join('');
-
-  var meta = [];
-  if (entry.wef) meta.push(['Effective From (W.E.F.)', entry.wef]);
-  if (entry.updated) meta.push(['Notification Verified', entry.updated]);
-  if (entry.source) meta.push(['Source', entry.source]);
-  var metaHtml = meta.length ? '<div class="meta-grid" style="margin-bottom:16px">' + meta.map(function (m) {
-    return '<div class="meta-tile"' + (m[0] === 'Source' ? ' style="grid-column:1/-1"' : '') + '><div class="meta-lbl">' + m[0] + '</div><div class="meta-val" style="font-weight:' + (m[0] === 'Source' ? 400 : 600) + '">' + m[1] + '</div></div>';
-  }).join('') + '</div>' : '';
-
-  panel.innerHTML =
-    '<div class="detail-panel">' +
-      '<div class="dp-header"><div class="dp-title">' + name + '</div><div class="dp-badges"><span class="badge-applicable">✓ Verified' + (entry.updated ? ', updated ' + entry.updated : '') + '</span></div></div>' +
-      metaHtml +
-      (entry.scheduleNote ? '<div class="slab-note">📌 ' + entry.scheduleNote + '</div>' : '') +
-      '<div class="slab-section-title">Minimum Wages — all categories' + (showZoneCol ? ' and zones' : '') + '</div>' +
-      '<div style="overflow-x:auto"><table class="slab-table"><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table></div>' +
-      (showHraCol && entry.hraNote ? '<p style="font-size:11.5px;color:var(--text-light);margin-top:8px">🏠 ' + entry.hraNote + '</p>' : '') +
-      '<p style="font-size:11.5px;color:var(--text-light);margin-top:4px">Total per day assumes ' + (window.MIN_WAGE_PER_DAY_DIVISOR || 26) + ' working days a month, the usual convention in these notifications.</p>' +
-      (entry.notificationFile ? '<div style="margin-top:16px;text-align:center"><a href="' + entry.notificationFile + '" class="btn btn-outline-dark" download>📄 ' + (entry.notificationLabel || 'Download official notification') + '</a></div>' : '') +
-      '<div style="margin-top:14px;padding:12px 14px;background:var(--gold-pale);border:1px solid rgba(50,153,194,0.3);border-radius:8px;font-size:12.5px;color:#0d4a63">💼 <strong>Need help checking your salary structure against this?</strong> <a href="https://www.leapbusiness.in/contact.html" style="color:var(--navy);font-weight:700;text-decoration:underline">Contact LEAP →</a></div>' +
-    '</div>';
-}
-
-function mwBuildGrid() {
-  var grid = document.getElementById('mwStateGrid');
-  var states = (window.MIN_WAGE_STATES || []).slice().sort();
-  if (window.MIN_WAGE_CENTRAL_SPHERE) states.push(window.MIN_WAGE_CENTRAL_SPHERE);
-  var done = 0;
-  states.forEach(function (name) {
-    var entry = window.MIN_WAGE_DATA ? window.MIN_WAGE_DATA[name] : null;
-    var populated = window.minWageHasAnyRate ? window.minWageHasAnyRate(entry) : false;
-    if (populated) done++;
-    var btn = document.createElement('button');
-    btn.className = 'state-btn mw-state-btn' + (populated ? ' is-verified' : ' na');
-    btn.dataset.name = name;
-    btn.textContent = name + (populated ? '' : '  ·  verifying');
-    btn.onclick = function () { mwSelectState(name); };
-    grid.appendChild(btn);
-  });
-  var chip = document.getElementById('mwCoverageChip');
-  if (chip) chip.textContent = done + ' of ' + states.length + ' verified';
-  var bt = document.getElementById('mwBoardTitle'), bb = document.getElementById('mwBoardBar');
-  if (bt) bt.textContent = done + ' of ' + states.length + ' states and UTs verified so far';
-  if (bb) setTimeout(function () { bb.style.width = Math.max(3, Math.round(done / states.length * 100)) + '%'; }, 60);
-}
-
-if (window.MIN_WAGE_DATA) {
-  mwBuildGrid();
-  mwSelectState('Maharashtra', true);
-}
-</script>
+<script src="/js/minwage-hub.js?v=1"></script>
+<script>renderNavbar('resources');renderFooter();renderWhatsApp();</script>
 </body>
 </html>
