@@ -22,6 +22,7 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/style.css?v=15" />
   <link rel="stylesheet" href="/css/knowledge.css?v=2" />
+  <link rel="stylesheet" href="/css/minwage.css?v=1" />
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.leapbusiness.in/"},
@@ -43,6 +44,30 @@
 </div>
 
 <div class="kb-page">
+  <section class="mwc" aria-labelledby="mwcTitle">
+    <div class="mwc-eyebrow">Quick check</div>
+    <h2 id="mwcTitle">Are you paying at least the minimum?</h2>
+    <p class="mwc-sub">Pick the state and category, enter what you pay, and get a straight answer with the shortfall, if any.</p>
+    <div class="mwc-grid">
+      <div><label for="mwcState">State</label><select id="mwcState"></select></div>
+      <div id="mwcZoneWrap" hidden><label for="mwcZone">Zone</label><select id="mwcZone"></select></div>
+      <div class="mwc-full"><span class="mwc-lbl">Category</span><div class="mwc-chips" id="mwcCats" role="group" aria-label="Skill category"></div></div>
+      <div><label for="mwcWage">Monthly Basic + DA you pay (₹)</label><input type="number" id="mwcWage" inputmode="numeric" min="0" placeholder="e.g. 18500" /></div>
+      <div><button type="button" class="mwc-go" id="mwcGo" disabled>Check</button></div>
+    </div>
+    <div class="mwc-note" id="mwcNote" hidden></div>
+    <div class="mwc-result" id="mwcResult" hidden aria-live="polite"></div>
+  </section>
+
+  <div class="mw-board">
+    <div class="mw-board-main">
+      <strong id="mwBoardTitle">Coverage</strong>
+      <div class="mw-bar" aria-hidden="true"><span id="mwBoardBar"></span></div>
+      <p>A state goes live here only after we check it against the government's own notification. Each one links the order, so you can see where the figures come from.</p>
+    </div>
+    <div class="mw-legend"><span><i class="mw-dot v"></i>Verified by LEAP</span><span><i class="mw-dot p"></i>Being verified</span></div>
+  </div>
+
   <div class="tool-card">
     <div class="tool-card-header">
       <div class="tool-header-left">
@@ -53,7 +78,7 @@
         </div>
       </div>
       <div class="tool-meta">
-        <span class="chip chip-gold" id="mwCoverageChip">0 of 37 states added</span>
+        <span class="chip chip-gold" id="mwCoverageChip">verified</span>
         <span class="chip chip-navy">Free Tool</span>
       </div>
     </div>
@@ -99,7 +124,8 @@
 
 <script src="/js/components.js?v=20"></script>
 <script src="/js/main.js?v=11"></script>
-<script src="/js/minwage-data.js?v=3"></script>
+<script src="/js/minwage-data.js?v=4"></script>
+<script src="/js/minwage-check.js?v=1"></script>
 <script>
 renderNavbar('resources');renderFooter();renderWhatsApp();
 
@@ -109,10 +135,10 @@ function mwFilterStates(q) {
   });
 }
 
-function mwSelectState(name) {
+function mwSelectState(name, noScroll) {
   document.querySelectorAll('.mw-state-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.name === name); });
   mwRenderDetail(name);
-  document.getElementById('mwDetailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (!noScroll) document.getElementById('mwDetailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   if (typeof gtag === 'function') gtag('event', 'state_select', { tool_name: 'minimum-wages', state_name: name });
 }
 
@@ -196,19 +222,22 @@ function mwBuildGrid() {
     var populated = window.minWageHasAnyRate ? window.minWageHasAnyRate(entry) : false;
     if (populated) done++;
     var btn = document.createElement('button');
-    btn.className = 'state-btn mw-state-btn' + (populated ? '' : ' na');
+    btn.className = 'state-btn mw-state-btn' + (populated ? ' is-verified' : ' na');
     btn.dataset.name = name;
-    btn.textContent = name + (populated ? '' : '  ·  soon');
+    btn.textContent = name + (populated ? '' : '  ·  verifying');
     btn.onclick = function () { mwSelectState(name); };
     grid.appendChild(btn);
   });
   var chip = document.getElementById('mwCoverageChip');
-  if (chip) chip.textContent = done + ' of ' + states.length + ' states added';
+  if (chip) chip.textContent = done + ' of ' + states.length + ' verified';
+  var bt = document.getElementById('mwBoardTitle'), bb = document.getElementById('mwBoardBar');
+  if (bt) bt.textContent = done + ' of ' + states.length + ' states and UTs verified so far';
+  if (bb) setTimeout(function () { bb.style.width = Math.max(3, Math.round(done / states.length * 100)) + '%'; }, 60);
 }
 
 if (window.MIN_WAGE_DATA) {
   mwBuildGrid();
-  mwSelectState('Maharashtra');
+  mwSelectState('Maharashtra', true);
 }
 </script>
 </body>

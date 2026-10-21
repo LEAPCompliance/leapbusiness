@@ -98,6 +98,29 @@
     }
   };
 
+  /* Delhi: read directly off the Labour Department's own order (hosted below),
+     not from a third-party compilation. The order lists the rate as on
+     1 Oct 2024, the D.A. added w.e.f. 1 Apr 2025, and the resulting monthly rate;
+     all three tie out for each category (18,066 + 390 = 18,456 and so on).
+     Delhi notifies one rate for every scheduled employment, so there are no
+     zones and no separate Highly Skilled category. */
+  MIN_WAGE_DATA['Delhi'] = {
+    updated: '21 Oct 2026',
+    wef: '1 Apr 2025',
+    source: 'Government of NCT of Delhi, Labour Department, order dated 15 April 2025 (D.A. revision w.e.f. 1 April 2025), all scheduled employments',
+    notificationFile: '/assets/notifications/delhi-minimum-wages-order-15apr2025.pdf',
+    notificationLabel: 'Download official order (PDF)',
+    scheduleNote: 'Delhi notifies one rate for all scheduled employments. Clerical and supervisory staff are notified separately: non-matriculates Rs 20,371, matriculates but not graduates Rs 22,411, graduates and above Rs 24,356 per month. Basic is the rate as on 1 October 2024 and VDA is the D.A. added w.e.f. 1 April 2025, as the order states them. As on 21 October 2026 this is the most recent order listed on the Labour Department website.',
+    hasZones: false, zones: null,
+    rates: {
+      unskilled:     { basic: 18066, vda: 390 },
+      semiskilled:   { basic: 19929, vda: 442 },
+      skilled:       { basic: 21917, vda: 494 },
+      highlyskilled: null
+    },
+    hraPct: null, hraNote: null
+  };
+
   /* True once at least one rate has been filled in for the state, so the Hub
      and the CTC lookup can tell "not yet added" apart from "genuinely zero". */
   function hasAnyRate(entry) {

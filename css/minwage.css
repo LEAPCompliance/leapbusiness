@@ -1,0 +1,78 @@
+/* =============================================
+   Minimum Wages hub: Wage Check and coverage board
+   Page-specific (/knowledge/minimum-wages/). Every class is
+   prefixed mw- so nothing here touches shared stylesheets.
+   ============================================= */
+.mwc { background: linear-gradient(135deg, #123A5A 0%, #1A4F78 60%, #1F6A94 100%); color: #fff; border-radius: 18px; padding: 30px 30px 26px; margin-bottom: 22px; position: relative; overflow: hidden; }
+.mwc::after { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,.06); pointer-events: none; }
+.mwc-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #9FD3EA; margin-bottom: 8px; }
+.mwc h2 { font-family: 'Playfair Display', serif; font-size: clamp(24px, 3.4vw, 32px); margin: 0 0 6px; color: #fff; line-height: 1.2; }
+.mwc-sub { font-size: 15px; color: rgba(255,255,255,.82); margin: 0 0 22px; max-width: 560px; line-height: 1.6; }
+.mwc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; align-items: end; position: relative; z-index: 1; }
+.mwc label, .mwc .mwc-lbl { display: block; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.85); margin-bottom: 6px; }
+.mwc select, .mwc input[type="number"] { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 10px; border: 2px solid transparent; font-family: 'Inter', sans-serif; font-size: 15.5px; color: #1F2A33; background: #fff; }
+.mwc select:focus, .mwc input:focus { outline: none; border-color: #9FD3EA; }
+.mwc-full { grid-column: 1 / -1; }
+.mwc-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.mwc-chip { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; padding: 9px 16px; border-radius: 30px; border: 2px solid rgba(255,255,255,.35); background: transparent; color: #fff; cursor: pointer; transition: background .15s ease, color .15s ease, border-color .15s ease; }
+.mwc-chip:hover:not([disabled]) { border-color: #fff; }
+.mwc-chip[aria-pressed="true"] { background: #fff; color: #123A5A; border-color: #fff; }
+.mwc-chip[disabled] { opacity: .35; cursor: not-allowed; }
+.mwc-go { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 15.5px; padding: 13px 28px; border-radius: 10px; border: 0; background: #3299C2; color: #fff; cursor: pointer; transition: background .15s ease; }
+.mwc-go:hover { background: #2788B0; }
+.mwc-go[disabled] { opacity: .5; cursor: not-allowed; }
+.mwc-hint { font-size: 12.5px; color: rgba(255,255,255,.7); margin-top: 6px; line-height: 1.5; }
+
+.mwc-note { margin-top: 16px; position: relative; z-index: 1; background: rgba(255,255,255,.1); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.65; color: rgba(255,255,255,.92); }
+.mwc-note a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+.mwc-result { margin-top: 18px; position: relative; z-index: 1; background: #fff; color: #1F2A33; border-radius: 14px; padding: 22px 24px; animation: mwc-in .25s ease; }
+@keyframes mwc-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.mwc-result[hidden], .mwc-note[hidden], .mwc [hidden] { display: none !important; }
+.mwc-verdict { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.mwc-badge { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mwc-badge svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.mwc-result.ok .mwc-badge { background: #E6F4EC; color: #17714A; }
+.mwc-result.bad .mwc-badge { background: #FDECEA; color: #B3261E; }
+.mwc-big { font-size: 22px; font-weight: 800; line-height: 1.25; }
+.mwc-result.ok .mwc-big { color: #17714A; }
+.mwc-result.bad .mwc-big { color: #B3261E; }
+.mwc-small { font-size: 14px; color: #5B6770; margin-top: 2px; }
+.mwc-meter { position: relative; height: 12px; border-radius: 12px; background: #E8EDF1; margin: 6px 0 4px; overflow: visible; }
+.mwc-meter .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 12px; transition: width .5s ease; }
+.mwc-result.ok .fill { background: #1FAF57; }
+.mwc-result.bad .fill { background: #E5574D; }
+.mwc-meter .mark { position: absolute; top: -5px; width: 3px; height: 22px; background: #123A5A; border-radius: 2px; }
+.mwc-scale { display: flex; justify-content: space-between; font-size: 12px; color: #5B6770; margin-bottom: 14px; }
+.mwc-break { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.mwc-tile { background: #F5F7F9; border-radius: 10px; padding: 10px 12px; }
+.mwc-tile span { display: block; font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: #5B6770; margin-bottom: 2px; }
+.mwc-tile b { font-size: 16px; color: #123A5A; }
+.mwc-tile.total { background: #EAF3F8; }
+.mwc-src { font-size: 12.5px; color: #5B6770; line-height: 1.65; }
+.mwc-src a { color: #1A4F78; font-weight: 600; text-decoration: underline; }
+.mwc-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.mwc-actions a, .mwc-actions button { font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; padding: 9px 16px; border-radius: 8px; border: 2px solid #D9D9D9; background: #fff; color: #1A4F78; cursor: pointer; text-decoration: none; }
+.mwc-actions a:hover, .mwc-actions button:hover { border-color: #1A4F78; }
+
+/* coverage board */
+.mw-board { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; background: #F5F7F9; border: 1px solid #DFE5EA; border-radius: 14px; padding: 16px 20px; margin: 0 0 16px; }
+.mw-board-main { flex: 1 1 260px; }
+.mw-board-main strong { font-size: 15px; color: #123A5A; display: block; margin-bottom: 6px; }
+.mw-bar { height: 10px; border-radius: 10px; background: #DDE4EA; overflow: hidden; }
+.mw-bar span { display: block; height: 100%; width: 0; border-radius: 10px; background: #1FAF57; transition: width .6s ease; }
+.mw-board p { margin: 8px 0 0; font-size: 13px; color: #5B6770; line-height: 1.55; }
+.mw-legend { display: flex; gap: 14px; font-size: 12.5px; color: #5B6770; flex-wrap: wrap; }
+.mw-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+.mw-dot.v { background: #1FAF57; } .mw-dot.p { background: #C7CFD6; }
+.mw-state-btn.is-verified::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1FAF57; margin-right: 8px; vertical-align: 1px; }
+.mw-state-btn.na { font-style: normal; }
+
+@media (max-width: 640px) {
+  .mwc { padding: 22px 18px; border-radius: 14px; }
+  .mwc-go { width: 100%; }
+  .mwc-result { padding: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mwc-result, .mwc-meter .fill, .mw-bar span { animation: none; transition: none; }
+}
